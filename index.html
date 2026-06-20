@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CET-4 英语期末全能通关刷题库（终极完整版）</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e293b;
+            --border: #e2e8f0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0; padding: 0; display: flex;
+        }
+        #sidebar {
+            width: 290px; background: var(--card); border-right: 1px solid var(--border);
+            height: 100vh; position: fixed; overflow-y: auto; display: flex; flex-direction: column;
+        }
+        .sidebar-title {
+            padding: 24px; font-size: 1.25rem; font-weight: bold; color: var(--primary);
+            border-bottom: 1px solid var(--border); text-align: center;
+        }
+        .nav-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
+        .nav-item {
+            padding: 14px 20px; cursor: pointer; border-bottom: 1px solid var(--border);
+            display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem;
+            transition: all 0.2s;
+        }
+        .nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--primary); font-weight: bold; }
+        .nav-item .badge { background: #f1f5f9; color: #64748b; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; }
+        .nav-item.active .badge { background: var(--primary); color: white; }
+        #wrong-btn { background: #fef2f2; color: var(--danger); }
+        #wrong-btn:hover, #wrong-btn.active { background: var(--danger); color: white; }
+        #main-content { margin-left: 290px; flex-grow: 1; padding: 40px; max-width: 950px; }
+        .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-title { font-size: 1.6rem; font-weight: bold; }
+        .progress-container { background: #e2e8f0; border-radius: 8px; height: 10px; margin-bottom: 30px; overflow: hidden; }
+        .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.3s; }
+        .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .passage-context { background: #f1f5f9; padding: 18px; border-radius: 6px; margin-bottom: 20px; line-height: 1.6; font-size: 1rem; white-space: pre-line; border-left: 4px solid var(--primary); }
+        .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; }
+        .options-grid { display: flex; flex-direction: column; gap: 10px; }
+        .opt-btn { background: var(--card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 6px; text-align: left; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; }
+        .opt-btn:hover:not(.disabled) { background: #f8fafc; border-color: #cbd5e1; }
+        .opt-btn.correct { background: #d1fae5 !important; border-color: var(--success) !important; color: #065f46; font-weight: bold; }
+        .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b; }
+        .opt-btn.disabled { cursor: not-allowed; }
+        .fill-box { display: flex; gap: 12px; margin-top: 12px; }
+        .fill-input { flex-grow: 1; padding: 10px 14px; font-size: 1rem; border: 1px solid var(--border); border-radius: 6px; }
+        .fill-submit { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        .analysis-box { margin-top: 18px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px; display: none; font-size: 0.95rem; line-height: 1.5; }
+        .analysis-box.show { display: block; }
+        .essay-card { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 25px; margin-bottom: 25px; }
+        .essay-title { font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 12px; border-bottom: 2px solid #f1f5f9; padding-bottom: 6px; }
+        @media (max-width: 768px) { body { flex-direction: column; } #sidebar { width: 100%; height: auto; position: relative; } #main-content { margin-left: 0; padding: 15px; } 
+/* 找到你原本样式表的末尾，在 @media ... { ... } 的后面加入以下代码 */
+        
+        #reset-btn { 
+            margin-top: auto; /* 这个属性会让按钮自动推到侧边栏的最底部 */
+            background: #f8fafc; 
+            color: #64748b; 
+            border-top: 2px solid var(--border); 
+            font-weight: bold; 
+            justify-content: center; 
+            gap: 8px;
+        }
+        #reset-btn:hover { 
+            background: #fee2e2; /* 鼠标悬浮时变成警告红 */
+            color: var(--danger); 
+        }}
+    </style>
+</head>
+<body>
+<div id="welcome-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); display: flex; justify-content: center; align-items: center; z-index: 99999;">
+    <div style="background: white; padding: 35px 30px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); max-width: 360px; width: 85%;">
+        <div style="font-size: 3.5rem; margin-bottom: 15px;">✍️</div>
+        <h3 style="margin: 0 0 10px 0; color: #1e293b; font-size: 1.4rem;">期末冲刺提醒</h3>
+        <p style="font-size: 1.25rem; color: #475569; margin: 0 0 30px 0; font-weight: 500; letter-spacing: 1px;">要好好记哦！</p>
+        <div style="display: flex; gap: 15px;">
+            <button onclick="enterQuiz()" style="flex: 1; background: #2563eb; color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: background 0.2s;">知道了</button>
+            <button onclick="exitQuiz()" style="flex: 1; background: #e2e8f0; color: #475569; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: bold; transition: background 0.2s;">不记</button>
+        </div>
+    </div>
+</div>
+    <div id="sidebar">
+        <div class="sidebar-title">英语 期末终极全本库</div>
+        <ul class="nav-list">
+            <li class="nav-item active" onclick="switchTab('news')">新闻报告 (Listening) <span class="badge" id="b-news">0/15</span></li>
+            <li class="nav-item" onclick="switchTab('conversation')">长对话 (Listening) <span class="badge" id="b-conversation">0/20</span></li>
+            <li class="nav-item" onclick="switchTab('passage')">短文理解 (Listening) <span class="badge" id="b-passage">0/20</span></li>
+            <li class="nav-item" onclick="switchTab('reading')">仔细阅读 (Reading) <span class="badge" id="b-reading">0/45</span></li>
+            <li class="nav-item" onclick="switchTab('long_reading')">长篇阅读 (Matching) <span class="badge" id="b-long_reading">0/15</span></li>
+            <li class="nav-item" onclick="switchTab('cloze')">智能选词 (四选一) <span class="badge" id="b-cloze">0/40</span></li>
+            <li class="nav-item" onclick="switchTab('fill_blank')">词汇填空 (Words) <span class="badge" id="b-fill_blank">0/20</span></li>
+            <li class="nav-item" onclick="switchTab('translation')">段落翻译对照 <span class="badge" id="b-translation">0/4</span></li>
+            <li class="nav-item" onclick="switchTab('essay')">作文范文背诵 <span class="badge">4篇</span></li>
+            <li class="nav-item" id="wrong-btn" onclick="switchTab('wrong_bank')">错题高频复刷库 <span class="badge" id="b-wrong_bank">0</span></li>
+		        
+        <li class="nav-item" id="reset-btn" onclick="clearAllProgress()">🔄 一键清除记录</li>
+    </ul> </div>
+        </ul>
+    </div>
+
+    <div id="main-content">
+        <div class="header-panel">
+            <div class="section-title" id="title-text">新闻报告 (News Reports)</div>
+            <div id="progress-text" style="font-size: 0.95rem; color: #64748b;">进度: 0%</div>
+        </div>
+        <div class="progress-container"><div class="progress-bar" id="bar-element"></div></div>
+        <div id="display-pool"></div>
+    </div>
+
+    <script>
+        // ==================== 终极压缩全量全本数据库 ====================
+        const DATA_PACK = {
+            news: [
+                {id:"n1",type:"mcq",q:"1. Options:\nA. Clinical experiments on pigs.\nB. Cross-species organ transplantation.\nC. Shortage of donated organs for humans.\nD. Scientific data in support of human transplantation.",a:"B",t:"【核心翻译】本篇聚焦跨物种器官移植技术。\nA. 猪的临床实验 | B. 跨物种器官移植 | C. 人类捐献器官短缺 | D. 支持人类移植的科学数据"},
+                {id:"n2",type:"mcq",q:"2. Options:\nA. It has become part of conventional treatment for many diseases.\nB. It has freed patients from the side effects of drugs.\nC. It has allowed patients to live as long as healthy people.\nD. It has laid a solid foundation for the advances of surgical technology.",a:"A",t:"【核心翻译】讨论该疗法的普及度。\nA. 已成为许多疾病的常规治疗手段 | B. 让患者免受药物副作用 | C. 让患者活得和健康人一样长 | D. 为手术技术进步奠定基石"},
+                {id:"n3",type:"mcq",q:"3. Options:\nA. Pigs' organs function best among other animals.\nB. Pigs' organs have been studied for a long time.\nC. Pigs' organs are similar to those of humans in size and shape.\nD. Pigs have a closer relationship with humans than with other species.",a:"C",t:"【核心翻译】阐述选择猪器官的原因。\nA. 猪器官功能最好 | B. 猪器官研究时间最长 | C. 猪器官在大小和形状上与人类相似 | D. 猪与人类亲缘关系最近"},
+                {id:"n4",type:"mcq",q:"4. Options:\nA. National Day holiday stimulates consumption.\nB. Major online shopping platforms' success in China.\nC. Supply chains are recovering continuously.\nD. A series of pro-consumption policies were introduced.",a:"A",t:"【核心翻译】A. 国庆假期刺激消费 | B. 网购平台在中国的成功 | C. 供应链持续恢复 | D. 引入促消费政策"},
+                {id:"n5",type:"mcq",q:"5. Options:\nA. Automatic dishwashers.\nB. Energy-saving refrigerators.\nC. Energy-saving water heaters.\nD. Intelligent vacuum cleaning machines",a:"B",t:"【核心翻译】A. 自动洗碗机 | B. 节能冰箱 | C. 节能热水器 | D. 智能吸尘器"},
+                {id:"n6",type:"mcq",q:"6. Options:\nA. 300 million yuan.\nB. 470 million yuan.\nC. 1.27 billion yuan.\nD. 6.96 billion yuan.",a:"C",t:"【核心翻译】A. 3亿元 | B. 4.7亿元 | C. 12.7亿元 | D. 69.6亿元"},
+                {id:"n7",type:"mcq",q:"7. Options:\nA. Legalized street performance by artists in Chinese cities.\nB. Magic tricks performed on the streets of Chinese cities.\nC. Competitions on Chinese city streets among talented professionals.\nD. Charity performance on Chinese city streets by various artist groups.",a:"A",t:"【核心翻译】A. 城市街头艺人表演合法化 | B. 街头魔术表演 | C. 街头专业竞赛 | D. 街头慈善表演"},
+                {id:"n8",type:"mcq",q:"8. Options:\nA. They can have the right to hire performers.\nB. They can have a chance to pursue their career.\nC. They can earn more money to help people in need.\nD. They can pass on their talents to the younger generation.",a:"B",t:"【核心翻译】A. 有权雇佣表演者 | B. 有机会追求职业生涯 | C. 赚更多钱资助他人 | D. 传承才华给下一代"},
+                {id:"n9",type:"mcq",q:"9. Options:\nA. Compete among themselves.\nB. Utilize public facilities.\nC. Damage the environment.\nD. Perform together with passers-by.",a:"C",t:"【核心翻译】管理条例中明确禁止的行为：\nA. 彼此竞争 | B. 利用公共设施 | C. 破坏环境 | D. 与路人共同表演"},
+                {id:"n10",type:"mcq",q:"10. Options:\nA. The Financial Center in the Middle East.\nB. The rapid growth of tourism in Lebanon.\nC. The China-funded conservatory of music in Lebanon.\nD. The exchange in art and culture between China and Lebanon.",a:"C",t:"【核心翻译】A. 中东金融中心 | B. 黎巴嫩旅游业快速增长 | C. 中国资助的黎巴嫩音乐学院 | D. 中黎艺术文化交流"},
+                {id:"n11",type:"mcq",q:"11. Options:\nA. The conservatory will be completed within one year.\nB. Chinese artists will soon give performances in Lebanon.\nC. Lebanon will get support from China in the media industry.\nD. The project will be an example of collaboration between China and Lebanon.",a:"D",t:"【核心翻译】A. 一年内完工 | B. 中国艺术家近期赴黎演出 | C. 媒体业得到中国支持 | D. 成为中黎合作的典范"},
+                {id:"n12",type:"mcq",q:"12. Options:\nA. The theater.\nB. The library.\nC. The teaching rooms.\nD. The auditoriums.",a:"A",t:"【核心翻译】A. 剧院 | B. 图书馆 | C. 教学室 | D. 礼堂"},
+                {id:"n13",type:"mcq",q:"13. Options:\nA. Gan Yu's long trip into the wilderness.\nB. Gan Yu's survival after an earthquake.\nC. Gan Yu's lucky escape from a severe flood.\nD. Gan Yu's involvement in rescuing villagers from a fire.",a:"B",t:"【核心翻译】A. 荒野长途旅行 | B. 地震后生还幸存 | C. 从严重洪涝中逃脱 | D. 参与火灾营救村民"},
+                {id:"n14",type:"mcq",q:"14. Options:\nA. The various crops in the field.\nB. Limited food given by a co-worker.\nC. The food and water he took with him.\nD. Rainwater, wild fruit, roots and even urine.",a:"D",t:"【核心翻译】维持生命的求生源：\nA. 田中作物 | B. 同事给的有限食物 | C. 随身携带的水粮 | D. 雨水、野果、树根甚至尿液"},
+                {id:"n15",type:"mcq",q:"15. Options:\nA. Bored but relaxed.\nB. Scared but relieved.\nC. Desperate but hopeful.\nD. Lonely but joyful.",a:"C",t:"【核心翻译】A. 无聊但放松 | B. 害怕但宽慰 | C. 绝望但抱有希望 | D. 孤独但喜悦"}
+            ],
+            conversation: [
+                {id:"c1",type:"mcq",q:"1. Options:\nA. A detective story.\nB. A class assignment.\nC. A birthday present.\nD. A jewelry store robbery.",a:"B",t:"【翻译】A. 侦探故事 | B. 课堂作业 | C. 生日礼物 | D. 珠宝店抢劫案"},
+                {id:"c2",type:"mcq",q:"2. Options:\nA. The professor did not like her story.\nB. She was taking too many courses.\nC. She had trouble finishing her assignment.\nD. She did not like the topic she had chosen.",a:"C",t:"【翻译】A. 教授不喜欢她的故事 | B. 选课太多 | C. 完成作业遇到困难 | D. 不喜欢选的题目"},
+                {id:"c3",type:"mcq",q:"3. Options:\nA. Take some extra time.\nB. Do some work for another course.\nC. Write the ending of the story first.\nD. Just put down whatever ideas she has first.",a:"D",t:"【翻译】A. 多花些时间 | B. 做其他课程作业 | C. 先写故事结尾 | D. 先把脑子里不管什么想法都记下来"},
+                {id:"c4",type:"mcq",q:"4. Options:\nA. To go shopping.\nB. To meet her professor for more advice.\nC. To do some research about jewelry stores for her story.\nD. To take a break from her work.",a:"C",t:"【翻译】A. 去购物 | B. 见教授听建议 | C. 为故事调研珠宝店 | D. 休息一下"},
+                {id:"c5",type:"mcq",q:"5. Options:\nA. On New Year's Eve.\nB. On an April day.\nC. A couple of days before the Dragon Boat Festival.\nD. A week before the Spring Festival.",a:"D",t:"【翻译】A. 除夕 | B. 四月的一天 | C. 端午节前几天 | D. 春节前一周"},
+                {id:"c6",type:"mcq",q:"6. Options:\nA. Stressed.\nB. Anxious.\nC. Delighted.\nD. Excited.",a:"A",t:"【翻译】A. 有压力的 | B. 焦虑的 | C. 高兴的 | D. 兴奋的"},
+                {id:"c7",type:"mcq",q:"7. Options:\nA. Make the man feel happy.\nB. Persuade the man to do shopping with his kids.\nC. Remind the man of the true spirit of the festival.\nD. Prevent the man from spending too much shopping.",a:"C",t:"【翻译】A. 让男子开心 | B. 劝说男子带孩子购物 | C. 提醒男子节日的真正精神 | D. 阻止男子过度消费"},
+                {id:"c8",type:"mcq",q:"8. Options:\nA. Pay off previous holiday bills.\nB. Prepare for the festival.\nC. Try to earn more money.\nD. Reduce the household budget.",a:"B",t:"【翻译】A. 付清此前的账单 | B. 为节日做准备 | C. 努力多赚钱 | D. 削减家庭预算"},
+                {id:"c9",type:"mcq",q:"9. Options:\nA. To find out about a student photography exhibition on campus.\nB. To find out why some of her work was not selected for an exhibition.\nC. To discuss how to get her photographs exhibited.\nD. To discuss the latest trends in photography.",a:"C",t:"【翻译】A. 了解校园摄影展 | B. 询问作品为何落选 | C. 讨论如何让作品参展 | D. 讨论摄影趋势"},
+                {id:"c10",type:"mcq",q:"10. Options:\nA. By consulting experienced photographers.\nB. By following one's own artistic views.\nC. By taking photographs that fit with current trends.\nD. By learning what gallery owners are interested in.",a:"B",t:"【翻译】A. 咨询老摄影师 | B. 遵循个人艺术观点 | C. 紧跟潮流拍摄 | D. 迎合画廊主的兴趣"},
+                {id:"c11",type:"mcq",q:"11. Options:\nA. One faces increased external pressure.\nB. It tends to be more interesting than class work.\nC. It is often technically better than work done in class.\nD. It is more likely to be exhibited than work done in class.",a:"A",t:"【翻译】A. 面临更高的外部压力 | B. 比课堂作业有趣 | C. 技术上表现更好 | D. 更有可能被展出"},
+                {id:"c12",type:"mcq",q:"12. Options:\nA. Hiring a professional agent to sell their work.\nB. Sharing examples of their work with others.\nC. Asking a professor to recommend their work to gallery owners.\nD. Selling their work at a low price to customers at restaurants.",a:"B",t:"【翻译】A. 雇中介代理销售 | B. 与他人分享作品范例 | C. 找教授写推荐信 | D. 在餐厅低价兜售"},
+                {id:"c13",type:"mcq",q:"13. Options:\nA. Impatient but then sympathetic.\nB. Indifferent but then interested.\nC. Curious but then envious.\nD. Kind but then impatient.",a:"B",t:"【翻译】A. 不耐烦转而同情 | B. 冷漠转而感兴趣 | C. 好奇转而嫉妒 | D. 友善转而急躁"},
+                {id:"c14",type:"mcq",q:"14. Options:\nA. To make an appointment.\nB. To ask for a job interview.\nC. To have a negotiation.\nD. To promote her advertising company business.",a:"D",t:"【翻译】A. 预约面谈 | B. 申请面试 | C. 商务谈判 | D. 推广自身广告公司业务"},
+                {id:"c15",type:"mcq",q:"15. Options:\nA. The company has been in operation for three years.\nB. It is an advertising company.\nC. It has earned a lot since it was set up.\nD. It specializes in selling billboards.",a:"A",t:"【翻译】A. 公司已运营三年 | B. 是一家广告公司 | C. 成立以来利润丰厚 | D. 专营广告牌"},
+                {id:"c16",type:"mcq",q:"16. Options:\nA. It has often refunded money because its customers are not satisfied.\nB. It does not have much business to do due to its poor service.\nC. It promises to redo products until its consumers are satisfied.\nD. It will sign a contract with the man right after the conversation.",a:"C",t:"【翻译】A. 经常退款 | B. 服务差导致业务少 | C. 承诺重做产品直至客户满意 | D. 赛后立即签约"},
+                {id:"c17",type:"mcq",q:"17. Options:\nA. Final exams.\nB. A boring subject.\nC. A weekend party.\nD. Classes in the final week.",a:"A",t:"【翻译】A. 期末考试 | B. 枯燥科目 | C. 周末派对 | D. 最后一周课程"},
+                {id:"c18",type:"mcq",q:"18. Options:\nA. It's fun.\nB. It's difficult.\nC. It's interesting.\nD. It's confusing.",a:"B",t:"【翻译】A. 有趣 | B. 困难 | C. 吸引人 | D. 令人困惑"},
+                {id:"c19",type:"mcq",q:"19. Options:\nA. A book review.\nB. A tough paper.\nC. A 15-page report.\nD. An English poem.",a:"C",t:"【翻译】A. 书评 | B. 棘手论文 | C. 15页的分量报告 | D. 英文诗歌"},
+                {id:"c20",type:"mcq",q:"20. Options:\nA. Take one exam for him.\nB. Have lunch with him.\nC. Write part of the report for him.\nD. Help him with his chemistry class.",a:"D",t:"【翻译】A. 代考 | B. 共进午餐 | C. 代写报告 | D. 帮他辅导化学课程"}
+            ],
+            passage: [
+                {id:"p1",type:"mcq",q:"1. Options:\nA. The importance of emotional speeches.\nB. Techniques used in speechwriting.\nC. The gift a speechwriter possesses.\nD. The shortcut to becoming a successful speechmaker.",a:"B",t:"【翻译】A. 情感演讲的重要性 | B. 演讲撰稿所用技能技巧 | C. 撰稿人的天赋 | D. 捷径"},
+                {id:"p2",type:"mcq",q:"2. Options:\nA. Being friendly.\nB. Being learned.\nC. Being confident.\nD. Being articulate.",a:"A",t:"【翻译】A. 表现友善 | B. 博学多才 | C. 充满自信 | D. 善于清晰表达"},
+                {id:"p3",type:"mcq",q:"3. Options:\nA. Quoting.\nB. Using anecdotes.\nC. Using three-part lists.\nD. Introducing contrast.",a:"D",t:"【翻译】A. 引用 | B. 轶事法 | C. 三项并列清单 | D. 引入强烈对比"},
+                {id:"p4",type:"mcq",q:"4. Options:\nA. Confirm statements frequently.\nB. Choose appropriate tools from a toolbox first.\nC. Apply one or more speechwriting techniques.\nD. Make sure you have plenty of celebrity speeches on hand.",a:"C",t:"【翻译】A. 频繁确认论点 | B. 从工具箱挑工具 | C. 应用一种或多种演讲写作技巧 | D. 收集名人演讲稿"},
+                {id:"p5",type:"mcq",q:"5. Options:\nA. The Best Place for Shopping.\nB. Grocery Shoppers' Guide.\nC. An Important Factor in Saving Money.\nD. Ways to Complete a Grocery List.",a:"B",t:"【翻译】A. 最佳购物地 | B. 杂货购物者指南 | C. 理财重要因素 | D. 完善清单的方法"},
+                {id:"p6",type:"mcq",q:"6. Options:\nA. Eat a big meal.\nB. Eat less than usual.\nC. Include more items on the grocery list.\nD. Figure out some healthy food to buy.",a:"A",t:"【翻译】购物前先填饱肚子：\nA. 吃一顿大餐 | B. 比平时少吃 | C. 增加购物清单条目 | D. 琢磨买健康食品"},
+                {id:"p7",type:"mcq",q:"7. Options:\nA. The product warranty.\nB. The product catalog.\nC. The local newspapers.\nD. The brochure for each grocery store.",a:"C",t:"【翻译】获取打折信息的渠道：\nA. 保修单 | B. 目录册 | C. 当地报纸新闻 | D. 商店宣传册"},
+                {id:"p8",type:"mcq",q:"8. Options:\nA. Use a bigger grocery cart to save time on shopping.\nB. Allow time to hunt for cheaper items.\nC. Stay for a while to have a final check of the grocery list.\nD. Control the cost by using smaller baskets to hold the groceries.",a:"D",t:"【翻译】A. 放大购物车提速 | B. 留出比价时间 | C. 核对清单 | D. 改用小型购物篮以强行控制采购成本"},
+                {id:"p9",type:"mcq",q:"9. Options:\nA. She is the first female symphony orchestra conductor of PRC.\nB. She is the world's first female symphony orchestra conductor.\nC. She is a symphony orchestra conductor who has lived the longest.\nD. She is the first conductor to take the stage at a Chinese opera house.",a:"A",t:"【翻译】关于著名女指挥家：\nA. 她是新中国第一位交响乐女指挥 | B. 世界首位女指挥 | C. 寿命最长指挥 | D. 首位登上中国歌剧院舞台的人"},
+                {id:"p10",type:"mcq",q:"10. Options:\nA. Art history.\nB. Music.\nC. Medicine.\nD. Education.",a:"C",t:"【翻译】她早期的专业背景：\nA. 艺术史 | B. 音乐 | C. 医学 | D. 教育学"},
+                {id:"p11",type:"mcq",q:"11. Options:\nA. She taught them how to play different roles in operas.\nB. She introduced ways to appreciate the beauty of music.\nC. She told them stories about the history of Western operas.\nD. She talked about the relevant cultural background before the performance.",a:"D",t:"【翻译】A. 教演歌剧 | B. 介绍如何欣赏音乐美 | C. 讲西方歌剧史 | D. 演出前介绍相关文化背景知识"},
+                {id:"p12",type:"mcq",q:"12. Options:\nA. She has composed about 20 symphonies.\nB. She has let the world hear China through music.\nC. She has lectured on cultural differences among countries.\nD. She has visited first-class music halls throughout the world.",a:"B",t:"【翻译】A. 创作20部交响乐 | B. 用音乐让世界听到中国声音 | C. 讲解文化差异 | D. 访问世界一流音乐厅"},
+                {id:"p13",type:"mcq",q:"13. Options:\nA. How to mix into a new work social group.\nB. How to compete for projects with colleagues.\nC. How to handle extra family responsibilities.\nD. How to cope with the pressure at the workplace.",a:"A",t:"【翻译】A. 如何融入全新工作社交圈 | B. 如何与同事竞争项目 | C. 承担额外家庭责任 | D. 应对职场高压"},
+                {id:"p14",type:"mcq",q:"14. Options:\nA. It's difficult for older people to get along with others.\nB. It may conflict with one's family responsibilities.\nC. It is almost as important as fulfilling one's job duties.\nD. It depends on what corporate culture a company has.",a:"C",t:"【翻译】A. 老人难相处 | B. 与家庭责任冲突 | C. 融入职场社交与做好本职工作几乎同等重要 | D. 取决于企业文化"},
+                {id:"p15",type:"mcq",q:"15. Options:\nA. Have good intentions.\nB. Make an overall plan.\nC. Show your interests.\nD. Learn from others.",a:"B",t:"【翻译】A. 心怀善意 | B. 制定全面周全的计划 | C. 展现个人兴趣 | D. 向他人学习"},
+                {id:"p16",type:"mcq",q:"16. Options:\nA. Accept reality and give up.\nB. Talk with their family members.\nC. Make use of coffee breaks at the office.\nD. Organize activities and invite colleagues to join in.",a:"D",t:"【翻译】A. 放弃 | B. 与家人倾诉 | C. 利用茶歇时间 | D. 亲自发起并组织活动邀请同事加入"},
+                {id:"p17",type:"mcq",q:"17. Options:\nA. Robots will take the place of human workers.\nB. Millions of jobs will disappear.\nC. The fifth industrial revolution will happen.\nD. An economic forum will be held in Switzerland.",a:"B",t:"【翻译】技术带来的冲击：\nA. 机器人取代人类工人 | B. 数以百万计的工作岗位将彻底消失 | C. 第五次工业革命 | D. 经济体制变革"},
+                {id:"p18",type:"mcq",q:"18. Options:\nA.The advancements in AI ,robotics and biotechnology.\nB. The rapid economic growth of developing countries.\nC. The creation of new jobs in professional services and media.\nD. The cooperation among countries of different economic systems.",a:"A",t:"【翻译】驱动力量：\nA. 人工智能、机器人技术和生物技术的跨越发展 | B. 发展中国家增长 | C. 媒体新岗位 | D. 跨制度国际合作"},
+                {id:"p19",type:"mcq",q:"19. Options:\nA. Cut out white collar office jobs.\nB. Attract more foreign talents.\nC. Set up programs to train the unemployed.\nD. Invest in transforming their workforce.",a:"D",t:"【翻译】企业和政府的应对之策：\nA. 裁撤白领岗位 | B. 吸引海外人才 | C. 建立再就业培训 | D. 投资重塑和转型其现有的整个劳动力团队"},
+                {id:"p20",type:"mcq",q:"20. Options:\nA. Reduce investment in education.\nB. Employ more diverse workforces.\nC. Restart adult learning programs.\nD. Create more administrative positions.",a:"B",t:"【翻译】A. 削减教育投入 | B. 雇佣更多元化的员工队伍 | C. 重启成人再教育 | D. 广设行政管理岗位"}
+            ],
+            reading: [
+                {id:"r1",type:"mcq",q:"Passage 1 - Q1. According to the passage, which of the following situations can be considered as a sample of counterurbanization?\nA.More people migrate into smaller cities.\nB.More people earn less money than before.\nC.The size of the commercial center decreases in small cities.\nD.The population greatly increases in both big cities and small cities.",a:"A",t:"【翻译】什么是“逆城市化”现象？\nA. 更多人口从小城镇流向/迁移入更小的城市/乡村区域 | B. 收入下降 | C. 商业中心缩小 | D. 两极人口暴增"},
+                {id:"r2",type:"mcq",q:"Passage 1 - Q2. According to Geyer and Kontuly's urbanization model, when does the polarization reversal occur?\nA.Periodic population decrease and settlement area increase are observed in many parts.\nB.A rigid hierarchical structure is built and the urban system moves toward a long-run equilibrium state.\nC.Net migration in big cities is of a lower level, while in intermediate-sized cities it is higher.\nD.Net migration change has a positive correlation with the settlement size change in nonmetropolitan cities.",a:"C",t:"【翻译】极化逆转发生在何时？\nA. 周期性人口减少 | B. 结构僵化 | C. 大都市净人口迁入率走低，中等规模城市迁入率反而冲高 | D. 正相关变动"},
+                {id:"r3",type:"mcq",q:"Passage 1 - Q3. What does the counterurbanization reflect, according to the passage\nA.The decrease in recreational activities in an urban area.\nB.The constantly increasing unemployment rate in big cities.\nC.The downstream movement of particular demographic groups.\nD.The downstream development of the economy in particular regions.",a:"C",t:"【翻译】逆城市化折射出了什么本质？\nA. 娱乐减少 | B. 失业暴涨 | C. 特定的特定社会人口群体主动向社会的下游/小城镇回流迁移 | D. 经济倒退"},
+                {id:"r4",type:"mcq",q:"Passage 1 - Q4. What will happen during suburbanization,according to the passage?\nA.A shift to an industrial society.\nB.A decrease in the urban core's population.\nC.An accelerated growth in the urban core.\nD.A boost in the development of outlying areas.",a:"B",t:"【翻译】郊区化进程中会发生什么？\nA. 转向工业社会 | B. 城市中心城区/核心区的人口总数出现净流失减少 | C. 核心区加速暴增 | D. 偏远地区腾飞"},
+                {id:"r5",type:"mcq",q:"Passage 1 - Q5. What can we learn about counterurbanization?\nA.It refers to infrequent population turnarounds.\nB.It has been identified in both advanced and emerging countries.\nC.It is the mainstream trend of urban system development.\nD.It is an exciting event in the process of urban system development.",a:"B",t:"【翻译】关于逆城市化，哪项叙述正确？\nA. 罕见见反转 | B. 在发达国家和新兴发展中国家都有被观测并证实存在 | C. 主流趋势 | D. 兴奋事件"},
+                {id:"r6",type:"mcq",q:"Passage 2 - Q1. What will Beijing do to establish itself as a benchmark city in the digital economic sector, according to the passage?\nA.Hold more global digital economy conferences.\nB.Cooperate more actively with international partners.\nC.Implement a series of plans to nurture sixty 'highlands'.\nD.Further speed up the development of the digital economy.",a:"D",t:"【翻译】北京如何打造数字经济标杆城市？\nA. 办会 | B. 国际合作 | C. 培育60个高地计划 | D. 进一步强力提速并深化数字经济的高质量全面发展"},
+                {id:"r7",type:"mcq",q:"Passage 2 - Q2. Which of the following is NOT a major characteristic of future cities?\nA.A 5G network.\nB.Online services.\nC.Modernized roads.\nD.Advanced VR devices.",a:"D",t:"【翻译】下列哪项不属于未来智慧城市规划的核心基础设施特征？\nA. 5G网络覆盖 | B. 全面在线政务便民服务 | C. 现代化智能道路系统 | D. 先进VR可穿戴外设（文中未提及作为城市规划特征）"},
+                {id:"r8",type:"mcq",q:"Passage 2 - Q3. Why is there an urgent need to develop the digital economy?\nA.It can continuously optimize the labor force.\nB.It can unleash the potential of online services.\nC.It is the new engine of high-quality development.\nD.It will promote the plan of nurturing six 'highlands'.",a:"C",t:"【翻译】为什么当下迫切需要重塑数字经济？\nA. 优化劳动力 | B. 释放网络服务潜力 | C. 因为它是驱动整个社会经济实现高质量、可持续发展的新引擎 | D. 推进高地计划"},
+                {id:"r9",type:"mcq",q:"Passage 2 - Q4. What can we learn about Beijing's digital economy?\nA.The worth is the highest in China.\nB.The added value of Beijing's digital economy exceeded 40 trillion yuan in 2020.\nC.The added value may constitute 50 percent of its GDP by 2025.\nD.The added value accounted for about 50 percent of its GDP in 2020.",a:"C",t:"【翻译】A. 价值全国第一 | B. 2020年超40万亿 | C. 预计到2025年，其数字经济增加值占GDP的比重将有望达到或逼近50%大关 | D. 2020年占50%"},
+                {id:"r10",type:"mcq",q:"Passage 2 - Q5. Which of the following is seen as the reason that Beijing is best placed to develop the digital economy?\nA.Beijing is the capital city of China.\nB.Beijing is the base of many cultural companies.\nC.Beijing excels in research investment, resources, and environment.\nD.Beijing's digital economy represents a high proportion of its GDP.",a:"C",t:"【翻译】为什么北京拥有无可比拟的数字经济底蕴？\nA. 首位优势 | B. 文化基地 | C. 在科研经费砸入、顶尖科技资源和双创生态环境上拔得头筹 | D. 占比高"},
+                {id:"r11",type:"mcq",q:"Passage 3 - Q1. Why is garbage one of the most valuable things that archaeologists can dig out?\nA.It tells the real story of a society.\nB.It is more useful than cultural relics.\nC.It records a sanitized version of history.\nD.It records the official version of history.",a:"A",t:"【翻译】为什么垃圾在考古学家眼中闪闪发光？\nA. 因为它不会说谎，能够赤裸裸地还原并讲述一个社会最真实的生存故事与风貌 | B. 比文物有用 | C. 记录干净历史 | D. 记录官方历史"},
+                {id:"r12",type:"mcq",q:"Passage 3 - Q2. What makes building a garbage dump high-tech?\nA.Garbage heaps are small, rotten, layer-by-layer cakes.\nB.Garbage heaps need to be piled high.\nC.Garbage dumps need to be stacked for a long time.\nD.Garbage dumps contain rotten and toxic substances that need to be dealt with.",a:"D",t:"【翻译】是什么让现代填埋场极具高科技含金量？\nA. 像蛋糕 | B. 堆得高 | C. 存放久 | D. 里面充斥着极难处理、易渗透和剧毒的次生腐烂物质，必须通过复杂技术阻绝污染"},
+                {id:"r13",type:"mcq",q:"Passage 3 - Q3. What is the most common solution to garbage in modern times?\nA.Burning it in backyard incinerators.\nB.Collecting it by urban rubbish collectors.\nC.Stacking it on the Great Pacific Garbage Patch.\nD.Burying it underground or dumping it in the sea.",a:"D",t:"【翻译】现代社会处理垃圾最普遍的简单粗暴法是什么？\nA. 后院焚烧 | B. 环卫收集 | C. 倒进太平洋 | D. 直接采取地下深埋填埋或是直接倾倒进远海"},
+                {id:"r14",type:"mcq",q:"Passage 3 - Q4. What is the most interesting part of the book Garbology?\nA.The garbage analysis.\nB.The creation of garbage.\nC.The shortcomings of garbage.\nD.The possible solutions for garbage.",a:"D",t:"【翻译】《垃圾学》这本书里最引人入胜的闪光篇章是什么？\nA. 分析 | B. 产生 | C. 缺点 | D. 探寻那些有望拯救未来的、可能性十足的垃圾消纳与资源化解决方案"},
+                {id:"r15",type:"mcq",q:"Passage 3 - Q5. What can be inferred about garbage from this passage?\nA.More and more people are interested in garbage.\nB.Garbage cannot bring great wealth to human society.\nC.Modern society produces more garbage than before.\nD.Modern society has found a proper way    to deal with garbage.",a:"C",t:"【翻译】推断题。根据常识和文意能得出什么？\nA. 人人都爱垃圾 | B. 无法带来财富 | C. 现代高消费快节奏社会产出的垃圾体量远超历史任何时期 | D. 已找到妥善办法"},
+                {id:"r16",type:"mcq",q:"Passage 4 - Q1. Why did Gruys launch her no-mirrors project?\nA. She believed it was a good way to overcome eating disorders.\nB. She was afraid that the manufacturing process of mirrors caused pollution.\nC. She wanted to be more confident and encourage others to value inner beauty.\nD. She thought mirrors should be blamed for her then-fiancé's overemphasis on external perfection.",a:"C",t:"【翻译】她为什么要发起“绝不照镜子”打卡挑战？\nA. 克制饮食障碍 | B. 控诉镜子厂污染 | C. 强迫自己重拾自信，并呼吁公众将注意力从皮囊外表转移到审视内在美上 | D. 甩锅给未婚夫"},
+                {id:"r17",type:"mcq",q:"Passage 4 - Q2. What can we learn about Gruys before her project?\nA. She had always a habit of dieting.\nB. She exercised to keep herself in shape.\nC. She was pretty critical of her body image.\nD. She paid much attention to people's appearance.",a:"C",t:"【翻译】在这个奇特挑战开始前，Gruys是一个怎样的人？\nA. 长期节食 | B. 疯狂健身 | C. 她对自己的身体形象极度焦虑，甚至到了吹毛求疵、十分挑剔的心态 | D. 在意别人外表"},
+                {id:"r18",type:"mcq",q:"Passage 4 - Q3. What do we learn about Gruys' wedding dress shopping?\nA. She had an exciting time buying her wedding dress.\nB. She was satisfied with how she looked in her wedding dress.\nC.She went wedding dress shopping after starting the no-mirrors project.\nD. She had thought wedding dress shopping would be a pleasant experience.",a:"D",t:"【翻译】关于她挑婚纱的悲伤小插曲：\nA. 兴奋 | B. 极其自满 | C. 挑战后采购 | D. 她之前天真地幻想这会是一次梦幻完美的快乐体验（结果被镜子里的自己焦虑到了）"},
+                {id:"r19",type:"mcq",q:"Passage 4 - Q4. When Gruys carried out her no-mirrors project, ______.\nA. she was helped by some reliable people\nB. she didn't have her hair cut at all\nC. she didn't have any trouble living her life\nD. she couldn't avoid seeing her own image in windows",a:"A",t:"【翻译】执行计划时，真实状况是：\nA. 她得到了身边一群靠谱贴心朋友和亲人的全力协助（比如帮她遮住家里的反光面） | B. 不剪发 | C. 毫无波折 | D. 无法避免看橱窗"},
+                {id:"r20",type:"mcq",q:"Passage 4 - Q5. What can be inferred from the passage?\nA. A life without mirrors is better than one with mirrors.\nB. Gruys used to be a perfectionist about her appearance.\nC. Gruys could overcome any difficulty with her friends' help.\nD.It is dangerous to drive without looking into your rear-view mirrors.",a:"B",t:"【翻译】推断题。\nA. 无镜生活更好 | B. Gruys曾经在容貌和身材管理上是个极端的、追求无瑕的完美主义者 | C. 朋友万能 | D. 不看后视镜危险"},
+                {id:"r21",type:"mcq",q:"Passage 5 - Q1. What can be learned from multiple studies on sports?\nA. Sleep disorders can be overcome through exercise.\nB. Lung cancer can be avoided by participating in sports.\nC. The condition of one's teeth can be improved by sports.\nD. Positive effects can be felt only after a few weeks of exercise.",a:"C",t:"【翻译】颠覆常识的科学新发现：\nA. 治愈失眠 | B. 彻底免疫肺癌 | C. 坚持运动锻炼居然能在一定程度上系统性改善并强健牙齿状况 | D. 数周见效"},
+                {id:"r22",type:"mcq",q:"Passage 5 - Q2. What do scientists attribute the fitness benefits to?\nA. Social skills developed.\nB. Collagen boosted by the nutrients in sports.\nC. The body cells that are physically active in sports.\nD. A variety of mechanisms that are triggered by exercise.",a:"D",t:"【翻译】科学家将运动带来的全方位溢出效应归结于什么？\nA. 社交技巧 | B. 胶原蛋白营养 | C. 活跃细胞 | D. 运动全方位激活了人体内部链路中多种极其复杂的防御与修复响应机制"},
+                {id:"r23",type:"mcq",q:"Passage 5 - Q3. What is the relationship between collagen and exercise, according to the passage?\nA. Exercise increases the number of collagen-producing cells.\nB. Exercise brings more nutrients to collagen combating wrinkles.\nC. Exercise helps repair damage to the cells that produce collagen.\nD. Exercise enables collagen-producing cells to function more effectively.",a:"D",t:"【翻译】运动是怎么延缓衰老的？\nA. 细胞数量暴增 | B. 补充营养 | C. 修复损伤 | D. 运动促使生成胶原蛋白的专用母细胞能够以更高、更年轻的效率维持运转"},
+                {id:"r24",type:"mcq",q:"Passage 5 - Q4. Why do routine trainers have a more positive attitude toward themselves?\nA. Regular exercise makes their skin and hair more healthy.\nB. Regular exercise helps them lose fat deep in their bodies.\nC. Participating in sports increases their sense of self-worth.\nD. Exercise helps them better notice substantial changes in their bodies.",a:"C",t:"【翻译】为什么经常撸铁/跑步的人内心都更强大自信？\nA. 皮肤头发好 | B. 减脂 | C. 长期运动流汗能从生化和心理层面显著拔高一个人的核心自我价值感和自信心 | D. 注意到身体变化"},
+                {id:"r25",type:"mcq",q:"Passage 5 - Q5. What can we infer about sports from this passage?\nA. Sports can prevent hair loss.\nB. The biggest benefit of sports is weight loss.\nC. Exercise is an act with high costs and low benefits.\nD. Playing sports is a great way to interact with people.",a:"D",t:"【翻译】推断题。\nA. 防脱发 | B. 唯减脂论 | C. 高开低走 | D. 体育运动是人与人之间进行深度、高质量社会交往与互动的绝佳纽带"},
+                {id:"r26",type:"mcq",q:"Passage 6 - Q1. What is the similarity between a person who is good at self-exploration and a navigator with a sense of direction, according to the author?\nA. They both have clear aims.\nB. They both like asking questions.\nC. They both are blessed with intelligence.\nD. They both are good at navigating in sea.",a:"A",t:"【翻译】善于深度自省的人和经验丰富的职业航海家有何共通之处？\nA. 他们脑海中都悬挂着极其清晰、不可动摇的终极航向与目标 | B. 爱提问 | C. 天生聪明 | D. 航海术高超"},
+                {id:"r27",type:"mcq",q:"Passage 6 - Q2. What does the author say about being creative?\nA. It is a talent you were born with.\nB. Experiments are fundamental to developing creativity.\nC. Self-awareness plays a key role in developing creativity.\nD. What you are good at is crucial in strengthening creativity.",a:"C",t:"【翻译】作者对如何唤醒创造力持何种见解？\nA. 天赋论 | B. 实验第一 | C. 强烈的自我意识和清晰的自我认知，是孵化并点燃创造力火花的绝对主推器 | D. 扬长避短"},
+                {id:"r28",type:"mcq",q:"Passage 6 - Q3. How can young people use their intelligence?\nA. They have to know the way to create a talent.\nB. They have to be born smart and with a lot of ideas.\nC. They have to be classified among nobles in high places.\nD. They have to discover themselves to make use of their wisdom.",a:"D",t:"【翻译】年轻人如何才能完全兑现自己的智力天赋？\nA. 制造天赋 | B. 只要够聪明 | C. 挤进上流阶层 | D. 必须先通过自省彻底找准定位、发现真我，才能把一身才华用在刀刃上"},
+                {id:"r29",type:"mcq",q:"Passage 6 - Q4. What does the author advise young people to do to find time for themselves?\nA. Prepare a concrete plan.\nB. Give up some pointless pleasures.\nC. Master skills that they are good at.\nD. Put themselves through difficulty.",a:"B",t:"【翻译】作者建议年轻人如何为灵魂“减负”以留出开窍的时间？\nA. 做死板计划 | B. 必须狠下心舍弃并戒掉那些毫无营养、空耗精力的低级多巴胺和无意义娱乐 | C. 刷技能 | D. 自找苦吃"},
+                {id:"r30",type:"mcq",q:"Passage 6 - Q5. What does the author want to illustrate with the example of Archimedes?\nA. Archimedes was good at finding ways of solving problems.\nB. The Archimedes' principle is popular because it was discovered through careful observation.\nC. Taking risks without worrying about failure is necessary to work toward objectives.\nD. Archimedes found time to discover himself and knew what he was good at even when he was a layman.",a:"C",t:"【翻译】引用阿基米德澡堂灵光一闪的例子是为了证明：\nA. 他善于找方法 | B. 原理出名 | C. 敢于直面失败、果断承担合理风险，是一个人朝着伟大宏图推进时必须具备的魄力 | D. 发现自我"},
+                {id:"r31",type:"mcq",q:"Passage 7 - Q1. What does the author say about the unpaid internship in the first and second paragraphs?\nA. It helps graduates apply for thrilling jobs.\nB. It helps graduates to bargain about the salary.\nC. It allows graduates to have meaningful programs.\nD. It enables graduates to get better odds of being employed.",a:"D",t:"【翻译】前两段对备受争议的“白嫖式无薪实习”大环境作了什么客观阐述？\nA. 帮投简历 | B. 谈高工资 | C. 提供项目 | D. 它确实能够在客观上让应届毕业生在激烈的网申秋招中捞到更高的录用概率"},
+                {id:"r32",type:"mcq",q:"Passage 7 - Q2. What does Melissa Reyes describe her internship like, according to the passage?\nA. Serious and valuable.\nB. Arduous but beneficial.\nC. Educational and excellent.\nD. Trivial with no skills required.",a:"D",t:"【翻译】Melissa Reyes吐槽自己的实习生活就像：\nA. 严肃有含金量 | B. 痛并快乐着 | C. 充满教育意义 | D. 纯粹是干一些机械、琐碎、毫无技术含量且边缘化的打杂事务"},
+                {id:"r33",type:"mcq",q:"Passage 7 - Q3. What are employers supposed to do, according to the passage?\nA. Have interns work without supervision.\nB. Get interns to work as regular employees.\nC. Make interns' work benefit the company immediately.\nD. Provide interns with something like vocational training.",a:"D",t:"【翻译】从法律法规和契约精神来看，雇主本应该承担什么义务？\nA. 放任不管 | B. 当作正职来压榨 | C. 必须立刻产生效益 | D. 应当将实习视作讲义，为学生提供成体系、带教性质的准职业化技能培训"},
+                {id:"r34",type:"mcq",q:"Passage 7 - Q4. Why are interns frequently suffering exploitation by employers?\nA. It has become the ''underlying rule'' of society.\nB. The law provides no measures to punish employers.\nC. The government has no resources to deal with such cases.\nD. Interns are reluctant to take official action as it may affect their future job prospect.",a:"D",t:"【翻译】为什么实习生遭遇不公、被无情剥削时大都选择打碎牙往肚里咽？\nA. 潜规则横行 | B. 法律盲区 | C. 监管缺失 | D. 卑微的学生极度恐惧仲裁或把事情闹大会被圈内封杀，进而彻底毁掉自己本就脆弱的未来就业前景"},
+                {id:"r35",type:"mcq",q:"Passage 7 - Q5. What do we learn about unpaid internships from the passage?\nA. The quality of unpaid internships is good.\nB. More graduates apply for unpaid internships.\nC. Unpaid internships are an isolated phenomenon.\nD. Unpaid internships are crucial for college graduates.",a:"B",t:"【翻译】通篇看下来，关于无薪实习能得出什么残酷的市场结论？\nA. 质量上乘 | B. 由于就业内卷，硬着头皮、飞蛾扑火般主动申请无薪实习的毕业生反而呈现逐年暴增态势 | C. 个例 | D. 绝对关键"},
+                {id:"r36",type:"mcq",q:"Passage 8 - Q1. What message does the author want to convey by using the expression ''caught me off guard'' (Para.3)?\nA. She was afraid to answer such a question.\nB. She felt awkward answering such a question.\nC. She was happy to hear such a question.\nD. She was surprised to hear such a question.",a:"D",t:"【翻译】短语“caught me off guard”在第三段中生动刻画了作者何种临场心境？\nA. 吓得不敢说话 | B. 极度尴尬 | C. 满心欢喜 | D. 对方突如其来的刁钻提问完全出乎她的意料，令她大惊失色、猝不及防"},
+                {id:"r37",type:"mcq",q:"Passage 8 - Q2. What does the author say about her source of motivation?\nA. It is precious.\nB. It is common.\nC. It is laborious.\nD. It is controversial.",a:"C",t:"【翻译】作者坦言，她长久以来的核心动力源泉其实本质上非常：\nA. 珍贵珍稀 | B. 普普通通 | C. 费劲、艰苦、需要极其艰辛的自我鞭策 | D. 饱受争议"},
+                {id:"r38",type:"mcq",q:"Passage 8 - Q3. What do we learn about the concept of hormesis from the passage?\nA. It is an adaptive response of cells to relieve stress.\nB. It can be illustrated by the example of building muscle.\nC. It is the phenomenon that something in low doses can kill people.\nD. It is the concept that something in high doses can make people stronger.",a:"B",t:"【翻译】关于高大上的生物进化理论“激殖效应”，文中是如何接地气地阐述的？\nA. 减压反应 | B. 它就像人类去健身房撕裂肌肉纤维、通过微损刺激以催生更强壮肌肉生长的原理一模一样 | C. 低剂量致死 | D. 高剂量变强"},
+                {id:"r39",type:"mcq",q:"Passage 8 - Q4. What can help you perform better at work overall, according to the author?\nA. Enduring hardships.\nB. Trying something new.\nC. Focusing on your skill set.\nD. Facing a gentle learning curve.",a:"B",t:"【翻译】如何才能让你在职场日常工作中长久维持顶峰状态、表现更优秀？\nA. 纯吃苦 | B. 隔三差五跳出舒适圈去接触、探索和【尝试全新的新鲜事物】以激活大脑皮层 | C. 固守技能 | D. 渴望安稳"},
+                {id:"r40",type:"mcq",q:"Passage 8 - Q5. What is the author's ultimate answer to the question of how to stay motivated?\nA. Having a list of activities.\nB. Setting aside all the tangible benefits.\nC. Forming a habit of seeking adventures.\nD. Being cautious about the things you do.",a:"C",t:"【翻译】作者抛出的终极不懈动力核心秘诀是什么？\nA. 疯狂列任务清单 | B. 斩断利益心 | C. 在骨子里形成一种对未知的渴望，【养成主动寻找微冒险、新挑战的终身习惯】 | D. 谨小慎微"},
+                {id:"r41",type:"mcq",q:"Passage 9 - Q1. What is the focus of the research, according to the passage\nA. Doing housework may promote health in old age.\nB. Doing housework can damage health at a young age.\nC. Housework is a predictor of people's health.\nD. Housework is a drag and of no benefit to people's health.",a:"A",t:"【翻译】本项最新医学研究的绝对核心课题是：\nA. 步入老年后，适当、高频率地承担家务劳动居然能够系统性逆转衰老、促进身体健康 | B. 年轻吃苦 | C. 指标预测 | D. 纯属累赘"},
+                {id:"r42",type:"mcq",q:"Passage 9 - Q2. What do we learn about the method of the research?\nA. The research relied on observation.\nB. Participants were carefully selected.\nC. Participants were asked about their levels of physical activity.\nD. The research was based on substantial volumes of collected data.",a:"C",t:"【翻译】该课题采取了何种科研统计方法？\nA. 跟踪观察 | B. 精准筛选 | C. 主要是通过设计细致的问卷形式，【由参与者自述报告日常的家务和体力活动活跃度】 | D. 大数据收集"},
+                {id:"r43",type:"mcq",q:"Passage 9 - Q3. What were the findings about older adults doing high amounts of heavy housework?\nA. Their knee extension was more flexible.\nB. They needed more time to stand tall.\nC. They had a higher risk of having a fall.\nD. They scored higher on the cognition and attention test.",a:"D",t:"【翻译】那些天天在家勤快打扫、做重体力家务的老年人得到了什么惊喜福报？\nA. 膝盖灵活 | B. 站立久 | C. 容易摔倒 | D. 他们竟然在随后的【大脑认知能力与注意力集中度测试中斩获了显著更高的高分】"},
+                {id:"r44",type:"mcq",q:"Passage 9 - Q4. What is the attitude of the professor at University College London toward the research?\nA. Neutral. \nB. Doubtful. \nC. Approving. \nD. Indifferent.",a:"B",t:"【翻译】伦敦大学学院（UCL）的高傲老教授对该结论持何种冷淡态度？\nA. 绝对中立 | B. 充满质疑、不以为然、持强烈保留的【怀疑态度】 | C. 疯狂点赞 | D. 漠不关心"},
+                {id:"r45",type:"mcq",q:"Passage 9 - Q5. What may cause the inaccuracy of the research, according to the professor at the University of Bristol?\nA. The cognitive function tests.\nB. The number of participants.\nC. The age and sex of participants.\nD. The self-reported levels of housework.",a:"D",t:"【翻译】布里斯托大学教授指出，该论文最大的致命漏洞、可能导致数据严重注水的原因是：\nA. 测试太难 | B. 样本量太少 | C. 性别失衡 | D. 【完全依赖中老年人模糊的、主观自述的家务劳动量】，缺乏硬性客观临床监控测量"}
+            ],
+            long_reading: [
+                {id:"lr1",type:"mcq",q:"Q1. We know from the text that ______.\nA) compared with Germany's earlier bombings, the 'little Blitz' was bombing on a larger scale\nB) Germany launched the most destructive bombing in February 1944\nC) the British and Americans did not launch massive air raids on Germany\nD) the writer did not see much bombing in the first two years after he returned home",a:"D",t:"【翻译】A.小闪电规模更大 | B.44年2月最惨重 | C)英美没反击 | D)作者回国后的头两年基本没遭遇过激烈的狂轰滥炸"},
+                {id:"lr2",type:"mcq",q:"Q2. What was most noticeable about the buzz-bombs?\nA) They gave off a sharp rasping sound when they were about to fall.\nB) They could deliver an explosive load over a very long range.\nC) They could be controlled from a remote distance.\nD) Once their tearing sound stopped, it meant that they would drop soon.",a:"D",t:"【翻译】德军臭名昭著的V-1导弹（嗡嗡炸弹）最大的恐怖特征是：\nA) 坠落前嘶吼 | B) 射程超远 | C) 远程遥控 | D) 【只要那尖锐刺耳的发动机撕裂声骤然停息，就预示着它马上就要做自由落体砸下来爆炸了】"},
+                {id:"lr3",type:"mcq",q:"Q3. When the main shopping centre of Lewisham was bombed, ______.\nA) the writer was shocked to see so many people killed\nB) the writer was surprised that he could still remain calm in the face of such a tragedy\nC) the writer saw from a nearby street the serious destruction that was caused\nD) the writer was struck by the bravery of the people who were wounded in the bombing",a:"B",t:"【翻译】当商业中心惨遭炸弹夷为平地时，作者的内心反应是：\nA) 震惊悲痛 | B) 【他极其惊诧于在直面如此惨绝人寰的灾难悲剧时，自己居然能麻木、冷酷地保持绝对的镇定】 | C) 街角看破坏 | D) 被赞勇敢"},
+                {id:"lr4",type:"mcq",q:"Q4. What was Doodlebug Alley?\nA) The village over which the buzz-bombs flew on their way to their targets.\nB) The flight path of the buzz-bombs directed at British cities.\nC) The flight route of the buzz-bombs aimed at London.\nD) The place in Germany where the buzz-bombs were produced.",a:"C",t:"【翻译】著名的死神走廊“Doodlebug Alley”是指：\nA) 必经村庄 | B) 英国城市航线 | C) 【德军轰炸机和导弹专门规划的、死死咬住并直奔伦敦而去的特定轰炸飞行主航道】 | D) 导弹兵工厂"},
+                {id:"lr5",type:"mcq",q:"Q5. During the last winter of the war, ______.\nA) people were concerned that Allies were unable to think of a way to counter Germany's use of buzz-bombs\nB) the Germans developed a more powerful and destructive weapon that was even more alarming\nC) the V2 rockets did far more damage to London in a matter of a few weeks than the buzz-bombs did in a wholw year \nD) the V2 rockets were found to be more destructive because they were silent in flight",a:"B",t:"【翻译】二战最后一战的寒冬中：\nA) 担忧盟国无能 | B) 【绝望的德军困兽犹斗，竟然研发出了更加鬼神莫测、杀伤力成倍暴增、更令英美恐慌窒息的新型大杀器（V-2）】"},
+                {id:"lr6",type:"mcq",q:"Q6. The real reason why older people are complaining about the younger generation's dependency on modern technology is that ______.\nA) they believe the younger generation have become too lazy.\nB) they are unhappy about also becoming 'has beens'.\nC) they feel younger people should also be trained to use dial phones.\nD) they don't believe that dial telephones have become obsolete.",a:"B",t:"【翻译】老人看不惯控诉年轻人离了智能手机就活不了，其内心深处的真实心理投影是：\nA) 嫌弃懒惰 | B) 【他们感到自己被时代无情抛弃、正在沦为毫无存在感的“过气历史遗留物”，从而产生的阵发性不平衡感】 | C) 强练拨号 | D) 电话过时"},
+                {id:"lr7",type:"mcq",q:"Q7. Why does John A. Junot ask the writer whether he would be able to ride a horse if his car broke down?\nA) To argue that dial phones have not become obsolete.\nB) To prove that the writer does not know what he is talking about.\nC) To show that criticism of young people for not knowing how to use a dial phone is unfair.\nD) To demonstrate that older people are also very dependent on modern technology.",a:"C",t:"【翻译】为什么Junot大爷反问“你车坏了你会骑马吗”？\nA) 嘴硬机械电话没过时 | B) 抬杠选手 | C) 【为了证明：老一辈因为现在的年轻人不会拨老古董电话而横加指责，完全是脱离时代、极为不公的胡搅蛮缠】 | D) 讽刺依赖"},
+                {id:"lr8",type:"mcq",q:"Q8. Junot uses the examples of archery, blacksmithing, sailing, etc., to argue that ______.\nA) they are not objects of culture.\nB) such skills can be improved by modern technology.\nC) skills like these are doomed to extinction.\nD) there is no practical use for obsolete technology.",a:"D",t:"【翻译】大爷搬出射箭、打铁、帆船等老技术，是为了说明：\nA) 非文化 | B) 技术能改良 | C) 注定灭绝 | D) 【那些已经被工业文明淘汰的、过时的老技术，在当今现代化高效率的现实生活中早就没有任何实质性卵用了】"},
+                {id:"lr9",type:"mcq",q:"Q9. It can be inferred from the text that people like Barbara Jones and Sally Wade believe that state-of-the-art technology like digital clocks ______.\nA) can have a negative effect on young people.\nB) will make words like ''clockwise'' and ''counterclockwise'' obsolete.\nC) will cause young people to become mindless and unable to tell the time.\nD) could result in young people not being able to use a wrench or screwdriver.",a:"A",t:"【翻译】保守派学者认为现在的电子表、数字显示器等傻瓜式技术：\nA) 【会在潜移默化中对年轻一代的底层空间思维和认知逻辑发育产生不可逆的负面荼毒效应】 | B) 词汇过时 | C) 脑残 | D) 不会用扳手"},
+                {id:"lr10",type:"mcq",q:"Q10. What is the tone of the text?\nA) Optimistic. \nB) Scornful. \nC) Ironic. \nD) Gloomy.",a:"C",t:"【翻译】整篇纵论两代人技术代沟与心理战的文章其主基调是：\nA) 阳光乐观 | B) 破口大骂 | C) 【充满了高级感、冷嘲热讽且引人深思的黑色幽默与讽刺（Ironic）】 | D) 哀怨低沉"},
+                {id:"lr11",type:"mcq",q:"Q11. Why is the Mall of America a primary tourist destination?\nA) Because it is a showcase of inexpensive American merchandise.\nB) Because it represents the various aspects of the American way of life.\nC) Because it is the site of numerous shops and entertainment facilities.\nD) Because it is the biggest and most famous of all American shopping centres.",a:"C",t:"【翻译】为什么超级摩尔购物中心能名扬海外、成为美国旅游打卡必经之地？\nA. 卖便宜货 B. 象征美式生活 C. 【因为它疯狂地把成千上万家一线大牌旗舰店与超巨型室内游乐场、水族馆完美缝合在了一起】 D. 最大名气"},
+                {id:"lr12",type:"mcq",q:"Q12. Shopping malls are popular in that they ______.\nA) favorite meeting place.\nB) have so many different places to shop at one location.\nC) make life convenient.\nD) do everything under one roof.",a:"B",t:"【翻译】大型集约式购物中心的风靡，核心卖点在于：\nA. 约会圣地 B. 【让消费者只需要停一次车，就能在一个庞大的商业聚合体内一口气扫光所有维度的品牌货物】 C. 方便 D. 一屋干所有"},
+                {id:"lr13",type:"mcq",q:"Q13. The chief purpose of the MOA in providing a variety of recreational activities is to ______.\nA) combine shopping with fun activities.\nB) make it an enjoyable place for young people to visit.\nC) attract as many visitors as possible.\nD) extract as much money as possible from its visitors.",a:"D",t:"【翻译】揭露资本本质。商家大费周章在商场里建过山车、海洋馆，最根本的獠牙是：\nA. 寓教于乐 B. 关爱年轻人 C. 冲流量 D. 【为了尽可能长久地把顾客双腿锁在商场里，从而疯狂榨干他们钱包里的最后一分钱】"},
+                {id:"lr14",type:"mcq",q:"Q14. Despite the high priority it places on doing business, the MOA also gives some consideration to ______.\nA) the human side of things.\nB) the recreational needs of its visitors.\nC) the cultural needs of society.\nD) the social life of the community.",a:"A",t:"【翻译】尽管金钱至上，但该商场在细节设计上偶尔也兼顾了：\nA. 【充满温情、关怀的人性化设计与人文关怀一面（The human side）】 B. 娱乐 C. 文化需求 D. 社区社交"},
+                {id:"lr15",type:"mcq",q:"Q15. According to the passage, people's lifestyles can be determined by ______.\nA) market economics.\nB) business activities.\nC) economic interests.\nD) commercial companies.",a:"B",t:"【翻译】文章最后的终极升华观点：现代人的生活习惯、作息习惯、甚至是活法，在本质上都是由什么重塑和决定的？\nA. 市场规律 B. 【庞大、无孔不入的现代商业活动与消费主义浪潮（Business activities）】 C. 经济利益 D. 广告公司"}
+            ],
+            cloze: [], // 下方由引擎动态自动100%洗牌装填
+            fill_blank: [
+                {id:"fb1",type:"fill",q:"1. This study was conducted to test the ___ that exposure to urban air pollution contributes to the development of chronic lung diseases.",a:"hypothesis",t:"【中文大意】本项临床研究旨在严格验证以下核心【假设】：长期暴露于城市重度空气污染中会导致人体慢性肺部疾病加速恶化。"},
+                {id:"fb2",type:"fill",q:"2. If your stress is ____ into more serious issues, you should reach out to a licensed professional to get a treatment plan.",a:"escalating",t:"【中文大意】如果你的心理压力正在显著地【升级/恶化】为更为严重的心理病症，你必须立刻向有资质的临床专家求助。"},
+                {id:"fb3",type:"fill",q:"3. Studies have shown that long-term confinement is ____ to the physical and psychological well-being of animals.",a:"detrimental",t:"【中文大意】多项动物行为学研究表明，长期、逼仄的圈养关押对野生动物的生理和心理健康是极其【有害的】。"},
+                {id:"fb4",type:"fill",q:"4. Computers, vehicles, paintings, furniture, etc. are all ____ assets that are characterized by their movability.",a:"tangible",t:"【中文大意】在财务会计中，计算机、商用车、名贵画作、家具等均属于以具备物理可移动性为核心特征的【有形】资产。"},
+                {id:"fb5",type:"fill",q:"5. The dock was constructed on a(n) _____ scale with the most modern equipment, designed to enable rapid loading.",a:"lavish",t:"【中文大意】该深水码头是以极其【宏大/奢华的】规模倾力打造的，配备了最前沿的自动化设备以实现货轮急速全天候装卸。"},
+                {id:"fb6",type:"fill",q:"6. To encourage innovation among employees, the company has canceled a number of regulations that may ______ creative ideas.",a:"hamper",t:"【中文大意】为了自上而下激活员工的创新基因，集团董事会痛下决心废除了多项可能会【阻碍/束缚】员工创意思维的条条框框。"},
+                {id:"fb7",type:"fill",q:"7. Chinese consumers embrace healthy lifestyles, and many are changing their ______ habits to further reduce the consumption of sugar.",a:"dietary",t:"【中文大意】新一代中国消费者正在狂热拥抱健康养生，许多人正在极力重塑其【饮食】习惯以达到全面控糖、断糖的目的。"},
+                {id:"fb8",type:"fill",q:"8. The professor usually ______ his lecture by providing some interesting background information, which helps students understand.",a:"prefaces",t:"【中文大意】这位老教授在讲授硬核干货前，惯常喜欢通过抛出一些趣味十足的历史边角料来【作为讲座的引言/开场白】。"},
+                {id:"fb9",type:"fill",q:"9. What attracted me most in the museum was a stone sculpture of an ancient warrior in a(n) ______ complete with helmet, sword.",a:"costume",t:"【中文大意】整个历史博物馆最让我挪不动步的，是一尊身着全套古战场重型【甲胄/盛装】、威风凛凛的远古武士石雕。"},
+                {id:"fb10",type:"fill",q:"10. He fully researched immigration to North America to write a(n) ______ account of immigrant life.",a:"authentic",t:"【中文大意】他只身一人扎进北美移民档案馆翻阅数年，只为能够落笔写就一部绝对【真实、具有权威考证的】早年华工血泪史。"},
+                {id:"fb11",type:"fill",q:"11. The air and rivers in this area are getting cleaner, and attempts to preserve animal species and their ______ have been successful.",a:"habitat",t:"【中文大意】得益于重工业腾退，本市的蓝天碧水正在回归，保护珍稀野生动物以及恢复其原始【栖息地】的工程基本大功告成。"},
+                {id:"fb12",type:"fill",q:"12. Due to rising ______ and the availability of a wider range of choices, consumption is now based more on what one wants.",a:"affluence",t:"【中文大意】由于居民整体【富裕/荷包鼓胀】程度水涨船高，当下的年轻消费逻辑已经彻底从‘生存必需’演变为‘取悦自我’。"},
+                {id:"fb13",type:"fill",q:"13. Improper ______ of plastics into the oceans endangers the marine species and subsequently human lives.",a:"disposal",t:"【中文大意】极不负责任地向蔚蓝大海里无节制【处置/倾倒】塑料垃圾，正严重破坏海洋食物链，并终将反噬伤害整个人类社会。"},
+                {id:"fb14",type:"fill",q:"14. Insects are important sources of food. Hundreds of species of birds would ______ if there were no insects to feed on.",a:"perish",t:"【中文大意】生态学铁律：昆虫是自然界基石级饲料。一旦昆虫被农药赶尽杀绝，成百上千种鸟类都将因断粮而【覆灭/死亡】。"},
+                {id:"fb15",type:"fill",q:"15. Scientists in China have carried out advanced research on hydrology and made ______ achievements in recent years.",a:"monumental",t:"【中文大意】我国地学科学家在内陆河流域水文学研究上持续发力，在国际学术界接连取得了【里程碑式的/永垂不朽的】非凡成就。"},
+                {id:"fb16",type:"fill",q:"16. The average life ______ in developing countries has risen rapidly due to improvements in nutrition, medicine, and public health.",a:"expectancy",t:"【中文大意】由于底层营养摄入、临床医疗资源以及公共卫生防疫体系的跨越式健全，发展中国家人口的平均【预期】寿命飙升。"},
+                {id:"fb17",type:"fill",q:"17. He is planning to retire as executive director in a few months, but agreed to stay on until a(n) ______ is appointed.",a:"successor",t:"【中文大意】虽然大老板去意已决，准备在数月后光荣退休，但他还是仁至义尽地答应在【继任者/接班人】正式敲定前继续坐镇。"},
+                {id:"fb18",type:"fill",q:"18. The clothing you wear to the gym shouldn't be too tight because you don't want to work out in something that ______ your movements.",a:"constricts",t:"【中文大意】去健身房撸铁时穿的运动衣千万别太紧绷，因为你肯定不想在做深蹲硬拉时，衣服死死【束缚/限制】住你的动作。"},
+                {id:"fb19",type:"fill",q:"19. The company decided to redesign the advertisement after realizing that it might ______ criticism from consumers.",a:"incur",t:"【中文大意】市场部在惊恐地意识到这则带有偏见擦边的创意广告可能会全网【招致/惹来】消费者的疯狂抵制和口诛笔伐后，连夜撤档重做。"},
+                {id:"fb20",type:"fill",q:"20. After hearing about the family's difficulties, all the neighbors felt great ______ and offered to help in what they could.",a:"sympathy",t:"【中文大意】在悉知了隔壁那家人遭遇的飞来横祸与惨淡家境后，街坊邻居们都流露出了极大的【同情心】，纷纷有钱出钱有力出力。"}
+            ],
+            translation: [
+                {id:"t1",type:"text",title: "（1）篇章一：城乡一体化发展",content: "1. 城乡一体化是我国现代化和城市化发展的一个新阶段。\n2. 城乡一体化的目的是破除城乡二元经济结构。\n3. 只有大力推进城乡一体化，我国整个城乡经济才能实现全面、可持续的发展。",answer: "1. Urban-rural integration is a new stage in China’s development toward modernization and urbanization.\n2. The purpose of urban-rural integration is to eliminate the urban-rural dual economic structure.\n3. Only by greatly promoting urban-rural integration can the whole urban and rural economy of our country develop comprehensively and sustainably."},
+                {id:"t2",type:"text",title: "（2）篇章二：国画水墨画之美",content: "1. 水墨画是中国国画的代表。\n2. 在其一千多年的历史中，水墨画经历了不断的发展、提高和完善。\n3. 水墨画在中国绘画史上具有很高的地位。",answer: "1. Ink wash painting is representative of traditional Chinese painting.\n2. In its history of over one thousand years, ink wash painting has experienced constant development, improvement, and perfection.\n3. Ink wash painting holds a high status in the history of Chinese painting."},
+                {id:"t3",type:"text",title: "（3）篇章三：生态文明保护工程",content: "1. 中国政府采取了一系列改善生态环境的措施。\n2. 许多重点生态工程得到推进或实施。\n3. 今后，我们还需要进一步提升生态系统的多样性、稳定性和持续性。",answer: "1. The Chinese government has taken a series of measures to improve the ecological environment.\n2. Many key ecological projects have been advanced or implemented.\n3. In the future, we should further enhance the diversity, stability, and sustainability of ecosystems."},
+                {id:"t4",type:"text",title: "（4）篇章四：中国载人航天壮举",content: "1. 迄今，中国载人航天工程已经取得了巨大成就。\n2. 2003 年，“神舟五号”载人飞船成功发射。\n3. 2005 年至今，中国又完成了多次神舟飞船载人发射。",answer: "1. To date, China's manned space program has achieved remarkable accomplishments.\n2. In 2003 Shenzhou-5, a manned spacecraft, was launched successfully.\n3. Since 2005, several more manned space missions have been completed using the Shenzhou spacecraft."}
+            ],
+            essay: [
+                {title: "第一篇：城市化与智慧城市（From Urbanization to Smart Cities）", content: "The Future of Smart Cities\nChina is experiencing rapid urbanization, and the rise of smart cities offers a new way to deal with urban problems. Unlike traditional cities that waste energy and harm the environment, smart cities use modern technology like the Internet of Things, big data, and AI to make city life more efficient and sustainable.\nIn smart cities, data helps manage traffic, improve safety, and respond to emergencies quickly. Green spaces are protected, and resources are used wisely. Chinese cities such as Shenzhen have already started this transformation. Smart cities are not just about technology; they aim to create a better life for people. By using innovation in city planning, we can build cleaner, safer, and more comfortable places to live.", chinese: "智慧城市的未来\n中国正在经历快速的城市化进程，智慧城市的兴起为解决城市问题提供了新途径。与传统城市浪费能源、损害环境不同，智慧城市利用物联网、大数据和人工智能等现代技术，使城市生活更加高效和可持续。\n在智慧城市中，数据有助于管理交通、提高安全水平，并快速应对紧急事件。绿地得到保护，资源得到合理利用。深圳等中国城市已经开始这一转型。智慧城市不仅仅是关于技术的，它们的目标是为人民创造更美好的生活。通过在城市规划中运用创新，我们可以建设更清洁、更安全、更舒适的居住环境。这是迈向更美好未来的重要一步。"},
+                {title: "第二篇：真正的美（Making the Choice to Be Truly Beautiful）", content: "What Is True Beauty?\nMany people today care too much about physical appearance. They try to look like the perfect images they see on TV or social media. However, true beauty does not come from makeup, fashionable clothes, or a perfect body. It comes from inside — from kindness, honesty, and a good heart.\nPhysical beauty fades as we get older, but inner beauty grows with experience. People who are caring, understanding, and positive make others feel good. They are the ones who truly shine. Instead of trying to meet others' standards, we should focus on becoming better people and accepting ourselves as we are. In the end, beauty is not about how we look. It is about the choices we make and how we treat others. Real beauty lies in our character and spirit.", chinese: "什么是真正的美？\n如今许多人过于在意外表，试图让自己看起来像电视或社交媒体上看到的完美形象。然而，真正的美并非来自化妆品、时髦的衣服或完美的身材，而是来自内心——来自善良、诚实和美好的心灵。\n外在的美丽会随着年龄增长而消逝，但内在的美会随着阅历而加深。那些关心他人、善解人意、积极乐观的人会给周围的人带来好感，他们才是真正闪耀的人。我们不应该试图迎合别人的标准，而应该专注于成为更好的人，并接纳真实的自己。\n说到底，美不在于外表，而在于我们所做的选择以及我们如何对待他人。真正的美存在于我们的品格和精神之中。"},
+                {title: "第三篇：保护地球与生态环境（Save the Earth, Save Life）", content: "Protecting Our Planet\nWorld Environment Day reminds us that we must take care of our planet. For many years, human activities like cutting down forests, overfishing, and burning fossil fuels have caused serious damage to the environment. Climate change is getting worse, and many species are in danger of disappearing. If we do not take action, the future will be very difficult for all living things.\nWe should reduce energy use, recycle more, and protect natural habitats. Governments should make stricter laws to stop pollution, and companies should develop cleaner technologies. Each of us can also make a difference by making environmentally friendly choices in our daily lives. We must act now to save the earth for ourselves and for future generations.", chinese: "保护我们的星球\n世界环境日提醒我们，必须爱护我们的地球。多年来，砍伐森林、过度捕捞和燃烧化石燃料等人类活动已经对环境造成了严重破坏。气候变化日益加剧，许多物种面临灭绝的危险。如果我们不采取行动，所有生物的将来都会非常艰难。\n我们应该减少能源消耗，加强回收利用，保护自然栖息地。政府应制定更严格的法律来制止污染，企业也应开发更清洁的技术。我们每个人也可以通过日常生活中的环保选择来发挥作用。任务虽艰巨，但人人有责。为了我们自己和子孙后代，我们必须现在就采取行动来拯救地球。"},
+                {title: "第四篇：有意义的人生（A Meaningful Life）", content: "How to Live a Meaningful Life\nHenry Spira’s life shows us what it really means to live with purpose. He was not rich or famous, but he spent his whole life fighting for animal rights. He successfully stopped cruel experiments on animals and pushed companies to find safer alternatives. Even when he was dying of cancer, he stayed positive because he felt he had done something important.\nA meaningful life does not depend on money or status. It comes from helping others and making a difference, no matter how small. Henry never married or had children, but he left a lasting impact on the world. His courage and kindness gave his life real meaning. We can all find meaning in our own lives by caring for others, standing up for what is right, and taking action. A life with purpose is a life well lived.", chinese: "如何过上有意义的人生\n亨利·斯皮拉的一生向我们展示了什么叫做有目的地活着。他既不富有也不出名，却毕生致力于争取动物权利。他成功阻止了残忍的动物实验，并推动企业寻找更安全的替代方案。即使身患癌症临终之际，他仍保持积极心态，因为他觉得自己做了重要的事情。\n有意义的人生不取决于金钱或地位，而在于帮助他人、做出改变，无论这改变多么微小。亨利从未结婚，也没有孩子，但他给世界留下了持久的影响。他的勇气和善良赋予了他生命真正的意义。我们都可以通过关心他人、坚持正义和采取行动，在自己的人生中找到意义。有目标的人生，才是真正有价值的人生。"}
+            ]
+        };
+
+        // ==================== 智能选词填空（四选一）深度生成算法 ====================
+        const CLOZE_SOURCE_TEXTS = [
+            {
+                ctx: "【完形填空第 1 篇】\nCities are getting smarter every day, so are their transit options. One emerging option is autonomous vehicles (AVs), or simply cars with self-driving 1) [__]. However, as experts say, before we enter a reality where AVs are 2) [__] into our daily lives, we will see the continued rise of electric vehicles (EVs) all over the world. Besides saving costs for consumers, EVs can bring many 3) [__] benefits to the environment because they use electricity instead of gas. Many large cities are trying to encourage the use of EVs by installing public charging stations and 4) [__] the vehicle registration process. At the same time, many automakers are working to 5) [__] the charging speed of EVs and to make EVs more 6) [__].\nAs the use of EVs rises, greater 7) [__] will be placed on the power industry. In some areas where energy resources are stressed already, the increasing use of EVs could well 8) [__] the electrical supply system. It is important for automakers to partner with urban planners to provide 9) [__] experiences for consumers. Imagine one day a driverless EV picks you up and then 10) [__] to the location of the next passenger without ever stopping...",
+                bank: ["affordable","capability","demand","disputable","disrupt","embedded","enhance","escalation","exceeds","modernized","optimal","proceeds","streamlining","sustainability","undermining"],
+                answers: ["capability", "embedded", "sustainability", "streamlining", "enhance", "affordable", "demand", "disrupt", "optimal", "proceeds"],
+                chinese: "【全篇汉译参考】城市每天都在变得更智慧，其交通选择也是如此。一个新兴选择是自动驾驶汽车（AVs），或者简称为具有自动驾驶【能力】的汽车。然而，正如专家所说，在我们进入自动驾驶汽车全面【融入】日常生活的现实之前，我们将在全球范围内看到电动汽车（EVs）的持续崛起。除了为消费者节省成本外，电动汽车还能为环境带来许多【可持续性】的利益。许多大城市正试图通过在全市安装公共充电桩并【简化】车辆登记流程来鼓励使用电动汽车。同时，许多汽车制造商正在努力【提升】电动汽车的充电速度，并使电动汽车更加【负担得起/经济实惠】。随着电动汽车使用的增加，将对电力行业提出更大的【需求】。在一些能源资源已经紧张的地区，电动汽车使用的增加很可能会【瓦解/扰乱】供电系统。汽车制造商与城市规划者合作以提供【最优的】体验至关重要。想象一下，有一天一辆无人驾驶的电动汽车接上你并把你送下车，然后【继续前往】下一个乘客的位置，中途无需停下来充电..."
+            },
+            {
+                ctx: "【完形填空第 2 篇】\nWhen I was young, I had a very narrow understanding of beauty. I used to 1) [__] it with only physical things. It was about what the eye could see: soft hair, clear skin, 2) [__] clothes, a good figure ... I think some other people may also have gone through this phase of wanting the perfect shell defined solely in terms of 3) [__] standards.\nWhen I first entered the modeling industry, I was always 4) [__] to conform to others' criteria of beauty. Even today, I can't believe how 5) [__] my thoughts were. I want to correct this narrow idea. When we allow others to determine what is beautiful, we fail to express and accept our individuality, our unique physical and personal 6) [__]. I think we should construct our own 7) [__] of beauty that are more comprehensive. As time goes on, I have realized that physical beauty won't last forever because we humans are all 8) [__] and grow old inevitably. I have met many strong women, for example, a friend who 9) [__] breast cancer. Their confidence radiates from their 10) [__] to their professional pursuits.",
+                bank: ["associate","collaborate","concepts","dedication","depriving","hesitation","ideological","mortal","physical","populous","ridiculous","striving","stylish","survived","traits"],
+                answers: ["associate", "stylish", "physical", "striving", "ridiculous", "traits", "concepts", "mortal", "survived", "dedication"],
+                chinese: "【全篇汉译参考】年轻时，我对美的理解很狭隘。我过去常常把它仅与外在事物【联系】在一起。那是眼睛能看到的东西：柔顺的头发、白皙的皮肤、【时髦的】衣服、姣好的身材……我想其他人可能也经历过这个阶段，渴望拥有完全由【外在生理】标准定义的完美外壳。当我刚进入模特行业时，我总是【极力挣扎】去迎合别人的审美标准。即使在今天，我也无法相信我当时的想法是多么的【荒谬可笑】。我想纠正这种狭隘的观念。当我们允许别人来定义美时，我们就无法表达和接受自己的个性，无法接受我们独特的身体和个人【特征】。我认为我们应该构建属于自己的、更全面的美的【概念】。随着时间的流逝，我逐渐意识到外在美不会永远持续，因为我们人类都是【终有一死的】，必然会变老。我遇到过许多坚强的女性，例如，一位在乳腺癌中【幸存下来】的朋友。她们的自信源于她们对专业追求的【奉献/专注】。"
+            },
+            {
+                ctx: "【完形填空第 3 篇】\nFarming invariably interferes with the habitats of plants and animals. However, agriculture will not necessarily put biodiversity in 1) [__] and the two can coexist. Sustainable cultivation enables us to 2) [__] biodiversity. A large 3) [__] of the earth's surface like deserts is not suitable for crop cultivation, and other areas are 4) [__] by humans for roads and buildings. Some land that is rich in biodiversity should not be 5) [__] into arable land. Changing tropical rain forests for crop cultivation would be 6) [__] to the habitats. By 2050, global demand for food will have increased substantially. This is one of the 7) [__] challenges facing agriculture today: How do we balance food demand and the need to maintain biological 8) [__]? Efficient and effective use of land will be 9) [__] to the increase of food production. Achieving this will depend on the use of modern and 10) [__] agricultural methods.",
+                bank: ["conserve","converted","corresponding","devastating","elimination","jeopardy","imperative","innovative","integrity","monumental","notional","proportion","reserve","tackled","utilized"],
+                answers: ["jeopardy", "conserve", "proportion", "utilized", "converted", "devastating", "monumental", "integrity", "imperative", "innovative"],
+                chinese: "【全篇汉译参考】农业开垦不可避免地会干扰动植物的栖息地。然而，这并不意味着农业一定会让生物多样性陷入【危险/绝境】之中。可持续耕作能够使我们【保护】生物多样性。地球表面的很大【比例】（如沙漠）不适合农作物种植，而其他区域则被人类【利用】来修建道路和建筑。一些生物多样性丰富的土地不应当被【转化为】耕地。改变热带雨林用于农作物种植对栖息地而言将是【毁灭性的】。到2050年，全球对粮食的需求将大幅增加。这是当今农业面临的【巨大的/里程碑式的】挑战之一：我们如何在不断增长的粮食需求与维护生态【完整性】和多样性的需要之间取得平衡？高效利用土地对于提高粮食产量将是【迫切的/至关重要的】。实现这一目标将取决于现代和【创新】农业方法的使用。"
+            },
+            {
+                ctx: "【完形填空第 4 篇】\nJack MacDonald, a Seattle man, left a fortune worth $187.6 million to charity after living a frugal and humble life. The 1) [__] was the largest charitable gift in Washington State in 2013. MacDonald struck people as a man without much money. He 2) [__] coupons to save money on groceries, wore sweaters with holes, and took a bus to attend alumni luncheons. He once bought so many cans of frozen juice at a bargain price that he had to 3) [__] a new freezer to hold them.\nMacDonald left 40 percent of his fortune to support a variety of 4) [__] research in childhood diseases, although he had no 5) [__] of his own. MacDonald made a huge fortune by investing in the stock market. After his parents died, he received a large family 6) [__]. He never thought about buying any luxuries although he had 7) [__] wealth at his disposal. MacDonald might have been eccentric in some ways, but he always acted on his 8) [__] to do good with his wealth. He also sent anonymous gifts to a small town in Canada after his parents 9) [__] there from Scotland. In the two months before he died, he insisted on using inexpensive ordinary drugs so that his treatment wouldn't 10) [__] additional costs.",
+                bank: ["clipped","convictions","disruptive","domination","donation","enormous","immigrated","incur","inheritance","innovative","occur","offspring","purchase","reluctance","vaccinated"],
+                answers: ["donation", "clipped", "purchase", "innovative", "offspring", "inheritance", "enormous", "convictions", "immigrated", "incur"],
+                chinese: "【全篇汉译参考】西雅图男子杰克·麦克唐纳在过着节俭质朴的一生后，留下了价值1.876亿美元的巨额遗产给慈善机构。这笔【捐款】是2013年华盛顿州最大的一笔慈善赠款。麦克唐纳给人的印象是一个没有多少钱的人。他【剪下】优惠券以节省购买杂货的钱，穿着有洞的毛衣，坐公交车参加校友午宴。他曾以特价购买了如此多罐冷冻果汁，以至于不得不【购买】一台新冰箱来存放它们。麦克唐纳将他财产的40%留给了儿童研究所，以支持各种治疗儿童疾病的【创新型】研究，尽管他自己并没有【后代】。麦克唐纳通过在股票市场投资赚取了巨额财富。父母去世后，他继承了一笔丰厚的家族【遗产】。尽管有【巨大的】财富可供支配，他却从未想过购买任何奢侈品。麦克唐纳在某些方面可能很古怪，但他总是根据自己用财富行善的【坚定制约/信仰】来行动。在其父母从苏格兰【移民】到加拿大的一座小镇后，他还匿名寄去礼物。在临终前两个月，他坚持使用便宜的普通药物，以免治疗【招致/产生】额外的费用。"
+            }
+        ];
+
+        function unpackCloze() {
+            CLOZE_SOURCE_TEXTS.forEach((item, pIdx) => {
+                item.answers.forEach((ans, aIdx) => {
+                    let pool = item.bank.filter(w => w !== ans);
+                    pool.sort(() => 0.5 - Math.random());
+                    const distractors = pool.slice(0, 3);
+                    const finalOptions = [ans, ...distractors];
+
+                    DATA_PACK.cloze.push({
+                        id: `gen_cloz_${pIdx}_${aIdx}`,
+                        type: "mcq",
+                        isCloze: true,
+                        showPassage: aIdx === 0 ? item.ctx : null,
+                        rawQ: `【第 ${pIdx + 1} 篇】 第 <strong>(${aIdx + 1})</strong> 空：请在下方选项中选出唯一正确的填空词汇：`,
+                        correctWord: ans,
+                        optionsSource: finalOptions,
+                        t: `【完形填空核心解析】\n标准正确答案：<strong>${ans}</strong>\n${item.chinese}`
+                    });
+                });
+            });
+        }
+        unpackCloze();
+// 核心函数：点击知道了，隐藏弹窗进入系统
+function enterQuiz() {
+    document.getElementById('welcome-modal').style.display = 'none';
+}
+
+// 核心函数：点击不记，智能退出或跳转空白页
+function exitQuiz() {
+    window.opener = null;
+    window.open('', '_self');
+    window.close(); // 尝试关闭网页
+    setTimeout(function() {
+        window.location.href = "about:blank"; // 浏览器拦截关闭时的兜底退出方案
+    }, 100);
+}
+        // ==================== 状态管理与核心交互引擎 ====================
+        let currentTab = 'news';
+        let progressData = JSON.parse(localStorage.getItem('cet4_full_prog_2026')) || {};
+        let wrongsList = JSON.parse(localStorage.getItem('cet4_full_wro_2026')) || [];
+
+        function randArr(arr) { return arr.sort(() => Math.random() - 0.5); }
+
+        function render() {
+            const pool = document.getElementById('display-pool');
+            pool.innerHTML = '';
+            
+            let list = [];
+            if (currentTab === 'wrong_bank') {
+                let all = [];
+                Object.keys(DATA_PACK).forEach(k => all = all.concat(DATA_PACK[k]));
+                all.forEach(q => { if (wrongsList.includes(q.id)) list.push(q); });
+                if (list.length === 0) {
+                    pool.innerHTML = '<div style="text-align:center; padding:50px; color:#10b981; font-weight:bold; font-size:1.2rem;">🎉 错题库已经全部清空！太厉害了！</div>';
+                    return;
+                }
+            } else {
+                list = DATA_PACK[currentTab] || [];
+            }
+
+            if (currentTab === 'essay') {
+                list.forEach(es => {
+                    const div = document.createElement('div');
+                    div.className = 'essay-card';
+                    div.innerHTML = `
+                        <div class="essay-title">${es.title}</div>
+                        <div style="font-size:1.05rem; line-height:1.6; margin-bottom:15px; font-weight:500;">${es.content.replace(/\n/g, '<br>')}</div>
+                        <div style="color:#475569; background:#f8fafc; padding:14px; border-radius:6px; border:1px dashed var(--border);">${es.chinese.replace(/\n/g, '<br>')}</div>
+                    `;
+                    pool.appendChild(div);
+                });
+                return;
+            }
+
+            list.forEach((q) => {
+                const card = document.createElement('div');
+                card.className = 'q-card';
+                card.id = `c-${q.id}`;
+
+                if (q.showPassage) {
+                    const pb = document.createElement('div');
+                    pb.className = 'passage-context';
+                    pb.innerText = q.showPassage;
+                    card.appendChild(pb);
+                }
+
+                if (q.type === 'mcq') {
+                    if (!q.shuffled) {
+                        if (q.isCloze) {
+                            let opts = randArr([...q.optionsSource]);
+                            q.shuffled = opts.map(o => ({ text: o, isCorrect: o === q.correctWord }));
+                        } else {
+                            const lines = q.q.split('\n');
+                            const optsArr = lines.filter(l => l.match(/^[A-D]\b/ || /^[A-D]\)/)).map(l => l.replace(/^[A-D][\.\)]\s*/, '').trim());
+                            let finalOpts = [
+                                { text: optsArr[0], isCorrect: q.a === 'A' },
+                                { text: optsArr[1], isCorrect: q.a === 'B' },
+                                { text: optsArr[2], isCorrect: q.a === 'C' },
+                                { text: optsArr[3], isCorrect: q.a === 'D' }
+                            ];
+                            q.shuffled = randArr(finalOpts);
+                        }
+                    }
+
+                    const qt = document.createElement('div');
+                    qt.className = 'q-text';
+                    qt.innerHTML = q.isCloze ? q.rawQ : q.q.split('\n')[0];
+                    card.appendChild(qt);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'options-grid';
+
+                    const labels = ['A', 'B', 'C', 'D'];
+// 💡 请在你的 render() 函数里，找到循环输出 opt-btn 的地方，整体替换为以下判断：
+q.shuffled.forEach((opt, oIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML = `<strong>${labels[oIdx]}.</strong> ${opt.text}`;
+
+    // 如果这道题在本地存有做题历史进度
+    if (progressData[q.id]) {
+        btn.style.pointerEvents = 'none'; // 刷新或切分类时，同样无感锁死点击交互
+        
+        // 恢复用户历史选择的亮色状态
+        if (progressData[q.id].choice === opt.text) {
+            btn.classList.add(opt.isCorrect ? 'correct' : 'wrong'); // 历史选对恢复绿色，选错恢复红色
+        }
+        // 正确答案无论如何强制保底高亮恢复成绿色
+        if (opt.isCorrect) {
+            btn.classList.add('correct');
+        }
+    } else {
+        // 如果是未答过的题目，正常绑定答题点击事件
+        btn.onclick = () => submitMcq(q.id, opt.text, opt.isCorrect, card);
+    }
+    grid.appendChild(btn);
+});
+                    card.appendChild(grid);
+
+                    const ab = document.createElement('div');
+                    ab.className = `analysis-box ${progressData[q.id] ? 'show' : ''}`;
+                    ab.innerHTML = q.t.replace(/\n/g, '<br>');
+                    card.appendChild(ab);
+// 找到 render() 里面处理已答题目处的这一段，将其完全替换：
+// 找到你原本 render() 函数里处理已答题目回填的 if 块，将其内部完全替换：
+if (progressData[q.id]) {
+                        (async () => {
+                            try {
+                                let dynamicLetter = q.a || q.answer || "";
+                                if (q.shuffled) {
+                                    const correctIdx = q.shuffled.findIndex(opt => opt.isCorrect);
+                                    if (correctIdx !== -1) {
+                                        dynamicLetter = ['A', 'B', 'C', 'D'][correctIdx];
+                                    }
+                                }
+                                const standardAns = q.isCloze ? `${dynamicLetter} (${q.correctWord})` : dynamicLetter;
+
+                                // ✨【同步修复点】：四选一词汇题刷新回填时，同样要读取当前乱序好的 shuffled 进行拼接发送
+                                let textToTranslate = "";
+                                if (q.isCloze) {
+                                    if (q.shuffled && q.shuffled.length > 0) {
+                                        const labels = ['A', 'B', 'C', 'D'];
+                                        textToTranslate = "【选词填空选项翻译】:\n" + q.shuffled.map((opt, idx) => `${labels[idx]}. ${opt.text}`).join("\n");
+                                    } else {
+                                        textToTranslate = progressData[q.id].choice;
+                                    }
+                                } else {
+                                    let questionCleaned = q.q || q.question || "";
+                                    const optStartIdx = questionCleaned.search(/\n+\s*[A-D][\.\)]/i);
+                                    if (optStartIdx !== -1) {
+                                        questionCleaned = questionCleaned.substring(0, optStartIdx).trim();
+                                    }
+                                    textToTranslate = questionCleaned;
+                                    
+                                    if (q.shuffled && q.shuffled.length > 0) {
+                                        const labels = ['A', 'B', 'C', 'D'];
+                                        const shuffledOptionsText = q.shuffled.map((opt, idx) => `${labels[idx]}. ${opt.text}`).join("\n");
+                                        textToTranslate += "\n\n【选项对照翻译】:\n" + shuffledOptionsText;
+                                    }
+                                }
+
+                                const resChinese = await translateOnline(textToTranslate);
+
+                                const localTransQ = q.t || q.transQ || "⚠️ 原本地库中未录入本题的中文翻译。";
+                                const localTransOptions = q.transOptions || "";
+
+                                ab.innerHTML = `
+                                    <div style="margin-bottom:12px;">
+                                        <span style="background:#10b981;color:white;padding:2px 6px;border-radius:4px;font-size:0.8rem;font-weight:bold;">标准答案</span> 
+                                        <strong style="color:#10b981;font-size:1.1rem;margin-left:5px;">${standardAns}</strong>
+                                    </div>
+                                    
+                                    <div style="display:flex; gap:8px; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+                                        <button onclick="switchTransTab(this, 'net')" style="background:#f59e0b; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;">🌐 联网实时翻译</button>
+                                        <button onclick="switchTransTab(this, 'local')" style="background:#e2e8f0; color:#475569; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;">💾 原本地库翻译</button>
+                                    </div>
+
+                                    <div class="trans-net-content" style="color:#78350f; white-space:pre-line;">
+                                        ${resChinese}
+                                    </div>
+
+                                    <div class="trans-local-content" style="color:#1e293b; white-space:pre-line; display:none; background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+                                        <div style="font-weight:bold; color:#3b82f6; margin-bottom:4px;">📌 原本地库保存的静态翻译：</div>
+                                        <div>${localTransQ}</div>
+                                        ${localTransOptions ? `<div style="margin-top:8px; border-top:1px dashed #cbd5e1; padding-top:6px; color:#475569;">${localTransOptions}</div>` : ''}
+                                    </div>
+                                `;
+                            } catch (err) {
+                                console.error("历史记录网络回填发生异常:", err);
+                            }
+                        })();
+                    
+}                } else if (q.type === 'fill') {
+                    const qt = document.createElement('div');
+                    qt.className = 'q-text';
+                    qt.innerText = q.q;
+                    card.appendChild(qt);
+
+                    const box = document.createElement('div');
+                    box.className = 'fill-box';
+
+                    const input = document.createElement('input');
+                    input.className = 'fill-input';
+                    input.type = 'text';
+                    input.placeholder = '请输入你的拼写答案...';
+
+                    const sub = document.createElement('button');
+                    sub.className = 'fill-submit';
+                    sub.innerText = '核对确定';
+
+                    if (progressData[q.id]) {
+                        input.value = progressData[q.id].choice;
+                        input.disabled = true; sub.disabled = true;
+                        sub.style.background = '#cbd5e1';
+                        input.style.background = progressData[q.id].isCorrect ? '#d1fae5' : '#fee2e2';
+                    } else {
+                        sub.onclick = () => submitFill(q.id, input.value, q.a, card);
+                    }
+
+                    box.appendChild(input); box.appendChild(sub);
+                    card.appendChild(box);
+
+                    const ab = document.createElement('div');
+                    ab.className = `analysis-box ${progressData[q.id] ? 'show' : ''}`;
+                    ab.innerHTML = `<span style="color:var(--success); font-weight:bold;">【标准拼写】 ${q.a}</span><br><br>${q.t}`;
+                    card.appendChild(ab);
+
+                } else if (q.type === 'text') {
+                    const qt = document.createElement('div');
+                    qt.className = 'q-text';
+                    qt.style.color = 'var(--primary)';
+                    qt.innerText = q.title;
+                    card.appendChild(qt);
+
+                    const box = document.createElement('div');
+                    box.className = 'passage-context';
+                    box.innerText = q.content;
+                    card.appendChild(box);
+
+                    const btn = document.createElement('button');
+                    btn.className = 'fill-submit';
+                    btn.innerText = '核对参考译文';
+                    btn.onclick = () => {
+                        ab.classList.toggle('show');
+                        progressData[q.id] = { choice: 'checked', isCorrect: true };
+                        save(); updateUI();
+                    };
+                    card.appendChild(btn);
+
+                    const ab = document.createElement('div');
+                    ab.className = 'analysis-box';
+                    ab.style.background = '#f0fdf4';
+                    ab.style.borderLeft = '4px solid var(--success)';
+                    ab.innerHTML = `<strong>【参考英文译文】</strong><br><span style="line-height:1.6; font-size:1rem; color:#0f172a;">${q.answer.replace(/\n/g, '<br>')}</span>`;
+                    card.appendChild(ab);
+                }
+
+                pool.appendChild(card);
+            });
+        }
+
+async function submitMcq(id, choice, isCorrect, card) {
+    // 1. 存储进度，更新错题本
+    progressData[id] = { choice: choice, isCorrect: isCorrect };
+    if (!isCorrect) { 
+        if (!wrongsList.includes(id)) wrongsList.push(id); 
+    } else { 
+        wrongsList = wrongsList.filter(i => i !== id); 
+    }
+    
+    save(); 
+    updateUI();
+
+    // 2. 自动拉取大数据库中的当前题目对象
+    let all = []; 
+    const db = (typeof rawDatabase !== 'undefined') ? rawDatabase : ((typeof DATA_PACK !== 'undefined') ? DATA_PACK : null);
+    if (db) {
+        Object.keys(db).forEach(k => { if(Array.isArray(db[k])) all = all.concat(db[k]); });
+    }
+    const qObj = all.find(item => item.id === id);
+    if (!qObj) return;
+
+    // 3. 【精准亮色与高强锁死】
+    const btns = card.querySelectorAll('.opt-btn');
+    
+    let correctText = "";
+    if (qObj.isCloze) {
+        correctText = qObj.correctWord;
+    } else if (qObj.shuffled) {
+        const found = qObj.shuffled.find(o => o.isCorrect);
+        if (found) correctText = found.text;
+    }
+
+    btns.forEach((b) => {
+        b.style.pointerEvents = 'none'; // 锁死点击，保留高亮
+        if (b.innerText.includes(choice)) {
+            b.classList.add(isCorrect ? 'correct' : 'wrong'); 
+        }
+        if (correctText && b.innerText.includes(correctText)) {
+            b.classList.add('correct'); 
+        }
+    });
+
+    // 4. 自动抓取并展开解析框
+    const ab = card.querySelector('.analysis-box') || card.querySelector('.analysis-panel');
+    if (ab) {
+        ab.classList.add('show'); 
+        ab.innerHTML = "⚡ 正在通过互联网智能秒级翻译问题与选项，请稍候..."; 
+
+        // 动态计算洗牌后的正确选项英文字母位置（A/B/C/D）
+        let dynamicLetter = qObj.a || qObj.answer || "";
+        if (qObj.shuffled) {
+            const correctIdx = qObj.shuffled.findIndex(opt => opt.isCorrect);
+            if (correctIdx !== -1) {
+                dynamicLetter = ['A', 'B', 'C', 'D'][correctIdx];
+            }
+        }
+        const standardAns = qObj.isCloze ? `${dynamicLetter} (${qObj.correctWord})` : dynamicLetter;
+
+        // ✨【重磅修复点】：重组发送文本，四选一题型也必须严丝合缝地读取 shuffled 乱序数组发送给 AI！
+        let textToTranslate = "";
+        if (qObj.isCloze) {
+            if (qObj.shuffled && qObj.shuffled.length > 0) {
+                const labels = ['A', 'B', 'C', 'D'];
+                textToTranslate = "【选词填空选项翻译】:\n" + qObj.shuffled.map((opt, idx) => `${labels[idx]}. ${opt.text}`).join("\n");
+            } else {
+                textToTranslate = choice;
+            }
+        } else {
+            let questionCleaned = qObj.q || qObj.question || "";
+            const optStartIdx = questionCleaned.search(/\n+\s*[A-D][\.\)]/i);
+            if (optStartIdx !== -1) {
+                questionCleaned = questionCleaned.substring(0, optStartIdx).trim();
+            }
+            textToTranslate = questionCleaned;
+            
+            if (qObj.shuffled && qObj.shuffled.length > 0) {
+                const labels = ['A', 'B', 'C', 'D'];
+                const shuffledOptionsText = qObj.shuffled.map((opt, idx) => `${labels[idx]}. ${opt.text}`).join("\n");
+                textToTranslate += "\n\n【选项对照翻译】:\n" + shuffledOptionsText;
+            }
+        }
+
+        // 请求网络翻译
+        const resChinese = await translateOnline(textToTranslate);
+
+        const localTransQ = qObj.t || qObj.transQ || "⚠️ 原本地库中未录入本题的中文翻译。";
+        const localTransOptions = qObj.transOptions || ""; 
+
+        // 渲染页面
+        ab.innerHTML = `
+            <div style="margin-bottom:12px;">
+                <span style="background:#10b981;color:white;padding:2px 6px;border-radius:4px;font-size:0.8rem;font-weight:bold;">标准答案</span> 
+                <strong style="color:#10b981;font-size:1.1rem;margin-left:5px;">${standardAns}</strong>
+            </div>
+            
+            <div style="display:flex; gap:8px; margin-bottom:12px; border-bottom:1px solid #e2e8f0; padding-bottom:6px;">
+                <button onclick="switchTransTab(this, 'net')" style="background:#f59e0b; color:white; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;">🌐 联网实时翻译</button>
+                <button onclick="switchTransTab(this, 'local')" style="background:#e2e8f0; color:#475569; border:none; padding:5px 12px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold; transition:all 0.2s;">💾 原本地库翻译</button>
+            </div>
+
+            <div class="trans-net-content" style="color:#78350f; white-space:pre-line;">
+                ${resChinese}
+            </div>
+
+            <div class="trans-local-content" style="color:#1e293b; white-space:pre-line; display:none; background:#f8fafc; padding:10px; border-radius:4px; border:1px solid #e2e8f0;">
+                <div style="font-weight:bold; color:#3b82f6; margin-bottom:4px;">📌 原本地库保存的静态翻译：</div>
+                <div>${localTransQ}</div>
+                ${localTransOptions ? `<div style="margin-top:8px; border-top:1px dashed #cbd5e1; padding-top:6px; color:#475569;">${localTransOptions}</div>` : ''}
+            </div>
+        `;
+    }
+}
+    // 6. 给选项按钮精确上色
+    btns.forEach(b => {
+        if (b.innerText.includes(choice)) {
+            b.classList.add(isCorrect ? 'correct' : 'wrong');
+        }
+        // 额外保底：把真正正确的那个选项强制染成绿色，不管用户选对还是选错
+        const pureText = b.innerText.replace(/^[A-D][\.\)]\s*/, '').trim();
+        const currentOptObj = qObj.shuffled.find(o => o.text === pureText);
+        if (currentOptObj && currentOptObj.isCorrect) {
+            b.classList.add('correct');
+        }
+    });
+        function submitFill(id, val, ans, card) {
+            const isCorrect = val.trim().toLowerCase() === ans.trim().toLowerCase();
+            progressData[id] = { choice: val, isCorrect: isCorrect };
+            if (!isCorrect) { if (!wrongsList.includes(id)) wrongsList.push(id); }
+            else { wrongsList = wrongsList.filter(i => i !== id); }
+            save(); updateUI();
+            card.querySelector('.analysis-box').classList.add('show');
+            render();
+        }
+
+        function save() {
+		
+            localStorage.setItem('cet4_full_prog_2026', JSON.stringify(progressData));
+            localStorage.setItem('cet4_full_wro_2026', JSON.stringify(wrongsList));
+        }
+// 找到你原本的 save() 函数
+      
+        // 【在这里加入下面这个清除函数】
+        function clearAllProgress() {
+            if (confirm('🚨 警告：确定要清空所有做题记录、清除错题本吗？此操作不可逆！')) {
+                // 1. 清除浏览器本地缓存
+                localStorage.removeItem('cet4_full_prog_2026');
+                localStorage.removeItem('cet4_full_wro_2026');
+                
+                // 2. 释放当前页面的数据变量
+                progressData = {}; 
+                wrongsList = [];
+                
+                // 3. 抹除选项的随机打乱缓存，让下次重刷时选项顺序重新彻底打乱
+                Object.keys(DATA_PACK).forEach(k => DATA_PACK[k].forEach(q => delete q.shuffled));
+                
+                // 4. 保存状态并强制切回第一个分类
+                save(); 
+                switchTab('news');
+                alert('🚀 所有做题记录已完全清除，可以重新开始刷题啦！');
+            }
+        }
+        function updateUI() {
+            Object.keys(DATA_PACK).forEach(k => {
+                const total = DATA_PACK[k].length;
+                const done = DATA_PACK[k].filter(q => progressData[q.id]).length;
+                const badge = document.getElementById(`b-${k}`);
+                if (badge) badge.innerText = `${done}/${total}`;
+            });
+            document.getElementById('b-wrong_bank').innerText = wrongsList.length;
+
+            if (currentTab !== 'wrong_bank' && currentTab !== 'essay') {
+                const total = DATA_PACK[currentTab].length;
+                const done = DATA_PACK[currentTab].filter(q => progressData[q.id]).length;
+                const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+                document.getElementById('bar-element').style.width = `${pct}%`;
+                document.getElementById('progress-text').innerText = `本组刷题进度: ${pct}% (已刷 ${done} / 共 ${total} 题)`;
+            } else if (currentTab === 'wrong_bank') {
+                document.getElementById('bar-element').style.width = '100%';
+                document.getElementById('progress-text').innerText = `错题重刷池: 剩余 ${wrongsList.length} 道错题`;
+            }
+        }
+
+        function switchTab(key) {
+            currentTab = key;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const item = event?.currentTarget || document.querySelector(`[onclick="switchTab('${key}')"]`);
+            if (item) item.classList.add('active');
+
+            const names = {
+                news: "新闻报告 (News Reports)", conversation: "长对话 (Long Conversation)",
+                passage: "短文理解 (Passage Comprehension)", reading: "仔细阅读 (Reading Comprehension)",
+                long_reading: "长篇阅读段落匹配 (Long Reading)", cloze: "智能完形选词填空 (四选一升级版)",
+                fill_blank: "核心词汇挖空填空 (Words in Use)", translation: "核心段落翻译对照训练",
+                essay: "考前核心高分作文范文背诵", wrong_bank: "🔥🔥 个人错题本高频强化训练营"
+            };
+            document.getElementById('title-text').innerText = names[key] || "题库";
+            updateUI(); render();
+        }
+
+        window.onload = function() { switchTab('news'); };
+
+// 1. 联网实时翻译引擎
+
+async function translateOnline(text) {
+    try {
+        // 💡 核心秘籍：加上 &de= 邮箱参数，免费翻译额度直接暴涨至每天 10,000 单词！
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|zh-CN&de=cet4_cram_session@outlook.com`;
+        const res = await fetch(url);
+        const data = await res.json();
+        
+        if (data && data.responseData && data.responseData.translatedText) {
+            const translatedText = data.responseData.translatedText;
+            
+            // 💡 智能拦截：如果返回的文本里包含了警告字样，说明 10,000 字又被刷爆了，直接优雅拦截
+            if (translatedText.toUpperCase().includes("MYMEMORY WARNING")) {
+                return "⚠️ 【提示】当前联网实时翻译的公网免费额度已耗尽，请直接用手指点击上方的 <b>[💾 原本地库翻译]</b> 切换至保底精校汉化！";
+            }
+            return translatedText; 
+        }
+        return "翻译返回空值";
+    } catch (error) {
+        console.error("网络翻译故障:", error);
+        return "❌ [网络连接故障] 无法连接到公网翻译接口，请直接点击 <b>[💾 原本地库翻译]</b> 查看离线解析。";
+    }
+}
+// 2. 解析框内部的“联网/原库”标签页切换控制
+function switchTransTab(btn, type) {
+    const parentBox = btn.parentElement.parentElement; // 自动定位到当前题目的解析框
+    const netDiv = parentBox.querySelector('.trans-net-content');
+    const localDiv = parentBox.querySelector('.trans-local-content');
+    const allBtns = btn.parentElement.querySelectorAll('button');
+    
+    // 重置按钮颜色（变灰）
+    allBtns.forEach(b => {
+        b.style.background = '#e2e8f0';
+        b.style.color = '#475569';
+    });
+    
+    // 高亮当前选中的按钮（变橘黄色）
+    btn.style.background = '#f59e0b';
+    btn.style.color = 'white';
+    
+    // 切换内容区域的显示
+    if (type === 'net') {
+        netDiv.style.display = 'block';
+        localDiv.style.display = 'none';
+    } else {
+        netDiv.style.display = 'none';
+        localDiv.style.display = 'block';
+    }
+}
+    </script>
+</body>
+</html>
