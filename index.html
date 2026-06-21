@@ -340,11 +340,25 @@ function enterQuiz() {
 
 // 核心函数：点击不记，智能退出或跳转空白页
 function exitQuiz() {
-    window.opener = null;
-    window.open('', '_self');
-    window.close(); // 尝试关闭网页
-    setTimeout(function() {
-        window.location.href = "about:blank"; // 浏览器拦截关闭时的兜底退出方案
+    // 1. 🚀 微信环境终极降击特权：尝试调用微信内核底层的原生桥接器关闭当前窗口
+    if (typeof WeixinJSBridge !== "undefined") {
+        WeixinJSBridge.call('closeWindow');
+        return;
+    }
+    
+    // 2. 🛡️ 移动端浏览器保底：尝试标准的网页关闭逻辑（兼容QQ/夸克等独立浏览器标签页）
+    window.close();
+    
+    // 3. ☠️ 终极死线兜底：如果上面两招都被微信/手机浏览器的安全机制死死拦截了（页面依然没动）
+    // 直接把页面内容抹除，重定向到一个完全干净的空白提示页，提示用户手动划掉
+    setTimeout(() => {
+        document.body.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:80vh; color:#64748b; font-family:sans-serif; padding:20px; text-align:center;">
+                <div style="font-size:3rem; margin-bottom:15px;">🔒</div>
+                <div style="font-size:1.1rem; font-weight:bold; margin-bottom:8px; color:#1e293b;">已成功退出刷题系统</div>
+                <div style="font-size:0.9rem; color:#94a3b8;">为了您的隐私安全，请直接左滑或点击左上角的 [X] 按钮关闭本页面。</div>
+            </div>
+        `;
     }, 100);
 }
         // ==================== 状态管理与核心交互引擎 ====================
