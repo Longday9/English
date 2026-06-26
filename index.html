@@ -1,559 +1,582 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>计算机组成原理客观题全能通关刷题库</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --success: #10b981;
-            --danger: #ef4444;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --border: #e2e8f0;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0; padding: 0; display: flex;
-        }
-        #sidebar {
-            width: 290px; background: var(--card); border-right: 1px solid var(--border);
-            height: 100vh; position: fixed; overflow-y: auto; display: flex; flex-direction: column;
-        }
-        .sidebar-title {
-            padding: 24px; font-size: 1.2rem; font-weight: bold; color: var(--primary);
-            border-bottom: 1px solid var(--border); text-align: center; line-height: 1.4;
-        }
-        .nav-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
-        .nav-item {
-            padding: 14px 20px; cursor: pointer; border-bottom: 1px solid var(--border);
-            display: flex; justify-content: space-between; align-items: center; font-size: 0.95rem;
-            transition: all 0.2s;
-        }
-        .nav-item:hover, .nav-item.active { background: #eff6ff; color: var(--primary); font-weight: bold; }
-        .nav-item .badge { background: #f1f5f9; color: #64748b; padding: 2px 8px; border-radius: 12px; font-size: 0.8rem; }
-        .nav-item.active .badge { background: var(--primary); color: white; }
-        #wrong-btn { background: #fef2f2; color: var(--danger); }
-        #wrong-btn:hover, #wrong-btn.active { background: var(--danger); color: white; }
-        #main-content { margin-left: 290px; flex-grow: 1; padding: 40px; max-width: 950px; }
-        .header-panel { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .section-title { font-size: 1.6rem; font-weight: bold; }
-        .progress-container { background: #e2e8f0; border-radius: 8px; height: 10px; margin-bottom: 30px; overflow: hidden; }
-        .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.3s; }
-        
-        .q-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .q-text { font-size: 1.05rem; font-weight: 600; margin-bottom: 16px; line-height: 1.5; white-space: pre-line; }
-        .options-grid { display: flex; flex-direction: column; gap: 10px; }
-        
-        .opt-btn { background: var(--card); border: 1px solid var(--border); padding: 12px 18px; border-radius: 6px; text-align: left; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; display: flex; align-items: center; gap: 8px; width: 100%; box-sizing: border-box; }
-        .opt-btn:hover:not(.disabled) { background: #f8fafc; border-color: #cbd5e1; }
-        .opt-btn.correct { background: #d1fae5 !important; border-color: var(--success) !important; color: #065f46; font-weight: bold; }
-        .opt-btn.wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b; }
-        .opt-btn.disabled { cursor: not-allowed; }
-        
-        .multi-submit-btn { background: var(--primary); color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 15px; font-size: 0.95rem; transition: background 0.2s; display: block; }
-        .multi-submit-btn:hover { background: #1d4ed8; }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>计算机组成原理期末刷题系统｜详细解析版</title>
+<style>
+:root {
+  --primary:#243447; --secondary:#2d8cff; --success:#23a455; --danger:#e34b4b; --warning:#f39c12;
+  --bg:#f4f7fb; --card:#fff; --text:#243447; --muted:#7b8794; --line:#e7ecf3;
+}
+* { box-sizing: border-box; }
+body { margin:0; padding:12px; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC","Microsoft YaHei",sans-serif; line-height:1.65; }
+.container { max-width:920px; margin:0 auto; }
+h1 { font-size:22px; text-align:center; margin:10px 0 14px; color:var(--primary); }
+.sub { text-align:center; color:var(--muted); font-size:13px; margin-top:-8px; margin-bottom:12px; }
+.board { background:linear-gradient(135deg,#243447,#335d86); color:white; border-radius:14px; padding:14px; box-shadow:0 8px 22px rgba(32,54,86,.18); margin-bottom:12px; }
+.board-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.board h2 { margin:0; font-size:17px; }
+.board small { opacity:.9; }
+.progress-bg { width:100%; height:10px; background:rgba(255,255,255,.22); border-radius:999px; overflow:hidden; margin-top:10px; }
+.progress-fill { height:100%; width:0%; background:#34d399; transition:.25s; }
+.wrong-board { background:var(--card); border-radius:12px; padding:12px; box-shadow:0 2px 10px rgba(23,40,65,.06); margin-bottom:12px; }
+.wrong-title { display:flex; justify-content:space-between; align-items:center; gap:8px; font-weight:700; margin-bottom:8px; }
+.stats-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.stat { border:1px solid var(--line); border-radius:10px; padding:8px; text-align:center; background:#fbfdff; }
+.stat b { display:block; font-size:16px; color:var(--danger); }
+.stat span { display:block; font-size:12px; color:var(--muted); }
+.toolbar { position:sticky; top:0; z-index:10; background:rgba(244,247,251,.94); backdrop-filter:blur(8px); padding:8px 0 10px; }
+.filter-bar { display:flex; gap:8px; overflow-x:auto; padding-bottom:8px; }
+.filter-btn { flex:0 0 auto; border:1px solid var(--secondary); color:var(--secondary); background:white; border-radius:999px; padding:8px 11px; font-size:13px; cursor:pointer; }
+.filter-btn.active { background:var(--secondary); color:white; }
+.search-row { display:flex; gap:8px; }
+.search-row input { flex:1; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:14px; outline:none; }
+.search-row button, .mini-btn { border:none; background:#eef4ff; color:#2563eb; border-radius:10px; padding:9px 11px; font-size:13px; cursor:pointer; }
+.retry-all-btn { border:none; background:linear-gradient(135deg, #ff922b, #f08c00); color:white; border-radius:10px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; display:none; }
+.question-card { background:var(--card); border-radius:14px; padding:15px; margin:12px 0; box-shadow:0 3px 14px rgba(23,40,65,.07); border-left:5px solid transparent; }
+.question-card.correct { border-left-color:var(--success); }
+.question-card.wrong { border-left-color:var(--danger); }
+.card-header { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; border-bottom:1px solid var(--line); padding-bottom:9px; margin-bottom:10px; }
+.tags { display:flex; gap:6px; flex-wrap:wrap; }
+.tag { border-radius:6px; padding:3px 7px; font-size:12px; font-weight:700; }
+.tag.kp { background:#e8f3ff; color:#1d75d8; }
+.tag.type { background:#f1f2f6; color:#6b7280; }
+.qid { color:#9aa4b2; font-size:12px; white-space:nowrap; }
+.question-text { font-size:16px; font-weight:650; margin:10px 0 12px; white-space:pre-line; }
+.options { display:flex; flex-direction:column; gap:8px; }
+.option { display:flex; gap:10px; align-items:flex-start; border:1px solid var(--line); border-radius:10px; padding:10px; background:#fff; cursor:pointer; }
+.option:hover { background:#f8fbff; }
+.option input { margin-top:4px; transform:scale(1.15); }
+.actions { display:flex; gap:8px; margin-top:12px; }
+.submit-btn { flex:1; border:none; background:var(--secondary); color:white; border-radius:10px; padding:11px; font-weight:700; cursor:pointer; }
+.submit-btn:disabled { background:#bcc6d3; cursor:not-allowed; }
+.wrong-toggle { border:none; border-radius:10px; padding:11px; background:#fff0f0; color:#cf2e2e; font-weight:700; cursor:pointer; }
+.feedback { display:none; margin-top:12px; border-radius:10px; padding:12px; font-size:14px; white-space:pre-line; }
+.feedback.show { display:block; }
+.feedback.ok { background:#ecfdf3; border:1px solid #b9f1cc; }
+.feedback.bad { background:#fff0f0; border:1px solid #ffc7c7; }
+.correct-answer { color:#d93025; font-weight:800; }
+.empty { text-align:center; color:#8b96a5; padding:32px 10px; }
+.footer-space { height:40px; }
 
-        .analysis-box { margin-top: 18px; padding: 16px; background: #fffbeb; border-left: 4px solid #f59e0b; border-radius: 4px; display: none; font-size: 0.95rem; line-height: 1.6; }
-        .analysis-box.show { display: block; }
-        
-        @media (max-width: 768px) { 
-            body { flex-direction: column; } 
-            #sidebar { width: 100%; height: auto; position: relative; } 
-            #main-content { margin-left: 0; padding: 15px; }  
-        }
-        
-        #reset-btn { margin-top: auto; background: #f8fafc; color: #64748b; border-top: 1px solid var(--border); font-weight: bold; justify-content: center; gap: 8px; }
-        #reset-btn:hover { background: #fee2e2; color: var(--danger); }
+/* 封面机制样式 */
+#coverPage {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  z-index: 99999; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 20px; color: white; text-align: center;
+}
+.cover-title { font-size: 28px; font-weight: 800; margin-bottom: 5px; letter-spacing: 1px; color: #f8fafc; }
+.cover-warning { font-size: 20px; color: #ef4444; font-weight: 700; margin-bottom: 30px; animation: blink 1.2s infinite; }
+.cover-box {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  padding: 25px; border-radius: 16px; max-width: 400px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.cover-box p { font-size: 15px; color: #94a3b8; margin-top: 0; margin-bottom: 20px; }
+.cover-btn {
+  width: 100%; padding: 14px; margin-bottom: 12px; border: none; border-radius: 10px;
+  font-size: 16px; font-weight: 700; cursor: pointer; transition: 0.2s;
+}
+.btn-danger { background: #dc2626; color: white; }
+.btn-danger:hover { background: #b91c1c; }
+.btn-success { background: #16a34a; color: white; }
+.btn-success:hover { background: #15803d; }
 
-        /* 💻 仅在电脑端大屏幕生效：客观选择题题干置顶悬浮 */
-        @media screen and (min-width: 769px) {
-            .q-card {
-                overflow: visible !important;
-                position: relative !important;
-            }
-            .q-card .q-text.float-title {
-                position: -webkit-sticky !important;
-                position: sticky !important;
-                top: 0px !important;              
-                z-index: 1000 !important;
-                background-color: #ffffff !important;   
-                padding: 14px 10px !important;
-                margin: -24px -24px 16px -24px !important;
-                border-bottom: 2px solid var(--primary) !important;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
-            }
-        }
-    </style>
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+/* 拦截死机样式 */
+.killed { background: #000 !important; color: #15ff00 !important; font-family: monospace !important; padding: 40px 20px !important; display: flex !important; flex-direction: column !important; justify-content: center !important; align-items: center !important; }
+.killed-msg { font-size: 24px; text-align: center; line-height: 2; font-weight: 900; color: #ff0000; }
+</style>
 </head>
 <body>
-    <div id="sidebar">
-        <div class="sidebar-title">计算机组成原理<br>期末客观题全能通关库</div>
-        <ul class="nav-list">
-            <li class="nav-item active" onclick="switchTab('single')">单项选择题 <span class="badge" id="b-single">0/78</span></li>
-            <li class="nav-item" onclick="switchTab('multiple')">多项选择题 <span class="badge" id="b-multiple">0/41</span></li>
-            <li class="nav-item" onclick="switchTab('judgment')">是非判断题 <span class="badge" id="b-judgment">0/60</span></li>
-            <li class="nav-item" id="wrong-btn" onclick="switchTab('wrong_bank')">错题高频复刷本 <span class="badge" id="b-wrong_bank">0</span></li>
-            <li class="nav-item" id="reset-btn" onclick="clearAllProgress()">🔄 一键擦除做题痕迹</li>
-        </ul>
-    </div>
 
-    <div id="main-content">
-        <div class="header-panel">
-            <div class="section-title" id="title-text">单项选择题</div>
-            <div id="progress-text" style="font-size: 0.95rem; color: #64748b;">进度: 0%</div>
+<!-- 权限拦截封面 -->
+<div id="coverPage">
+  <div class="cover-box">
+    <div class="cover-title">计组期末核心题库</div>
+    <div class="cover-warning">⚠️ 林坤明不许看 ⚠️</div>
+    <p>请进行身份核验以继续访问系统</p>
+    <button class="cover-btn btn-danger" onclick="denyAccess()">林坤明收到</button>
+    <button class="cover-btn btn-success" onclick="allowAccess()">林坤明没收到</button>
+  </div>
+</div>
+
+<div class="container">
+  <h1>计算机组成原理期末刷题系统</h1>
+  <div class="sub">179题全数据解析版｜单选 / 多选 / 判断｜一键重刷全部错题</div>
+  <div class="board">
+    <div class="board-row">
+      <h2>总进度：<span id="progressText">0 / 0</span></h2>
+      <small id="percentText">0%</small>
+    </div>
+    <div class="progress-bg"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+  <div class="wrong-board">
+    <div class="wrong-title">
+      <span>错题统计</span>
+      <div>
+        <button class="retry-all-btn" id="retryAllBtn" onclick="retryAllWrongQuestions()">🔄 一键重刷全部错题</button>
+        <button class="mini-btn" onclick="clearAllRecords()">清空记录</button>
+      </div>
+    </div>
+    <div class="stats-grid" id="statsGrid"></div>
+  </div>
+  <div class="toolbar">
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-btn active" data-filter="all">全部 <span id="badge-all"></span></button>
+      <button class="filter-btn" data-filter="single">单选 <span id="badge-single"></span></button>
+      <button class="filter-btn" data-filter="multi">多选 <span id="badge-multi"></span></button>
+      <button class="filter-btn" data-filter="tf">判断 <span id="badge-tf"></span></button>
+      <button class="filter-btn" data-filter="wrong">错题集 <span id="badge-wrong"></span></button>
+    </div>
+    <div class="search-row">
+      <input id="searchInput" placeholder="搜索题干、知识点、答案或解析..." oninput="render()" />
+      <button onclick="document.getElementById('searchInput').value=''; render();">清除</button>
+    </div>
+  </div>
+  <div id="quizContainer"></div>
+  <div class="footer-space"></div>
+</div>
+
+<script>
+// 封面拦截逻辑
+function denyAccess() {
+  const cover = document.getElementById('coverPage');
+  cover.innerHTML = `
+    <div class="killed-msg">
+      [CRITICAL_ERROR] ACCESS_DENIED_FOR_LINKUNMING<br><br>
+      都说了不许看！系统已永久锁定！<br>
+      请自觉关闭本网页。
+    </div>
+  `;
+  document.body.className = "killed";
+}
+
+function allowAccess() {
+  const cover = document.getElementById('coverPage');
+  cover.style.display = 'none';
+}
+
+// 计组客观题库数据 (179道)
+const questionsData = [
+  {"id":1,"type":"single","typeName":"单选题","kp":"计算机体系结构","text":"冯·诺依曼结构计算机的主要思想是什么？","options":[{"val":"A","text":"A.采用二进制表示指令和数据"},{"val":"B","text":"B.存储程序工作方式"},{"val":"C","text":"C.由五个基本部件组成"},{"val":"D","text":"D.以上都是"}],"answer":"D","analysis":"冯·诺依曼三大核心思想：二进制存储指令与数据、存储程序原理、运算器/控制器/存储器/输入/输出五大部件，ABC全部正确，选D。"},
+  {"id":2,"type":"single","typeName":"单选题","kp":"计算机硬件组成","text":"下列哪一项不是冯·诺依曼结构计算机的基本部件？","options":[{"val":"A","text":"A.运算器"},{"val":"B","text":"B.控制器"},{"val":"C","text":"C.硬盘"},{"val":"D","text":"D.存储器"}],"answer":"C","analysis":"五大基础部件为运算器、控制器、存储器、输入设备、输出设备；硬盘属于外部存储外设，不属于五大核心部件。"},
+  {"id":3,"type":"single","typeName":"单选题","kp":"数据编码基础","text":"计算机中采用二进制编码的主要原因是？","options":[{"val":"A","text":"A.制造稳定态的物理器件容易"},{"val":"B","text":"B.运算规则简单"},{"val":"C","text":"C.与逻辑命题对应"},{"val":"D","text":"D.以上都是"}],"answer":"D","analysis":"二进制优势：硬件仅需高低两种稳态易实现；加减乘除运算规则简单；0、1可直接对应逻辑真假，三点均成立。"},
+  {"id":4,"type":"single","typeName":"单选题","kp":"计算机发展史","text":"下列哪一代计算机首次采用晶体管作为逻辑元件？","options":[{"val":"A","text":"A.第一代"},{"val":"B","text":"B.第二代"},{"val":"C","text":"C.第三代"},{"val":"D","text":"D.第四代"}],"answer":"B","analysis":"第一代：电子管；第二代：晶体管；第三代：中小规模集成电路；第四代：超大规模集成电路。"},
+  {"id":5,"type":"single","typeName":"单选题","kp":"系统抽象层","text":"计算机系统的抽象层中，指令系统位于哪一层？","options":[{"val":"A","text":"A.硬件与软件的接口"},{"val":"B","text":"B.操作系统与硬件的接口"},{"val":"C","text":"C.应用程序与操作系统的接口"},{"val":"D","text":"D.编译器与操作系统的接口"}],"answer":"A","analysis":"指令集是硬件和所有软件（编译器、OS、应用）之间的标准交互接口。"},
+  {"id":6,"type":"single","typeName":"单选题","kp":"性能指标","text":"下列哪一项不是计算机系统的主要性能指标？","options":[{"val":"A","text":"A.响应时间"},{"val":"B","text":"B.吞吐量"},{"val":"C","text":"C.功耗"},{"val":"D","text":"D.带宽"}],"answer":"C","analysis":"响应时间、吞吐量、带宽衡量运算/传输性能；功耗属于能耗指标，不属于运行性能指标。"},
+  {"id":7,"type":"single","typeName":"单选题","kp":"浮点数标准","text":"计算机中用于表示浮点数的标准是？","options":[{"val":"A","text":"A.ASCII"},{"val":"B","text":"B.IEEE 754"},{"val":"C","text":"C.BCD"},{"val":"D","text":"D.Unicode"}],"answer":"B","analysis":"IEEE 754是全球统一浮点数标准；ASCII、Unicode为字符编码；BCD用于十进制编码。"},
+  {"id":8,"type":"single","typeName":"单选题","kp":"补码运算","text":"补码表示法中，-1的8位补码是？","options":[{"val":"A","text":"A.10000001"},{"val":"B","text":"B.11111111"},{"val":"C","text":"C.00000001"},{"val":"D","text":"D.11111110"}],"answer":"B","analysis":"8位有符号数，-1原码10000001，反码11111110，补码=反码+1=11111111。"},
+  {"id":9,"type":"single","typeName":"单选题","kp":"寻址方式","text":"下列哪种寻址方式中，操作数直接包含在指令中？","options":[{"val":"A","text":"A.直接寻址"},{"val":"B","text":"B.间接寻址"},{"val":"C","text":"C.立即寻址"},{"val":"D","text":"D.寄存器寻址"}],"answer":"C","analysis":"立即寻址：指令内直接存放操作数；直接寻址存内存地址；寄存器寻址操作数存寄存器。"},
+  {"id":10,"type":"single","typeName":"单选题","kp":"MIPS指令集","text":"MIPS指令集中，R-Type指令的功能由哪个字段决定？","options":[{"val":"A","text":"A.OP"},{"val":"B","text":"B.rs"},{"val":"C","text":"C.func"},{"val":"D","text":"D.shamt"}],"answer":"C","analysis":"R型指令OP固定为0，rs/rt为源寄存器，shamt移位量，func区分add/sub/and等运算功能。"},
+  {"id":11,"type":"single","typeName":"单选题","kp":"RISC设计风格","text":"下列哪一项不是RISC设计风格的特点？","options":[{"val":"A","text":"A.指令系统复杂"},{"val":"B","text":"B.指令周期短"},{"val":"C","text":"C.大量通用寄存器"},{"val":"D","text":"D.采用组合逻辑控制"}],"answer":"A","analysis":"指令系统复杂是CISC特征；RISC特点：定长简单指令、单周期、通用寄存器多、组合逻辑控制。"},
+  {"id":12,"type":"single","typeName":"单选题","kp":"MIPS寄存器","text":"在MIPS中，用于过程调用时保存返回地址的寄存器是？","options":[{"val":"A","text":"A.$sp"},{"val":"B","text":"B.$ra"},{"val":"C","text":"C.$fp"},{"val":"D","text":"D.$gp"}],"answer":"B","analysis":"ra=return address存储子程序返回地址；sp栈指针，fp帧指针，gp全局指针。"},
+  {"id":13,"type":"single","typeName":"单选题","kp":"数据类型","text":"下列哪一项不是非数值数据的类型？","options":[{"val":"A","text":"A.逻辑数据"},{"val":"B","text":"B.西文字符"},{"val":"C","text":"C.浮点数"},{"val":"D","text":"D.汉字"}],"answer":"C","analysis":"浮点数属于数值数据；逻辑量、字符、汉字均为非数值数据。"},
+  {"id":14,"type":"single","typeName":"单选题","kp":"字符编码","text":"汉字内码的主要作用是？","options":[{"val":"A","text":"A.输入汉字"},{"val":"B","text":"B.存储和查找汉字"},{"val":"C","text":"C.显示汉字字形"},{"val":"D","text":"D.打印汉字"}],"answer":"B","analysis":"输入码负责输入；内码是计算机内部存储、处理、检索汉字编码；字形码用于显示打印。"},
+  {"id":15,"type":"single","typeName":"单选题","kp":"BCD编码","text":"下列哪种编码方式用于表示十进制数？","options":[{"val":"A","text":"A.ASCII"},{"val":"B","text":"B.BCD"},{"val":"C","text":"C.Unicode"},{"val":"D","text":"D.补码"}],"answer":"B","analysis":"BCD码使用4位二进制表示1位十进制数字。"},
+  {"id":16,"type":"single","typeName":"单选题","kp":"端模式","text":"数据的存储排列方式中，大端方式的特点是？","options":[{"val":"A","text":"A.低地址存放数据的高位"},{"val":"B","text":"B.低地址存放数据的低位"},{"val":"C","text":"C.高地址存放数据的高位"},{"val":"D","text":"D.高地址存放数据的低位"}],"answer":"A","analysis":"大端：低地址存高字节；小端：低地址存低字节。"},
+  {"id":17,"type":"single","typeName":"单选题","kp":"端模式计算","text":"十六进制整数01234567H在32位小端表示的机器上的存储为（十六进制表示，从左到右为低字节到高字节）：","options":[{"val":"A","text":"A.01 23 45 67"},{"val":"B","text":"B.67 45 23 01"},{"val":"C","text":"C.10 32 54 76"},{"val":"D","text":"D.76 54 32 10"}],"answer":"B","analysis":"原数字四字节：01、23、45、67；小端字节逆序，低地址先存低字节，顺序67 45 23 01。"},
+  {"id":18,"type":"single","typeName":"单选题","kp":"C语言指针与端模式","text":"在大端方式机中运行以下代码的结果是什么？\n#include<stdio.h>\nint main() {\n  int d=0x1234567;\n  char *p=(char *)&d;\n  printf(\"%X\", *(p+1));\n}","options":[{"val":"A","text":"A.67"},{"val":"B","text":"B.45"},{"val":"C","text":"C.23"},{"val":"D","text":"D.1"}],"answer":"B","analysis":"0x01234567四字节大端排布：01（低地址）、23、45、67；p指向01，p+1指向23，输出23。"},
+  {"id":19,"type":"single","typeName":"单选题","kp":"MIPS控制指令","text":"MIPS指令集中，用于无条件跳转的指令是？","options":[{"val":"A","text":"A.j"},{"val":"B","text":"B.beq"},{"val":"C","text":"C.bne"},{"val":"D","text":"D.jal"}],"answer":"A","analysis":"j无条件跳转；beq/bne条件分支；jal跳转并保存返回地址。"},
+  {"id":20,"type":"single","typeName":"单选题","kp":"条件状态码","text":"下列哪一项不是条件码的标志位？","options":[{"val":"A","text":"A.ZF"},{"val":"B","text":"B.CF"},{"val":"C","text":"C.PF"},{"val":"D","text":"D.SF"}],"answer":"C","analysis":"ZF零标志、CF进位标志、SF符号标志为核心条件标志；PF奇偶标志不用于常规分支判断。"},
+  {"id":21,"type":"single","typeName":"单选题","kp":"MIPS栈控制","text":"在MIPS中，用于存储栈指针的寄存器是？","options":[{"val":"A","text":"A.$ra"},{"val":"B","text":"B.$sp"},{"val":"C","text":"C.$fp"},{"val":"D","text":"D.$gp"}],"answer":"B","analysis":"$sp=stack pointer栈指针。"},
+  {"id":22,"type":"single","typeName":"单选题","kp":"符号扩展","text":"4位机器数1101带符号扩展成8位后的机器数为：","options":[{"val":"A","text":"A.1101 1111"},{"val":"B","text":"B.1111 1101"},{"val":"C","text":"C.0000 1101"},{"val":"D","text":"D.1101 1101"}],"answer":"B","analysis":"有符号数扩展高位补符号位1，1101扩展为11111101。"},
+  {"id":23,"type":"single","typeName":"单选题","kp":"无符号扩展","text":"4位机器数1101无符号扩展成8位后的机器数为：","options":[{"val":"A","text":"A.1101 1111"},{"val":"B","text":"B.1111 1101"},{"val":"C","text":"C.0000 1101"},{"val":"D","text":"D.1101 1101"}],"answer":"C","analysis":"无符号数扩展高位补0，1101扩展为00001101。"},
+  {"id":24,"type":"single","typeName":"单选题","kp":"指令系统设计","text":"下列哪一项不是指令系统设计的基本原则？","options":[{"val":"A","text":"A.指令尽量短"},{"val":"B","text":"B.操作码位数足够"},{"val":"C","text":"C.指令编码唯一"},{"val":"D","text":"D.指令长度必须固定"}],"answer":"D","analysis":"指令长度不强制固定，CISC架构存在变长指令。"},
+  {"id":25,"type":"single","typeName":"单选题","kp":"MIPS位移指令","text":"在MIPS中，用于逻辑左移的指令 is？","options":[{"val":"A","text":"A.sll"},{"val":"B","text":"B.srl"},{"val":"C","text":"C.and"},{"val":"D","text":"D.or"}],"answer":"A","analysis":"sll逻辑左移；srl逻辑右移；and/or为逻辑运算。"},
+  {"id":26,"type":"single","typeName":"单选题","kp":"寻址方式分类","text":"下列哪一项不是偏移寻址的方式？","options":[{"val":"A","text":"A.直接寻址"},{"val":"B","text":"B.基址寻址"},{"val":"C","text":"C.变址寻址"},{"val":"D","text":"D.相对寻址"}],"answer":"A","analysis":"偏移寻址包含基址、变址、相对寻址；直接寻址无偏移量。"},
+  {"id":27,"type":"single","typeName":"单选题","kp":"MIPS访存指令","text":"在MIPS中，用于从内存加载字的指令是？","options":[{"val":"A","text":"A.lw"},{"val":"B","text":"B.sw"},{"val":"C","text":"C.lb"},{"val":"D","text":"D.sb"}],"answer":"A","analysis":"lw=load word读字；sw存字；lb/sb读写字节。"},
+  {"id":28,"type":"single","typeName":"单选题","kp":"MIPS指令编码","text":"汇编表示\"add $t0 $s1 $s2\"对应的MIPS指令的机器码为（add func=32,t0=8,s1=17, s2=18）：","options":[{"val":"A","text":"A.000000 01000 10001 10010 00000 100000"},{"val":"B","text":"B.000000 10001 10010 01000 00000 100000"},{"val":"C","text":"C.100000 01000 10001 10010 00000 000000"},{"val":"D","text":"D.100000 10001 10010 01000 00000 000000"}],"answer":"B","analysis":"R型格式OP(6) rs(5) rt(5) rd(5) shamt(5) func(6)；OP=0，rs=s1=17，rt=s2=18，rd=$t0=8，shamt=0，func=32，对应选项B。"},
+  {"id":29,"type":"single","typeName":"单选题","kp":"寻址机制","text":"下列哪一项不是指令的寻址方式？","options":[{"val":"A","text":"A.立即寻址"},{"val":"B","text":"B.直接寻址"},{"val":"C","text":"C.操作码寻址"},{"val":"D","text":"D.寄存器寻址"}],"answer":"C","analysis":"不存在“操作码寻址”，立即、直接、寄存器均为标准寻址方式。"},
+  {"id":30,"type":"single","typeName":"单选题","kp":"体系结构风格","text":"下列哪一项不是指令设计风格的类型？","options":[{"val":"A","text":"A.累加器型"},{"val":"B","text":"B.堆栈型"},{"val":"C","text":"C.通用寄存器型"},{"val":"D","text":"D.直接型"}],"answer":"D","analysis":"三大经典指令架构：累加器、堆栈、通用寄存器型，无直接型。"},
+  {"id":31,"type":"single","typeName":"单选题","kp":"MIPS子程序返回","text":"在MIPS中，用于从关系子过程返回的指令是？","options":[{"val":"A","text":"A.jr"},{"val":"B","text":"B.jal"},{"val":"C","text":"C.j"},{"val":"D","text":"D.beq"}],"answer":"A","analysis":"jr $ra跳转到返回地址实现子程序返回；jal用于调用子程序。"},
+  {"id":32,"type":"single","typeName":"单选题","kp":"指令集分类","text":"下列哪一项不是指令的操作类型？","options":[{"val":"A","text":"A.数据传送"},{"val":"B","text":"B.算术运算"},{"val":"C","text":"C.逻辑运算"},{"val":"D","text":"D.操作系统调用"}],"answer":"D","analysis":"硬件指令操作包含数据传送、算术、逻辑、分支；系统调用属于软件层面，不属于硬件指令类型。"},
+  {"id":33,"type":"single","typeName":"单选题","kp":"MIPS格式","text":"下列哪一项不是指令格式的类型？","options":[{"val":"A","text":"A.R-Type"},{"val":"B","text":"B.I-Type"},{"val":"C","text":"C.J-Type"},{"val":"D","text":"D.S-Type"}],"answer":"D","analysis":"MIPS仅R、I、J三类指令格式，无S-Type。"},
+  {"id":34,"type":"single","typeName":"单选题","kp":"MIPS控制指令","text":"在MIPS中，用于条件分支的指令是？","options":[{"val":"A","text":"A.beq"},{"val":"B","text":"B.j"},{"val":"C","text":"C.jal"},{"val":"D","text":"D.jr"}],"answer":"A","analysis":"beq相等条件分支；j无条件跳转，jal调用，jr返回。"},
+  {"id":35,"type":"single","typeName":"单选题","kp":"指令系统设计","text":"下列哪一项不是指令系统设计的基本问题？","options":[{"val":"A","text":"A.操作码的组成"},{"val":"B","text":"B.数据类型"},{"val":"C","text":"C.指令格式"},{"val":"D","text":"D.操作系统类型"}],"answer":"D","analysis":"指令设计关注操作码、数据类型、指令编码格式，与操作系统无关.</td>"},
+  {"id":36,"type":"single","typeName":"单选题","kp":"指令执行周期","text":"下列哪一项不是指令的执行步骤？","options":[{"val":"A","text":"A.取指令"},{"val":"B","text":"B.译码"},{"val":"C","text":"C.执行"},{"val":"D","text":"D.打印结果"}],"answer":"D","analysis":"CPU标准执行流程：取指、译码、执行、访存、写回；打印是外设操作，不属于CPU硬件步骤。"},
+  {"id":37,"type":"single","typeName":"单选题","kp":"操作数寻址","text":"下列哪一项不是指令的操作数来源？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.存储器"},{"val":"C","text":"C.立即数"},{"val":"D","text":"D.操作码"}],"answer":"D","analysis":"操作数来源：寄存器、内存、指令内立即数；操作码是运算标识，不是操作数。"},
+  {"id":38,"type":"single","typeName":"单选题","kp":"指令编码","text":"下列哪一项不是指令的编码方式？","options":[{"val":"A","text":"A.定长编码"},{"val":"B","text":"B.扩展编码"},{"val":"C","text":"C.哈夫曼编码"},{"val":"D","text":"D.变长编码"}],"answer":"C","analysis":"指令编码分为定长、扩展、变长；哈夫曼是压缩编码，不用于指令编码。"},
+  {"id":39,"type":"single","typeName":"单选题","kp":"单周期控制信号","text":"add指令的RegWr和MemtoReg信号分别为：","options":[{"val":"A","text":"A.0 1"},{"val":"B","text":"B.1 0"},{"val":"C","text":"C.0 0"},{"val":"D","text":"D.1 1"}],"answer":"B","analysis":"add运算结果写入寄存器，RegWr=1；不访问内存，MemtoReg=0。"},
+  {"id":40,"type":"single","typeName":"单选题","kp":"单周期控制信号","text":"lw指令的Branch和MemWr信号分别为：","options":[{"val":"A","text":"A.0 0"},{"val":"B","text":"B.0 1"},{"val":"C","text":"C.1 0"},{"val":"D","text":"D.1 1"}],"answer":"A","analysis":"lw是加载字，非分支指令Branch=0；仅读内存不写内存MemWr=0。"},
+  {"id":41,"type":"single","typeName":"单选题","kp":"单周期控制信号","text":"关于指令控制信号，错误的是：","options":[{"val":"A","text":"A.lw指令的ALUctr取值为addu"},{"val":"B","text":"B.sw指令的ALUctr取值为addu"},{"val":"C","text":"C.sw指令的ExtOp取值为0"},{"val":"D","text":"D.add指令的MemWr取值为0"}],"answer":"C","analysis":"sw需要扩展立即数计算地址，ExtOp=1，C错误；lw/sw均用加法算地址，add不写内存MemWr=0。"},
+  {"id":42,"type":"single","typeName":"单选题","kp":"数据通路","text":"数据通路的功能是：","options":[{"val":"A","text":"A.存储指令和数据"},{"val":"B","text":"B.进行数据存储、处理和传送"},{"val":"C","text":"C.控制指令的执行顺序"},{"val":"D","text":"D.生成时钟信号"}],"answer":"B","analysis":"数据通路负责数据传输、运算、临时存储；控制器控制流程，时钟电路生成时钟。"},
+  {"id":43,"type":"single","typeName":"单选题","kp":"单周期处理器","text":"单周期处理器的CPI为：","options":[{"val":"A","text":"A.0"},{"val":"B","text":"B.1"},{"val":"C","text":"C.2"},{"val":"D","text":"D.可变"}],"answer":"B","analysis":"单周期每条指令占用1个完整时钟周期，CPI=1。"},
+  {"id":44,"type":"single","typeName":"单选题","kp":"单周期核心瓶颈","text":"下列哪条指令的执行时间最长？","options":[{"val":"A","text":"A.add"},{"val":"B","text":"B.lw"},{"val":"C","text":"C.beq"},{"val":"D","text":"D.j"}],"answer":"B","analysis":"lw需要访存步骤，流程最长，决定单周期时钟周期长度。"},
+  {"id":45,"type":"single","typeName":"单选题","kp":"时钟周期设计","text":"在单周期处理器中，时钟周期的宽度由什么决定？","options":[{"val":"A","text":"A.最短指令的执行时间"},{"val":"B","text":"B.最长指令的执行时间"},{"val":"C","text":"C.所有指令的平均执行时间"},{"val":"D","text":"D.指令的条数"}],"answer":"B","analysis":"单周期所有指令共用同一时钟，周期必须覆盖最慢指令（lw）耗时。"},
+  {"id":46,"type":"single","typeName":"单选题","kp":"MIPS指令功能","text":"在MIPS指令集中，R-type指令的功能是：","options":[{"val":"A","text":"A.从内存读取数据"},{"val":"B","text":"B.将数据写入内存"},{"val":"C","text":"C.对寄存器中的数据进行运算"},{"val":"D","text":"D.跳转到目标地址"}],"answer":"C","analysis":"R型仅操作寄存器，完成算术/逻辑运算；lw/sw访存，j/jal跳转。"},
+  {"id":47,"type":"single","typeName":"单选题","kp":"MIPS指令格式","text":"下列哪项是I-type指令的特点？","options":[{"val":"A","text":"A.使用立即数"},{"val":"B","text":"B.仅对寄存器操作"},{"val":"C","text":"C.无条件跳转"},{"val":"D","text":"D.不涉及ALU运算"}],"answer":"A","analysis":"I型包含16位立即数，用于访存、条件分支、立即数运算。"},
+  {"id":48,"type":"single","typeName":"单选题","kp":"ALU核心功能","text":"在数据通路中，ALU的功能是：","options":[{"val":"A","text":"A.存储数据"},{"val":"B","text":"B.进行算术和逻辑运算"},{"val":"C","text":"C.控制指令执行顺序"},{"val":"D","text":"D.生成时钟信号"}],"answer":"B","analysis":"ALU算术逻辑单元，专门完成加减、与或、移位等运算。"},
+  {"id":49,"type":"single","typeName":"单选题","kp":"单周期控制信号","text":"在单周期处理器中，控制信号：","options":[{"val":"A","text":"A.在每个时钟周期变化"},{"val":"B","text":"B.在整个指令执行过程中不变"},{"val":"C","text":"C.由微程序生成"},{"val":"D","text":"D.仅用于ALU"}],"answer":"B","analysis":"单周期一条指令完整占一个周期，译码后控制信号全程保持不变。"},
+  {"id":50,"type":"single","typeName":"单选题","kp":"程序计数器","text":"在数据通路中，PC的功能是：","options":[{"val":"A","text":"A.存储指令"},{"val":"B","text":"B.存储下一条指令的地址"},{"val":"C","text":"C.存储数据"},{"val":"D","text":"D.控制ALU"}],"answer":"B","analysis":"Program Counter程序计数器，保存即将取出指令的内存地址。"},
+  {"id":51,"type":"single","typeName":"单选题","kp":"单周期关键性能","text":"在单周期处理器中，Load指令的执行时间 is：","options":[{"val":"A","text":"A.最短的"},{"val":"B","text":"B.最长的"},{"val":"C","text":"C.平均的"},{"val":"D","text":"D.可变的"}],"answer":"B","analysis":"Load（lw）包含取指、译码、运算、访存、写回五步，耗时最长。"},
+  {"id":52,"type":"single","typeName":"单选题","kp":"MIPS跳转寻址","text":"在MIPS中，Jump指令的目标地址计算方式是：","options":[{"val":"A","text":"A.PC+4+offset"},{"val":"B","text":"B.PC<31:28> concat target<25:0>"},{"val":"C","text":"C.从寄存器读取"},{"val":"D","text":"由ALU计算"}],"answer":"B","analysis":"J型跳转地址：PC高4位拼接指令内26位偏移，左移2位。"},
+  {"id":53,"type":"single","typeName":"单选题","kp":"流水线机制","text":"流水线技术的主要目的是什么？","options":[{"val":"A","text":"A.减少指令的执行时间"},{"val":"B","text":"B.提高指令的吞吐率"},{"val":"C","text":"C.降低功耗"},{"val":"D","text":"D.简化硬件设计"}],"answer":"B","analysis":"流水线不缩短单条指令耗时，但多条指令重叠执行，提升单位时间完成指令数量（吞吐率）。"},
+  {"id":54,"type":"single","typeName":"单选题","kp":"流水线阶段","text":"在MIPS流水线中，Load指令需要多少个阶段完成？","options":[{"val":"A","text":"A.3"},{"val":"B","text":"B.4"},{"val":"C","text":"C.5"},{"val":"D","text":"D.6"}],"answer":"C","analysis":"标准MIPS五级流水线：IF取指、ID译码、EX执行、MEM访存、WB写回，所有指令均5阶段。"},
+  {"id":55,"type":"single","typeName":"单选题","kp":"流水线硬件友好度","text":"以下哪种指令集特征最有利于流水线执行？","options":[{"val":"A","text":"A.指令长度不一致"},{"val":"B","text":"B.格式多样且源寄存器位置不同"},{"val":"C","text":"C.指令长度一致且格式规整"},{"val":"D","text":"D.允许运算指令直接访问内存"}],"answer":"C","analysis":"RISC定长规整指令，各阶段硬件逻辑统一，极易流水线；变长、格式混乱会阻塞流水线。"},
+  {"id":56,"type":"single","typeName":"单选题","kp":"结构冒险","text":"结构冒险（Structure Hazard）是指什么？","options":[{"val":"A","text":"A.指令间的数据依赖"},{"val":"B","text":"B.同一部件同时被不同指令使用"},{"val":"C","text":"C.分支指令改变程序流程"},{"val":"D","text":"D.异常中断的发生"}],"answer":"B","analysis":"结构冒险：硬件资源冲突，多条指令同时争抢同一功能部件。"},
+  {"id":57,"type":"single","typeName":"单选题","kp":"数据冒险消除","text":"转发（Forwarding）技术主要用于解决哪种冒险？","options":[{"val":"A","text":"A.结构冒险"},{"val":"B","text":"B.数据冒险"},{"val":"C","text":"C.控制冒险"},{"val":"D","text":"D.异常中断"}],"answer":"B","analysis":"转发旁路将尚未写回寄存器的运算结果直接送至ALU输入，解决RAW数据冒险。"},
+  {"id":58,"type":"single","typeName":"单选题","kp":"流水线设计","text":"在MIPS流水线中，R-type指令的写寄存器操作发生在哪个阶段？","options":[{"val":"A","text":"A.Exec"},{"val":"B","text":"B.Mem"},{"val":"C","text":"C.Wr"},{"val":"D","text":"D.Reg/Dec"}],"answer":"C","analysis":"五级流水线WB（写回）阶段完成寄存器写入。"},
+  {"id":59,"type":"single","typeName":"单选题","kp":"流水线设计","text":"在MIPS流水线中，哪一阶段不需要控制信号？","options":[{"val":"A","text":"A.IF"},{"val":"B","text":"B.ID"},{"val":"C","text":"C.EX"},{"val":"D","text":"D.MEM"}],"answer":"A","analysis":"IF仅取指令，仅需PC自增逻辑，无需译码产生的控制信号。"},
+  {"id":60,"type":"single","typeName":"单选题","kp":"编译优化控制冒险","text":"以下哪种技术可以消除循环内的分支指令？","options":[{"val":"A","text":"A.循环展开"},{"val":"B","text":"B.动态预测"},{"val":"C","text":"C.转发技术"},{"val":"D","text":"D.硬件阻塞"}],"answer":"A","analysis":"循环展开复制循环体，减少分支判断次数，消除循环内部分支。"},
+  {"id":61,"type":"single","typeName":"单选题","kp":"流水线气泡","text":"以下哪种冒险会导致流水线插入\"气泡\"？","options":[{"val":"A","text":"A.结构冒险"},{"val":"B","text":"B.数据冒险"},{"val":"C","text":"C.控制冒险"},{"val":"D","text":"D.以上都是"}],"answer":"D","analysis":"资源冲突、数据依赖、分支跳转三类冒险均会插入流水线气泡暂停执行。"},
+  {"id":62,"type":"single","typeName":"单选题","kp":"控制冒险解决","text":"在MIPS流水线中，分支指令的目标地址计算最早可以提前到哪个阶段？","options":[{"val":"A","text":"A.IF"},{"val":"B","text":"B.ID"},{"val":"C","text":"C.EX"},{"val":"D","text":"D.MEM"}],"answer":"B","analysis":"ID阶段读取寄存器、计算分支偏移，提前判断跳转地址，减少气泡。"},
+  {"id":63,"type":"single","typeName":"单选题","kp":"控制冒险解决","text":"以下哪种方法不能解决控制冒险？","options":[{"val":"A","text":"A.静态分支预测"},{"val":"B","text":"B.动态分支预测"},{"val":"C","text":"C.转发技术"},{"val":"D","text":"D.延迟分支"}],"answer":"C","analysis":"转发仅解决数据冒险；预测、延迟分支用于缓解分支带来的控制冒险。"},
+  {"id":64,"type":"single","typeName":"单选题","kp":"易失性存储","text":"以下哪种存储器属于易失性存储器？","options":[{"val":"A","text":"A.ROM"},{"val":"B","text":"B.DRAM"},{"val":"C","text":"C.磁盘"},{"val":"D","text":"D.光盘"}],"answer":"B","analysis":"DRAM断电电荷丢失，易失；ROM、磁盘、光盘断电数据保留，非易失。"},
+  {"id":65,"type":"single","typeName":"单选题","kp":"Cache映射机制","text":"Cache的映射方式中，灵活性最高的是？","options":[{"val":"A","text":"A.直接映射"},{"val":"B","text":"B.全相联映射"},{"val":"C","text":"C.组相联映射"},{"val":"D","text":"D.顺序映射"}],"answer":"B","analysis":"全相联任意主存块可放入任意Cache行，冲突最少，灵活性最高，但硬件成本最高。"},
+  {"id":66,"type":"single","typeName":"单选题","kp":"存储层次速度","text":"以下哪种存储器的工作速度最快？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.Cache"},{"val":"C","text":"C.主存"},{"val":"D","text":"D.硬盘"}],"answer":"A","analysis":"速度层级：寄存器 > Cache > 主存 > 磁盘。"},
+  {"id":67,"type":"single","typeName":"单选题","kp":"DRAM特性","text":"DRAM需要定期刷新的原因是？","options":[{"val":"A","text":"A.数据以电荷形式存储"},{"val":"B","text":"B.存储单元由触发器构成"},{"val":"C","text":"C.采用随机存取方式"},{"val":"D","text":"D.容量较大"}],"answer":"A","analysis":"DRAM用电容存电荷，电荷缓慢泄漏，必须定时刷新补充电荷；SRAM触发器无需刷新。"},
+  {"id":68,"type":"single","typeName":"单选题","kp":"直接映射关系","text":"在直接映射Cache中，主存块号与Cache行号的映射关系是？","options":[{"val":"A","text":"A.一对一"},{"val":"B","text":"B.多对一"},{"val":"C","text":"C.一对多"},{"val":"D","text":"D.多对多"}],"answer":"B","analysis":"直接映射主存块固定映射唯一Cache行，多个主存块共享同一行，多对一。"},
+  {"id":69,"type":"single","typeName":"单选题","kp":"主存物理选型","text":"以下哪种存储器通常用于构建主存？","options":[{"val":"A","text":"A.SRAM"},{"val":"B","text":"B.DRAM"},{"val":"C","text":"C.ROM"},{"val":"D","text":"D.磁带"}],"answer":"B","analysis":"DRAM容量大、成本低，用作内存主存；SRAM高速昂贵，用于Cache。"},
+  {"id":70,"type":"single","typeName":"单选题","kp":"Cache写策略","text":"Cache的写策略中，写回法（Write Back）的特点是？","options":[{"val":"A","text":"A.同时写Cache和主存"},{"val":"B","text":"B.只写Cache，不立即写主存"},{"val":"C","text":"C.直接写主存"},{"val":"D","text":"D.不写Cache"}],"answer":"B","analysis":"写回仅更新Cache块，块被替换时才一次性写入主存，减少主存访问。"},
+  {"id":71,"type":"single","typeName":"单选题","kp":"局部性原理","text":"程序访问的局部性包括哪两种？","options":[{"val":"A","text":"A.时间和空间"},{"val":"B","text":"B.顺序和随机"},{"val":"C","text":"C.静态和动态"},{"val":"D","text":"D.读写和执行"}],"answer":"A","analysis":"时间局部性：刚访问的数据短期内重复访问；空间局部性：相邻地址数据连续访问。"},
+  {"id":72,"type":"single","typeName":"单选题","kp":"页表加速TLB","text":"TLB的作用是？","options":[{"val":"A","text":"A.加快地址转换"},{"val":"B","text":"B.存储程序指令"},{"val":"C","text":"C.管理磁盘空间"},{"val":"D","text":"D.刷新DRAM"}],"answer":"A","analysis":"TLB是页表高速缓存，缓存虚拟-物理地址映射，加速地址转换。"},
+  {"id":73,"type":"single","typeName":"单选题","kp":"组相联映射","text":"在组相联映射Cache中，主存块可以映射到Cache的？","options":[{"val":"A","text":"A.固定行"},{"val":"B","text":"B.固定组中的任意行"},{"val":"C","text":"C.任意行"},{"val":"D","text":"D.任意组"}],"answer":"B","analysis":"主存块固定对应唯一Cache组，组内任意一行均可存放。"},
+  {"id":74,"type":"single","typeName":"单选题","kp":"虚拟存储器类别","text":"虚拟存储器的实现方式不包括？","options":[{"val":"A","text":"A.分页式"},{"val":"B","text":"B.分段式"},{"val":"C","text":"C.段页式"},{"val":"D","text":"D.直接映射式"}],"answer":"D","analysis":"直接映射是Cache映射策略，虚拟存储分页、分段、段页式三种。"},
+  {"id":75,"type":"single","typeName":"单选题","kp":"运行期指令执行","text":"以下哪种存储器通常用于存放当前执行的指令和数据？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.主存"},{"val":"C","text":"C.硬盘"},{"val":"D","text":"D.光盘"}],"answer":"B","analysis":"程序运行时代码与数据载入主存；硬盘仅长期存储。"},
+  {"id":76,"type":"single","typeName":"单选题","kp":"Cache命中指标","text":"Cache的命中时间（Hit Time）是指？","options":[{"val":"A","text":"A.判断是否命中的时间"},{"val":"B","text":"B.访问主存的时间"},{"val":"C","text":"C.访问磁盘的时间"},{"val":"D","text":"D.替换算法的时间"}],"answer":"A","analysis":"命中时间=访问Cache、对比标记判断命中的耗时。"},
+  {"id":77,"type":"single","typeName":"单选题","kp":"Cache物理实现","text":"以下哪种存储器通常用于构建Cache？","options":[{"val":"A","text":"A.SRAM"},{"val":"B","text":"B.DRAM"},{"val":"C","text":"C.ROM"},{"val":"D","text":"D.磁盘"}],"answer":"A","analysis":"SRAM速度快、无需刷新，用于Cache；DRAM做主存。"},
+  {"id":78,"type":"single","typeName":"单选题","kp":"长期不丢失外存","text":"以下哪种存储器通常用于长期存储数据？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.Cache"},{"val":"C","text":"C.主存"},{"val":"D","text":"D.硬盘"}],"answer":"D","analysis":"硬盘非易失，断电保存数据，长期存储文件程序。"},
+  
+  // 多选题数据
+  {"id":79,"type":"multi","typeName":"多选题","kp":"冯诺依曼结构","text":"冯·诺依曼结构计算机的主要组成部分包括？","options":[{"val":"A","text":"A.运算器"},{"val":"B","text":"B.控制器"},{"val":"C","text":"C.存储器"},{"val":"D","text":"D.输入设备和输出设备"}],"answer":["A","B","C","D"],"analysis":"五大核心部件：运算器、控制器、存储器、输入设备、输出设备全选。"},
+  {"id":80,"type":"multi","typeName":"多选题","kp":"MIPS指令译码汇编","text":"一条MIPS指令的机器码为000000 00101 01111 10000 00000 100000，其汇编形式如下（add func=32, sub func=34）：","options":[{"val":"A","text":"A.add $16,$5,$15"},{"val":"B","text":"B.add s0,a1,$t7"},{"val":"C","text":"C.add $5,$15,$16"},{"val":"D","text":"D.add a1,t7,$s0"}],"answer":["A","B"],"analysis":"R型rs=5(a1)，rt=15(t7)，rd=16($s0)，汇编格式add rd,rs,rt，即add s0,a1,$t7 等价add $16,$5,$15。选AB。"},
+  {"id":81,"type":"multi","typeName":"多选题","kp":"二进制优势","text":"计算机中采用二进制编码的原因包括？","options":[{"val":"A","text":"A.制造稳定态的物理器件容易"},{"val":"B","text":"B.运算规则简单"},{"val":"C","text":"C.与逻辑命题对应"},{"val":"D","text":"D.便于与十进制转换"}],"answer":["A","B","C"],"analysis":"ABC是二进制核心优势；便于十进制转换不是采用二进制的硬件理由。"},
+  {"id":82,"type":"multi","typeName":"多选题","kp":"运行期评价指标","text":"计算机性能评价的基本指标包括？","options":[{"val":"A","text":"A.响应时间"},{"val":"B","text":"B.吞吐量"},{"val":"C","text":"C.带宽"},{"val":"D","text":"D.功耗"}],"answer":["A","B","C"],"analysis":"响应时间、吞吐量、带宽衡量系统性能；功耗为能耗指标。"},
+  {"id":83,"type":"multi","typeName":"多选题","kp":"数值量分类","text":"下列哪些是数值数据的表示方式？","options":[{"val":"A","text":"A.定点数"},{"val":"B","text":"B.浮点数"},{"val":"C","text":"C.十进制数"},{"val":"D","text":"D.逻辑数"}],"answer":["A","B","C"],"analysis":"定点、浮点、十进制BCD均为数值；逻辑数属于非数值量。"},
+  {"id":84,"type":"multi","typeName":"多选题","kp":"规格化浮点","text":"下列哪些是浮点数的规格化形式？","options":[{"val":"A","text":"A.1.01×2^3"},{"val":"B","text":"B.0.01×2^5"},{"val":"C","text":"C.10.1×2^1"},{"val":"D","text":"D.1.0×2^0"}],"answer":["A","D"],"analysis":"IEEE规格化尾数整数位固定为1，AD符合；B、C整数位不为1，非规格化。"},
+  {"id":85,"type":"multi","typeName":"多选题","kp":"IEEE754特殊符号","text":"下列哪些是IEEE754浮点数的特殊表示？","options":[{"val":"A","text":"A.0"},{"val":"B","text":"B.∞"},{"val":"C","text":"C.NaN"},{"val":"D","text":"D.非规格化数"}],"answer":["A","B","C","D"],"analysis":"IEEE754包含零、正负无穷、NaN、规格化、非规格化五类编码全选。"},
+  {"id":86,"type":"multi","typeName":"多选题","kp":"补码物理特性","text":"下列哪些是补码的特性？","options":[{"val":"A","text":"A.0的表示唯一"},{"val":"B","text":"B.加减运算统一"},{"val":"C","text":"C.比原码多表示一个最小负数"},{"val":"D","text":"D.符号位与真值符号对应"}],"answer":["A","B","C","D"],"analysis":"补码零唯一；减法转为加法；n位补码范围比原码多一个负数；最高位1负0正。全部正确。"},
+  {"id":87,"type":"multi","typeName":"多选题","kp":"寻址范畴","text":"下列哪些是寻址方式？","options":[{"val":"A","text":"A.立即寻址"},{"val":"B","text":"B.直接寻址"},{"val":"C","text":"C.寄存器寻址"},{"val":"D","text":"D.堆栈寻址"}],"answer":["A","B","C","D"],"analysis":"四项均为计算机标准寻址方式，全选。"},
+  {"id":88,"type":"multi","typeName":"多选题","kp":"偏移寻址分类","text":"下列哪些是偏移寻址的方式？","options":[{"val":"A","text":"A.基址寻址"},{"val":"B","text":"B.变址寻址"},{"val":"C","text":"C.相对寻址"},{"val":"D","text":"D.间接寻址"}],"answer":["A","B","C"],"analysis":"偏移寻址三类：基址、变址、相对；间接寻址不属于偏移量相加寻址。"},
+  {"id":89,"type":"multi","typeName":"多选题","kp":"MIPS操作范围","text":"下列哪些是MIPS的指令操作类型？","options":[{"val":"A","text":"A.算术运算"},{"val":"B","text":"B.逻辑运算"},{"val":"C","text":"C.数据传送"},{"val":"D","text":"D.条件分支"}],"answer":["A","B","C","D"],"analysis":"MIPS完整指令类型包含算术、逻辑、访存数据传送、分支跳转。全选。"},
+  {"id":90,"type":"multi","typeName":"多选题","kp":"操作数类型","text":"下列哪些是操作数的类型？","options":[{"val":"A","text":"A.立即数"},{"val":"B","text":"B.寄存器操作数"},{"val":"C","text":"C.存储器操作数"},{"val":"D","text":"D.操作码"}],"answer":["A","B","C"],"analysis":"操作数三类：立即、寄存器、内存；操作码是运算操作标识，排除D。"},
+  {"id":91,"type":"multi","typeName":"多选题","kp":"架构设计风格","text":"下列哪些是指令设计风格的类型？","options":[{"val":"A","text":"A.累加器型"},{"val":"B","text":"B.堆栈型"},{"val":"C","text":"C.通用寄存器型"},{"val":"D","text":"D.装入/存储型"}],"answer":["A","B","C","D"],"analysis":"通用寄存器型细分装入存储架构（MIPS），前三类为经典基础架构类型。"},
+  {"id":92,"type":"multi","typeName":"多选题","kp":"数据通路职责","text":"数据通路的功能包括：","options":[{"val":"A","text":"A.数据存储"},{"val":"B","text":"B.数据处理"},{"val":"C","text":"C.数据传送"},{"val":"D","text":"D.指令译码"}],"answer":["A","B","C"],"analysis":"数据通路完成数据传输、运算、临时存储；译码属于控制器硬件逻辑。"},
+  {"id":93,"type":"multi","typeName":"多选题","kp":"单周期缺陷","text":"单周期处理器的缺点包括：","options":[{"val":"A","text":"A.时钟周期过长"},{"val":"B","text":"B.功能部件不能重复使用"},{"val":"C","text":"C.设计复杂"},{"val":"D","text":"D.CPI可变"}],"answer":["A","B"],"analysis":"单周期时钟由最慢指令决定周期长；所有部件一条指令内独占，无法复用；CPI固定为1。"},
+  {"id":94,"type":"multi","typeName":"多选题","kp":"单周期特性","text":"在单周期处理器中，控制信号的特点包括：","options":[{"val":"A","text":"A.在整个指令执行过程中不变"},{"val":"B","text":"B.由指令译码生成"},{"val":"C","text":"C.每个时钟周期变化"},{"val":"D","text":"D.由微程序生成"}],"answer":["A","B"],"analysis":"单周期一条指令占用一个周期，译码生成控制信号全程保持固定形态不变。"},
+  {"id":95,"type":"multi","typeName":"多选题","kp":"MIPS指令分类","text":"下列哪些指令属于I-type？","options":[{"val":"A","text":"A.ori"},{"val":"B","text":"B.lw"},{"val":"C","text":"C.sw"},{"val":"D","text":"D.beq"}],"answer":["A","B","C","D"],"analysis":"立即逻辑ori、访存lw/sw、条件分支beq均为I型含立即数扩展指令。"},
+  {"id":96,"type":"multi","typeName":"多选题","kp":"组合逻辑物理特征","text":"下列哪些是组合逻辑元件的特点？","options":[{"val":"A","text":"A.输出仅取决于当前输入"},{"val":"B","text":"B.具有存储功能"},{"val":"C","text":"C.无需时钟信号"},{"val":"D","text":"D.用于保存中间结果"}],"answer":["A","C"],"analysis":"组合逻辑无记忆，输出只由当前输入决定，不需要时钟；时序元件（如触发器、寄存器）才有存储功能。"},
+  {"id":97,"type":"multi","typeName":"多选题","kp":"单周期设计边界","text":"单周期处理器的时钟周期宽度由什么决定？","options":[{"val":"A","text":"A.最长指令的执行时间"},{"val":"B","text":"B.Load指令的执行时间"},{"val":"C","text":"C.最短指令的执行时间"},{"val":"D","text":"D.平均指令执行时间"}],"answer":["A","B"],"analysis":"Load(lw)指令是单周期中耗时最长指令，由它决定时钟周期边界。"},
+  {"id":98,"type":"multi","typeName":"多选题","kp":"PC计数器","text":"在数据通路中，PC的功能包括：","options":[{"val":"A","text":"A.存储指令"},{"val":"B","text":"B.存储下一条指令的地址"},{"val":"C","text":"C.控制指令执行顺序"},{"val":"D","text":"D.存储数据"}],"answer":["B","C"],"analysis":"PC存指令物理地址，通过自身自增或跳转地址改变控制取指顺序；不负责存放指令内容与计算数据。"},
+  {"id":99,"type":"multi","typeName":"多选题","kp":"Load指令延迟","text":"在单周期处理器中，Load指令的执行时间是：","options":[{"val":"A","text":"A.最长的"},{"val":"B","text":"B.由存储器访问时间决定"},{"val":"C","text":"C.最短的"},{"val":"D","text":"D.可变的"}],"answer":["A","B"],"analysis":"lw包含访存这一全系统最慢步骤，耗时最长，访存物理延迟是构成它的核心主要部分。"},
+  {"id":100,"type":"multi","typeName":"多选题","kp":"Load-use冒险消除","text":"以下哪种方法可以解决Load-use数据冒险？","options":[{"val":"A","text":"A.插入NOP指令"},{"val":"B","text":"B.硬件阻塞"},{"val":"C","text":"C.动态分支预测"},{"val":"D","text":"D.增加流水线级数"}],"answer":["A","B"],"analysis":"插入空气泡(NOP)、硬件暂停阻塞能够解决Load-use；分支预测对应解决控制冒险。"},
+  {"id":101,"type":"multi","typeName":"多选题","kp":"MIPS五级流水线","text":"以下哪些是MIPS流水线的阶段？","options":[{"val":"A","text":"A.IF"},{"val":"B","text":"B.ID"},{"val":"C","text":"C.EX"},{"val":"D","text":"D.WB"}],"answer":["A","B","C","D"],"analysis":"经典MIPS五级流水线包含：IF、ID、EX、MEM、WB，选项全覆盖。"},
+  {"id":102,"type":"multi","typeName":"多选题","kp":"结构冒险处理","text":"结构冒险的解决方法包括：","options":[{"val":"A","text":"A.增加功能部件"},{"val":"B","text":"B.插入NOP指令"},{"val":"C","text":"C.分开指令存储器和数据存储器"},{"val":"D","text":"D.动态分支预测"}],"answer":["A","B","C"],"analysis":"增加硬件组件、插入气泡、分离指令/数据Cache可消除硬件资源抢夺冲突；D解决控制冒险。"},
+  {"id":103,"type":"multi","typeName":"多选题","kp":"数据冒险分类","text":"数据冒险的类型包括：","options":[{"val":"A","text":"A.RAW"},{"val":"B","text":"B.WAR"},{"val":"C","text":"C.WAW"},{"val":"D","text":"D.RAR"}],"answer":["A","B","C"],"analysis":"三类经典数据冒险：写后读(RAW)、读后写(WAR)、写后写(WAW)。没有读后读(RAR)冒险。"},
+  {"id":104,"type":"multi","typeName":"多选题","kp":"控制冒险解决","text":"控制冒险的解决方法包括：","options":[{"val":"A","text":"A.静态分支预测"},{"val":"B","text":"B.动态分支预测"},{"val":"C","text":"C.延迟分支"},{"val":"D","text":"D.增加流水线级数"}],"answer":["A","B","C"],"analysis":"预测、延迟分支可极大缓解分支跳转引发的控制冒险；盲目增加级数反而会加剧控制冒险的气泡损失。"},
+  {"id":105,"type":"multi","typeName":"多选题","kp":"动态预测技术","text":"以下哪些是动态分支预测的技术？","options":[{"val":"A","text":"A.一位预测位"},{"val":"B","text":"B.两位预测位"},{"val":"C","text":"C.编译器调度"},{"val":"D","text":"D.循环展开"}],"answer":["A","B"],"analysis":"1位、2位饱和计数器是硬件电路层面的动态预测技术；编译器调度和循环展开属于软件静态优化。"},
+  {"id":106,"type":"multi","typeName":"多选题","kp":"流水线三大冒险","text":"以下哪些是流水线冒险的类型？","options":[{"val":"A","text":"A.结构冒险"},{"val":"B","text":"B.数据冒险"},{"val":"C","text":"C.控制冒险"},{"val":"D","text":"D.异常中断"}],"answer":["A","B","C"],"analysis":"经典流水线三大冒险阻碍：结构冒险、数据冒险、控制冒险。异常属于中断异常流。"},
+  {"id":107,"type":"multi","typeName":"多选题","kp":"内部存储器","text":"以下哪些存储器属于内部存储器？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.Cache"},{"val":"C","text":"C.主存"},{"val":"D","text":"D.硬盘"}],"answer":["A","B","C"],"analysis":"寄存器、Cache、物理主存均属于主机核心内联存储系统；硬盘属于外设辅助存储。"},
+  {"id":108,"type":"multi","typeName":"多选题","kp":"Cache映射分类","text":"Cache的映射方式包括？","options":[{"val":"A","text":"A.直接映射"},{"val":"B","text":"B.全相联映射"},{"val":"C","text":"C.组相联映射"},{"val":"D","text":"D.顺序映射"}],"answer":["A","B","C"],"analysis":"Cache三大通用标准经典映射策略，无顺序映射。"},
+  {"id":109,"type":"multi","typeName":"多选题","kp":"虚存分类","text":"虚拟存储器的实现方式包括？","options":[{"val":"A","text":"A.分页式"},{"val":"B","text":"B.分段式"},{"val":"C","text":"C.段页式"},{"val":"D","text":"D.直接映射式"}],"answer":["A","B","C"],"analysis":"虚拟存储器主流为页式、段式、段页式管理；直接映射是属于Cache的映射术语。"},
+  {"id":110,"type":"multi","typeName":"多选题","kp":"局部性分类","text":"以下哪些是程序访问的局部性表现？","options":[{"val":"A","text":"A.时间局部性"},{"val":"B","text":"B.空间局部性"},{"val":"C","text":"C.顺序局部性"},{"val":"D","text":"D.随机局部性"}],"answer":["A","B"],"analysis":"经典局部性仅划分时间局部性与空间局部性两类。"},
+  {"id":111,"type":"multi","typeName":"多选题","kp":"RAM种类","text":"以下哪些是随机存取存储器（RAM）？","options":[{"val":"A","text":"A.SRAM"},{"val":"B","text":"B.DRAM"},{"val":"C","text":"C.ROM"},{"val":"D","text":"D.磁盘"}],"answer":["A","B"],"analysis":"静态SRAM、动态DRAM属于随机存取读写RAM；ROM为只读类型，磁盘属于串行/直接存取外存。"},
+  {"id":112,"type":"multi","typeName":"多选题","kp":"Cache替换算法","text":"Cache的替换算法包括？","options":[{"val":"A","text":"A.FIFO"},{"val":"B","text":"B.LRU"},{"val":"C","text":"C.LFU"},{"val":"D","text":"D.随机替换"}],"answer":["A","B","C","D"],"analysis":"先进先出(FIFO)、近期最少使用(LRU)、最不经常使用(LFU)、随机替换均属于主流策略，全选。"},
+  {"id":113,"type":"multi","typeName":"多选题","kp":"虚存优势","text":"以下哪些是虚拟存储器的优点？","options":[{"val":"A","text":"A.扩大编程空间"},{"val":"B","text":"B.提高主存利用率"},{"val":"C","text":"C.简化程序员工作"},{"val":"D","text":"D.提高磁盘速度"}],"answer":["A","B","C"],"analysis":"虚存极大扩充了用户的逻辑进程寻址空间、提升内存复用率；但无法改变或提升底层磁碟硬件速度。"},
+  {"id":114,"type":"multi","typeName":"多选题","kp":"Cache性能维度","text":"以下哪些是Cache的性能指标？","options":[{"val":"A","text":"A.命中率"},{"val":"B","text":"B.缺失率"},{"val":"C","text":"C.缺失损失"},{"val":"D","text":"D.刷新周期"}],"answer":["A","B","C"],"analysis":"命中率、缺失率、失效开销(缺失损失)是衡量Cache核心准则；刷新周期是DRAM物理阻抗特性参数。"},
+  {"id":115,"type":"multi","toggle":"多选题","kp":"存储层次金字塔","text":"以下哪些是存储器的层次结构？","options":[{"val":"A","text":"A.寄存器"},{"val":"B","text":"B.Cache"},{"val":"C","text":"C.主存"},{"val":"D","text":"D.硬盘"}],"answer":["A","B","C","D"],"analysis":"全系统分级演化金字塔：从最快最贵的寄存器直到最慢廉价的物理外存磁盘。全选。"},
+  {"id":116,"type":"multi","typeName":"多选题","kp":"全写法特点","text":"写策略中，Write Through的特点包括：","options":[{"val":"A","text":"A.同时写Cache和主存"},{"val":"B","text":"B.使用写缓冲"},{"val":"C","text":"C.减少主存带宽需求"},{"val":"D","text":"D.适合高频写操作"}],"answer":["A","B"],"analysis":"全写法(直写法)更新Cache的同时也同步更新主存，引入写缓冲可解除CPU挂起等待；但由于频繁触发总线写内存，会大幅度消耗增加主存带宽消耗。"},
+  {"id":117,"type":"multi","typeName":"多选题","kp":"存储芯片扩展","text":"主存与CPU的连接方式包括：","options":[{"val":"A","text":"A.字扩展"},{"val":"B","text":"B.位扩展"},{"val":"C","text":"C.字位同时扩展"},{"val":"D","text":"D.交叉编址"}],"answer":["A","B","C","D"],"analysis":"位扩展增加位宽，字扩展增加容量，字位组合全面扩容；多体交叉编址用以提高吞吐带宽。全选。"},
+  {"id":118,"type":"multi","typeName":"多选题","kp":"存储衡量指标","text":"以下哪些是存储器的性能指标？","options":[{"val":"A","text":"A.存取时间"},{"val":"B","text":"B.存储周期"},{"val":"C","text":"C.容量"},{"val":"D","text":"D.功耗"}],"answer":["A","B","C","D"],"analysis":"速度时间、存取恢复周期、总容量、能耗功耗皆属于综合硬件性能指标。全选。"},
+  {"id":119,"type":"multi","typeName":"多选题","kp":"Cache数据一致性","text":"以下哪些是Cache一致性问题？","options":[{"val":"A","text":"A.多核CPU共享Cache"},{"val":"B","text":"B.I/O设备直接访问主存"},{"val":"C","text":"C.写策略冲突"},{"val":"D","text":"D.虚拟地址转换"}],"answer":["A","B","C"],"analysis":"多核竞争多副本、DMA外设绕过CPU写主存、冲突的写击穿策略均会带来副本数据不一致风险；虚拟地址映射查表不产生多版本数据冲突。"},
+
+  // 判断题数据
+  {"id":120,"type":"tf","typeName":"判断题","kp":"冯诺依曼思想","text":"数据库管理系统是位于用户与操作系统之间的一层数据管理软件。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"存储程序、程序控制是冯氏结构的核心精髓。"},
+  {"id":121,"type":"tf","typeName":"判断题","kp":"二进制原因","text":"计算机中采用二进制编码的唯一原因是运算规则简单。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"绝非唯一原因，更核心在于双稳态物理器件极其容易制造实现、同时与布尔逻辑命题完美匹配。"},
+  {"id":122,"type":"tf","typeName":"判断题","kp":"补码零","text":"补码表示法中，0的表示是唯一的。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"正因原码、反码存在[+0]与[-0]的歧义双码，补码通过数轴位移使零的表示达成唯一。"},
+  {"id":123,"type":"tf","typeName":"判断题","kp":"规格化浮点","text":"浮点数的规格化形式要求小数点前必须为1。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"根据IEEE 754规范，规格化二进制尾数的整数位固定隐藏为1。"},
+  {"id":124,"type":"tf","typeName":"判断题","kp":"NaN概念","text":"IEEE754标准中，NaN表示非数。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"NaN(Not a Number)用于非法计算（如0除以0、负数开根号）的占位异常表达。"},
+  {"id":125,"type":"tf","typeName":"判断题","kp":"立即寻址","text":"立即寻址中，操作数直接包含在指令中。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"立即数直接硬编码存放于提取出来的指令代码之中，无需进行后续访存。"},
+  {"id":126,"type":"tf","typeName":"判断题","kp":"MIPS R型","text":"MIPS中，R-Type指令的功能由OP字段决定。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"R型指令的操作码(OP)全置为0，具体算术/逻辑功能完全依赖于后六位的func字段区分。"},
+  {"id":127,"type":"tf","typeName":"判断题","kp":"RISC特点","text":"RISC设计风格的特点是指令系统复杂。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"指令集极度冗长复杂属于CISC(复杂指令集)典型代表；RISC精简指令集追求简单规整定长。"},
+  {"id":128,"type":"tf","typeName":"判断题","kp":"MIPS返回寄存器","text":"MIPS中，$ra寄存器用于保存返回地址。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"$ra (return address)用于存储jal跳转指令执行后的下一条恢复PC。"},
+  {"id":129,"type":"tf","typeName":"判断题","kp":"非数值量","text":"逻辑数据用一位表示真或假。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"1个比特位(0或1)足以完美刻画逻辑真假状态。"},
+  {"id":130,"type":"tf","typeName":"判断题","kp":"汉字编码","text":"汉字内码用于输入汉字。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"键盘拼音/五笔属于输入码；内码是计算机操作系统和主存内部流通、检索、存储汉字的机内表现形式。"},
+  {"id":131,"type":"tf","typeName":"判断题","kp":"十进制数编码","text":"BCD码用于表示十进制数。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"Binary-Coded Decimal (BCD) 采用4位二进制编码精准表达1位十进制0-9。"},
+  {"id":132,"type":"tf","typeName":"判断题","kp":"端模式分布","text":"大端方式中，低地址存放数据的低位。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"大端法指低地址优先存放高位字节；低地址存放低位字节属于小端法特征。"},
+  {"id":133,"type":"tf","typeName":"判断题","kp":"MIPS栈指针","text":"MIPS中，$sp寄存器用于保存栈指针。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"$sp (stack pointer) 始终锚定指向系统函数运行栈的栈顶。"},
+  {"id":134,"type":"tf","typeName":"判断题","kp":"CISC核心技术","text":"CISC设计风格的特点是采用大量通用寄存器。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"依赖庞大寄存器堆进行装载存储、减少访存是RISC的设计核心；CISC寄存器非常珍稀短缺。"},
+  {"id":135,"type":"tf","typeName":"判断题","kp":"指令长度界定","text":"指令系统设计的基本原则包括指令长度必须固定。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"仅RISC通常强制定长以简化流水线；CISC架构存在大量高度自由的非定长、变长指令。"},
+  {"id":136,"type":"tf","typeName":"判断题","kp":"寻址划分","text":"直接寻址是偏移寻址的一种方式。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"偏移寻址明确要求形式地址必须伴随寄存器内容相加（基址、变址、相对）；直接寻址无任何偏移相加。"},
+  {"id":137,"type":"tf","typeName":"判断题","kp":"MIPS访存","text":"MIPS中，lw指令用于从内存加载字。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"lw (load word) 负责将物理内存中32位整字搬运加载至指定寄存器。"},
+  {"id":138,"type":"tf","typeName":"判断题","kp":"操作码操作数","text":"操作码是操作数的类型之一。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"操作码指明指令动作属性（加、减、存）；操作数是该动作施加的受体对象，两者根本对立。"},
+  {"id":139,"type":"tf","typeName":"判断题","kp":"虚假概念","text":"操作码寻址是指令的寻址方式之一。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"纯属编造的虚假概念，寻址只针对操作数或下一条指令跳转地址，不针对操作码。"},
+  {"id":140,"type":"tf","typeName":"判断题","kp":"MIPS比较指令","text":"MIPS中，slt指令用于比较两个寄存器大小。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"slt (set less than) 条件成立则目标寄存器置1，否则清0，多用于分支决策。"},
+  {"id":141,"type":"tf","typeName":"判断题","kp":"风格混淆","text":"直接型是指令设计风格的类型之一。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"三大正统架构类型：累加器、堆栈、通用寄存器型。直接型非大类体系结构设计风格。"},
+  {"id":142,"type":"tf","typeName":"判断题","kp":"子程序控制流","text":"MIPS中，jr指令用于从子过程返回。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"通过 jr $ra 寄存器间接跳转，使控制流安全弹回原调用函数执行点。"},
+  {"id":143,"type":"tf","typeName":"判断题","kp":"硬件软件边界","text":"操作系统调用是指令的操作类型之一。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"系统调用(syscall)属于操作系统级软件抽象接口功能，非CPU硬件基本算术数据操作指令类型。"},
+  {"id":144,"type":"tf","typeName":"判断题","kp":"数据通路职责","text":"数据通路的功能是控制指令的执行顺序。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"控制、调度、改写指令流执行序列是控制器的核心职责；数据通路仅承担数据的机械运算加工传送。"},
+  {"id":145,"type":"tf","typeName":"判断题","kp":"元件时序特性","text":"状态元件的输出仅取决于当前输入。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"状态元件（触发器等时序逻辑）具备物理记忆，其当前输出由当前物理输入及历史内部记忆状态共同决定。"},
+  {"id":146,"type":"tf","typeName":"判断题","kp":"单周期CPI","text":"单周期处理器的CPI为1。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"定义使然，每条指令的全部执行步骤紧紧收束强制占用一个时钟周期。"},
+  {"id":147,"type":"tf","typeName":"判断题","kp":"多周期周期划分","text":"多周期处理器的时钟周期宽度由最长指令的执行时间决定。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"多周期将指令细分步骤，其单周期宽度由最慢的‘单步独立操作’决定，而非整条最长指令。"},
+  {"id":148,"type":"tf","typeName":"判断题","kp":"lw单周期极限","text":"Load指令的执行时间是单周期处理器中最长的。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"lw由于历经取指、译码、执行、访存、写回全部五大组件路径，物理门延迟之和冠绝全指令集。"},
+  {"id":149,"type":"tf","typeName":"判断题","kp":"单周期时钟核算","text":"在单周期处理器中，时钟周期的宽度由最长指令的执行时间决定。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"因为无法动态切分周期，单周期的总时钟倒数频率必须向下看齐、包容最慢那条lw指令的总开销。"},
+  {"id":150,"type":"tf","typeName":"判断题","kp":"单周期控制线","text":"在单周期处理器中，控制信号在整个指令执行过程中不变。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"取指译码完成之后，多路选择器控制电平在整条指令漫长的一个时钟期内保持高低电平恒定。"},
+  {"id":151,"type":"tf","typeName":"判断题","kp":"流水线本质","text":"流水线技术可以缩短单条指令的执行时间。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"流水线非但无法缩短单条指令延迟（甚至由于加入流水段缓冲寄存器使其稍有增加），但其能大幅度提高微架构的宏观指令吞吐率。"},
+  {"id":152,"type":"tf","typeName":"判断题","kp":"流水线执行","text":"MIPS的Load指令需要5个阶段完成。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"标准五级流水，Load不能跳过MEM与WB，必须跑满五个相互级联的各流水寄存器段。"},
+  {"id":153,"type":"tf","typeName":"判断题","kp":"转发局限","text":"转发技术可以完全消除Load-use数据冒险。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"紧邻的lw结果尚未从内存爬出来，下一条指令就要在EX阶段死等，转发无能为力，必须强制气泡硬件阻塞挂起一个周期。"},
+  {"id":154,"type":"tf","typeName":"判断题","kp":"乱序执行异常","text":"动态流水线调度中，乱序完成会简化异常处理。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"乱序完成打破了程序原生态时间线序，当突发中断异常时，想要精确判定并恢复现场会带来极为复杂的硬件重排开销。"},
+  {"id":155,"type":"tf","typeName":"判断题","kp":"虚存Cache尺度","text":"虚拟存储器的页大小通常比Cache的块大小要大。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"页尺寸多以KB（如4KB、8KB）为物理底数；Cache块仅在数十B（如32B、64B）级别以求高频吞吐匹配。"},
+  {"id":156,"type":"tf","typeName":"判断题","kp":"DRAM物理机制","text":"DRAM的存储单元由触发器构成，因此不需要刷新。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"混淆两物，DRAM由极其微小的极板电容存储微量电荷构成，漏电极其严重必须强制周期刷新；由双稳态触发器构成、无需刷新的是SRAM。"},
+  {"id":157,"type":"tf","typeName":"判断题","kp":"全相联优缺","text":"全相联映射Cache的灵活性最高，但实现复杂度也最高。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"可随意放置主存块极大降低碰撞缺失率；但由于各行并行检索对比，硬件耗费的硬件比较器规模和成本冠绝所有映射方案。"},
+  {"id":158,"type":"tf","typeName":"判断题","kp":"页表加速","text":"TLB是用于加快虚拟地址到物理地址转换的缓存。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"TLB（快表）本质是专为MMU寻址页表建立的高速SRAM核心缓存项。"},
+  {"id":159,"type":"tf","typeName":"判断题","kp":"写策略混淆","text":"Cache的写策略中，写回法（Write Back）会同时更新Cache和主存。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"写回法只对Cache打上脏标记，直到该行被脏替换驱逐时才做一次性写回内存；同步更新两者的是全写法(Write Through)。"},
+  {"id":160,"type":"tf","typeName":"判断题","kp":"缺页机制","text":"虚拟存储器的缺页处理由硬件完成。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"硬件MMU仅在查表失效时拦截并抛出缺页中断信号异常；后续去物理磁碟搬移调度页面入内存的重任，完全由操作系统的内核中断处理软件代劳。"},
+  {"id":161,"type":"tf","typeName":"判断题","kp":"局部性大类","text":"程序访问的局部性包括时间局部性和空间局部性。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"两大正统黄金基石理论，Cache和页表物理构想的理论源泉。"},
+  {"id":162,"type":"tf","typeName":"判断题","kp":"物理芯片倒置","text":"SRAM通常用于构建主存，而DRAM用于构建Cache。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"完全颠倒，Cache追求极速，选用昂贵且快的SRAM；主存要求海量廉价，选用密度极高、相对慢的DRAM。"},
+  {"id":163,"type":"tf","typeName":"判断题","kp":"页表信息","text":"虚拟存储器的页表中不记录磁盘地址信息。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"必须记录，当有效位（Valid bit）为0提示页面在外存时，页表项地址位直接转换为存放该调出页面的物理磁碟扇区绝对地址。"},
+  {"id":164,"type":"tf","typeName":"判断题","kp":"存储保护","text":"存储保护的措施包括地址越界检查和访问权限控制。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"多任务操作系统硬件底座，确保进程之间地址不越界、不越权读写内核段数据。"},
+  {"id":165,"type":"tf","typeName":"判断题","kp":"结构冒险根源","text":"结构冒险是由于多条指令同时使用同一硬件资源引起的。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"例：单端口内存被IF段取指和MEM段读数同时争抢，爆发典型的结构资源不可调和冲突。"},
+  {"id":166,"type":"tf","typeName":"判断题","kp":"转发万能论","text":"转发技术可以解决所有数据冒险问题。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"重复说明：Load-use这一物理时间倒流瓶颈，由于涉及等内存吐出数据，属于转发盲区，必须依靠气泡阻塞。"},
+  {"id":167,"type":"tf","typeName":"判断题","kp":"级数悖论","text":"流水线的级数越多，性能提升越明显。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"流水段切分越碎，级间缓冲寄存器的门级锁存时钟延迟占比就会陡增；同时引发的控制、数据冒险惩罚成倍翻番，收益存在严重边际递减曲线。"},
+  {"id":168,"type":"tf","typeName":"判断题","kp":"控制冒险成因","text":"控制冒险是由于分支指令改变程序流引起的。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"beq/bne/j等跳转导致流水线前几个阶段预取回来的新指令全部作废，必须清空重来产生硬件控制风险。"},
+  {"id":169,"type":"tf","typeName":"判断题","kp":"命中率访存","text":"Cache的命中率越高，平均访存时间越短。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"高命中率使得绝大多数处理器请求被截留在极速Cache，不再下沉访问慢速的DRAM主存总线。"},
+  {"id":170,"type":"tf","typeName":"判断题","kp":"映射碰撞率","text":"直接映射Cache的冲突率高于全相联Cache。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"直接映射强制模运算固定坑位，即使Cache大片留空，只要同坑位死碰就会引发无限频繁恶性抖动替换。"},
+  {"id":171,"type":"tf","typeName":"判断题","kp":"栈算法","text":"LRU替换算法是一种栈算法。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"LRU完美切合栈数据模型属性，证明其缺失率单调递减性质，不会爆发类似FIFO的Belady异常。"},
+  {"id":172,"type":"tf","typeName":"判断题","kp":"直写法缺陷","text":"Write Through策略会频繁访问主存。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"每次CPU发起写动作，该策略必须死板将其同步砸入主存，引发高频主存总线占用。"},
+  {"id":173,"type":"tf","typeName":"判断题","kp":"重复尺度核验","text":"虚拟存储器的页大小通常比Cache的块大小大。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"正确，题库条目数据双重验证。"},
+  {"id":174,"type":"tf","typeName":"判断题","kp":"快表定义","text":"TLB用于加速虚拟地址到物理地址的转换。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"正确，快表加速地址转译。"},
+  {"id":175,"type":"tf","typeName":"判断题","kp":"段页式优势","text":"段页式虚拟存储器结合了分段和分页的优点。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"用分段面向用户逻辑、方便共享与保护；用分页拆散物理空间、彻底斩断外部碎片，属于集大成者。"},
+  {"id":176,"type":"tf","typeName":"判断题","kp":"局部性概念核验","text":"程序访问的局部性包括时间局部性和空间局部性。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"正确。"},
+  {"id":177,"type":"tf","typeName":"判断题","kp":"单核一致性","text":"Cache一致性问题仅存在于多核CPU系统中。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"B","analysis":"传统架构中，只要引入具备独立总线控制权的DMA外设直接改写物理主存，也会瞬间造成单核核心Cache老旧副本过期失效的一致性灾难。"},
+  {"id":178,"type":"tf","typeName":"判断题","kp":"虚存磁盘访存","text":"虚拟存储器的缺页处理需要访问磁盘。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"必须发起I/O，将存在于慢速磁盘交换区（Swap）的页面载回物理主存。"},
+  {"id":179,"type":"tf","typeName":"判断题","kp":"存储金字塔宗旨","text":"存储器的层次结构是为了平衡速度、容量和成本。","options":[{"val":"A","text":"正确"},{"val":"B","text":"错误"}],"answer":"A","analysis":"全书底层哲学，利用多级软硬件缓存，靠极低的价格成本、换取逼近寄存器速度且容量接近外存的大一统存储虚像。"}
+];
+
+const STORAGE_KEY = 'comp_org_quiz_state_v3';
+let state = { answered: {}, wrong: {}, userAnswer: {}, revealed: {} };
+let currentFilter = 'all';
+
+try {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) state = JSON.parse(saved);
+} catch(e) {}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function answerLabel(q) {
+  if (q.type === 'tf') return q.answer === 'A' ? '正确' : '错误';
+  return q.answer;
+}
+
+function normalizeText(s) {
+  return String(s || '').trim().replace(/\s+/g,'').toLowerCase();
+}
+
+function countStats() {
+  const types = ['all','single','multi','tf','wrong'];
+  const stats = Object.fromEntries(types.map(t=>[t,{total:0,done:0,wrong:0}]));
+  
+  questionsData.forEach(q=>{
+    stats.all.total++;
+    if(stats[q.type]) stats[q.type].total++;
+    if(state.answered[q.id]) {
+      stats.all.done++;
+      if(stats[q.type]) stats[q.type].done++;
+    }
+    if(state.wrong[q.id]) {
+      stats.all.wrong++;
+      if(stats[q.type]) stats[q.type].wrong++;
+      stats.wrong.total++;
+    }
+  });
+  stats.wrong.done = stats.wrong.total;
+  return stats;
+}
+
+function updateBoards() {
+  const s = countStats();
+  const done = s.all.done, total = s.all.total;
+  const pct = total ? Math.round(done*100/total) : 0;
+  
+  document.getElementById('progressText').textContent = `${done} / ${total}`;
+  document.getElementById('percentText').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+  
+  ['all','single','multi','tf','wrong'].forEach(t=>{
+    const el=document.getElementById('badge-'+t);
+    if(el) el.textContent = t==='wrong' ? `(${s.wrong.total})` : `(${s[t].done}/${s[t].total})`;
+  });
+  
+  const labels = [ ['single','单选'], ['multi','多选'], ['tf','判断'] ];
+  document.getElementById('statsGrid').innerHTML = labels.map(([t,name])=>`
+    <div class="stat">
+      <b>${s[t].wrong}</b>
+      <span>${name}错题 / 已做 ${s[t].done}</span>
+    </div>
+  `).join('');
+  
+  // 仅在错题集筛选模式下展示“一键重刷”按钮
+  const retryBtn = document.getElementById('retryAllBtn');
+  if(retryBtn) {
+    retryBtn.style.display = (currentFilter === 'wrong' && s.wrong.total > 0) ? 'inline-block' : 'none';
+  }
+}
+
+function getFiltered() {
+  const kw = normalizeText(document.getElementById('searchInput').value);
+  return questionsData.filter(q=>{
+    let ok = currentFilter==='all' || (currentFilter==='wrong' ? state.wrong[q.id] : q.type===currentFilter);
+    if(!ok) return false;
+    if(!kw) return true;
+    const hay = normalizeText([q.text,q.kp,q.typeName,answerLabel(q),q.analysis,(q.options||[]).map(o=>o.text).join(' ')].join(' '));
+    return hay.includes(kw);
+  });
+}
+
+function render() {
+  updateBoards();
+  const box = document.getElementById('quizContainer');
+  const arr = getFiltered();
+  if(!arr.length) {
+    box.innerHTML = '<div class="empty">当前筛选条件下没有题目</div>';
+    return;
+  }
+  box.innerHTML = arr.map(q=>cardHtml(q)).join('');
+  arr.forEach(q=>{
+    if(state.revealed[q.id]) showFeedback(q.id);
+  });
+}
+
+function cardHtml(q) {
+  const done = !!state.answered[q.id], wrong = !!state.wrong[q.id];
+  const cls = wrong ? 'wrong' : done ? 'correct' : '';
+  const inputName = 'q_'+q.id;
+  
+  let optHtml = (q.options||[]).map(o=>{
+    const saved = state.userAnswer[q.id];
+    const checked = Array.isArray(saved) ? saved.includes(o.val) : saved===o.val;
+    const inputType = q.type==='multi' ? 'checkbox' : 'radio';
+    return `
+      <label class="option">
+        <input type="${inputType}" name="${inputName}" value="${o.val}" ${checked?'checked':''} ${done?'disabled':''}>
+        <span>${escapeHtml(o.text)}</span>
+      </label>
+    `;
+  }).join('');
+  
+  return `
+    <div class="question-card ${cls}" id="card_${q.id}">
+      <div class="card-header">
+        <div class="tags">
+          <span class="tag kp">${escapeHtml(q.kp)}</span>
+          <span class="tag type">${q.typeName}</span>
         </div>
-        <div class="progress-container"><div class="progress-bar" id="bar-element"></div></div>
-        <div id="display-pool"></div>
+        <div class="qid">#${q.id}</div>
+      </div>
+      <div class="question-text">${q.id}. ${escapeHtml(q.text)}</div>
+      <div class="options">${optHtml}</div>
+      <div class="actions">
+        <button class="submit-btn" id="btn_${q.id}" onclick="submitAnswer(${q.id})" ${done?'disabled':''}>
+          ${done?'已完成':'确认答案'}
+        </button>
+        <button class="wrong-toggle" onclick="toggleWrong(${q.id})">
+          ${wrong?'移出错题':'加入错题'}
+        </button>
+      </div>
+      <div class="feedback" id="feedback_${q.id}"></div>
     </div>
+  `;
+}
 
-    <script>
-        // ==================== 100% 手工对齐、精密校正清洗后的完整全本数据库 ====================
-        const DATA_PACK = {
-            single: [
-                {id:"s1",q:"1. 冯·诺依曼结构计算机的主要思想是什么？",options:["A. 采用二进制表示指令和数据","B. 存储程序工作方式","C. 由五个基本部件组成","D. 以上都是"],a:"D",t:"冯·诺依曼三大核心思想：二进制存储指令与数据、存储程序原理、运算器/控制器/存储器/输入/输出五大部件，ABC全部正确 [cite: 1]。"},
-                {id:"s2",q:"2. 下列哪一项不是冯·诺依曼结构计算机的基本部件？",options:["A. 运算器","B. 控制器","C. 硬盘","D. 存储器"],a:"C",t:"五大基础部件为运算器、控制器、存储器、输入设备、输出设备；硬盘属于外部存储外设，不属于五大核心部件 [cite: 1]。"},
-                {id:"s3",q:"3. 计算机中采用二进制编码的主要原因是？",options:["A. 制造稳定态的物理器件容易","B. 运算规则简单","C. 与逻辑命题对应","D. 以上都是"],a:"D",t:"二进制优势：硬件仅需高低两种稳态易实现；加减乘除运算规则简单；0、1可直接对应逻辑真假，三点均成立 [cite: 1]。"},
-                {id:"s4",q:"4. 下列哪一代计算机首次采用晶体管作为逻辑元件？",options:["A. 第一代","B. 第二代","C. 第三代","D. 第四代"],a:"B",t:"第一代：电子管；第二代：晶体管；第三代：中小规模集成电路；第四代：超大规模集成电路 [cite: 1]。"},
-                {id:"s5",q:"5. 计算机系统的抽象层中，指令系统位于哪一层？",options:["A. 硬件与软件的接口","B. 操作系统与硬件的接口","C. 应用程序与操作系统的接口","D. 编译器与操作系统的接口"],a:"A",t:"指令集是硬件和所有软件（编译器、OS、应用）之间的标准交互接口 [cite: 1]。"},
-                {id:"s6",q:"6. 下列哪一项不是计算机系统的主要性能指标？",options:["A. 响应时间","B. 吞吐量","C. 功耗","D. 带宽"],a:"C",t:"响应时间、吞吐量、带宽衡量运算/传输性能；功耗属于能耗指标，不属于运行性能指标 [cite: 1]。"},
-                {id:"s7",q:"7. 计算机中用于表示浮点数的标准是？",options:["A. ASCII","B. IEEE 754","C. BCD","D. Unicode"],a:"B",t:"IEEE 754是全球统一浮点数标准；ASCII、Unicode为字符编码；BCD用于十进制编码 [cite: 1]。"},
-                {id:"s8",q:"8. 补码表示法中，-1的8位补码是？",options:["A. 10000001","B. 11111111","C. 00000001","D. 11111110"],a:"B",t:"8位有符号数，-1原码10000001，反码11111110，补码=反码+1=11111111 [cite: 1]。"},
-                {id:"s9",q:"9. 下列哪种寻址方式中，操作数直接包含在指令中？",options:["A. 直接寻址","B. 间接寻址","C. 立即寻址","D. 寄存器寻址"],a:"C",t:"立即寻址：指令内直接存放操作数；直接寻址存内存地址；寄存器寻址操作数存寄存器 [cite: 1]。"},
-                {id:"s10",q:"10. MIPS指令集中，R-Type指令的功能由哪个字段决定？",options:["A. OP","B. rs","C. func","D. shamt"],a:"C",t:"R型指令OP固定为0，rs/rt为源寄存器，shamt移位量，func区分add/sub/and等运算功能 [cite: 1]。"},
-                {id:"s11",q:"11. 下列哪一项不是RISC设计风格的特点？",options:["A. 指令系统复杂","B. 指令周期短","C. 大量通用寄存器","D. 采用组合逻辑控制"],a:"A",t:"指令系统复杂是CISC特征；RISC特点：定长简单指令、单周期、通用寄存器多、组合逻辑控制 [cite: 1]。"},
-                {id:"s12",q:"12. 在MIPS中，用于过程调用时保存返回地址的寄存器是？",options:["A. $sp","B. $ra","C. $fp","D. $gp"],a:"B",t:"ra=return address存储子程序返回地址；sp栈指针，fp帧指针，gp全局指针 [cite: 1]。"},
-                {id:"s13",q:"13. 下列哪一项不是非数值数据的类型？",options:["A. 逻辑数据","B. 西文字符","C. 浮点数","D. 汉字"],a:"C",t:"浮点数属于数值数据；逻辑量、字符、汉字均为非数值数据 [cite: 1]。"},
-                {id:"s14",q:"14. 汉字内码的主要作用是？",options:["A. 输入汉字","B. 存储和查找汉字","C. 显示汉字字形","D. 打印汉字"],a:"B",t:"输入码负责输入；内码是计算机内部存储、处理、检索汉字编码；字形码用于显示打印 [cite: 1]。"},
-                {id:"s15",q:"15. 下列哪种编码方式用于表示十进制数？",options:["A. ASCII","B. BCD","C. Unicode","D. 补码"],a:"B",t:"BCD码使用4位二进制表示1位十进制数字 [cite: 1]。"},
-                {id:"s16",q:"16. 数据的存储排列方式中，大端方式的特点是？",options:["A. 低地址存放数据的高位","B. 低地址存放数据的低位","C. 高地址存放数据的高位","D. 高地址存放数据的低位"],a:"A",t:"大端：低地址存高字节；小端：低地址存低字节 [cite: 1]。"},
-                {id:"s17",q:"17. 十六进制整数01234567H在32位小端表示的机器上的存储为（从左到右为低字节到高字节）：",options:["A. 01 23 45 67","B. 67 45 23 01","C. 10 32 54 76","D. 76 54 32 10"],a:"B",t:"原数字四字节：01、23、45、67；小端字节逆序，低地址先存低字节，顺序67 45 23 01 [cite: 2]。"},
-                {id:"s18",q:"18. 【🔥精密订正题】在大端方式机中运行以下代码的结果是什么？\n#include<stdio.h>\nint main() {\n  int d=0x1234567;\n  char *p=(char *)&d;\n  printf(\"%X\", *(p+1));\n}",options:["A. 67","B. 45","C. 23","D. 01"],a:"C",t:"【精密校正】0x1234567补全4字节是0x01234567。大端排布低地址到高地址：01(p), 23(p+1), 45(p+2), 67(p+3)。因此*(p+1)读取的是23 [cite: 3]。"},
-                {id:"s19",q:"19. MIPS指令集中，用于无条件跳转的指令是？",options:["A. j","B. beq","C. bne","D. jal"],a:"A",t:"j无条件跳转；beq/bne条件分支；jal跳转并保存返回地址 [cite: 3]。"},
-                {id:"s20",q:"20. 下列哪一项不是条件码的标志位？",options:["A. ZF","B. CF","C. PF","D. SF"],a:"C",t:"ZF零标志、CF进位标志、SF符号标志为核心条件标志；PF奇偶标志不用于常规分支判断 [cite: 3]。"},
-                {id:"s21",q:"21. 在MIPS中，用于存储栈指针的寄存器是？",options:["A. $ra","B. $sp","C. $fp","D. $gp"],a:"B",t:"$sp=stack pointer栈指针 [cite: 3]。"},
-                {id:"s22",q:"22. 4位机器数1101带符号扩展成8位后的机器数为：",options:["A. 1101 1111","B. 1111 1101","C. 0000 1101","D. 1101 1101"],a:"B",t:"有符号数扩展高位补符号位1，1101扩展为11111101 [cite: 4]。"},
-                {id:"s23",q:"23. 4位机器数1101无符号扩展成8位后的机器数为：",options:["A. 1101 1111","B. 1111 1101","C. 0000 1101","D. 1101 1101"],a:"C",t:"无符号数扩展高位补0，1101扩展为00001101 [cite: 4]。"},
-                {id:"s24",q:"24. 下列哪一项不是指令系统设计的基本原则？",options:["A. 指令尽量短","B. 操作码位数足够","C. 指令编码唯一","D. 指令长度必须固定"],a:"D",t:"指令长度不强制固定，CISC架构存在变长指令 [cite: 4]。"},
-                {id:"s25",q:"25. 在MIPS中，用于逻辑左移的指令是？",options:["A. sll","B. srl","C. and","D. or"],a:"A",t:"sll逻辑左移；srl逻辑右移；and/or为逻辑运算 [cite: 4]。"},
-                {id:"s26",q:"26. 下列哪一项不是偏移寻址的方式？",options:["A. 直接寻址","B. 基址寻址","C. 变址寻址","D. 相对寻址"],a:"A",t:"偏移寻址包含基址、变址、相对寻址；直接寻址无偏移量 [cite: 4]。"},
-                {id:"s27",q:"27. 在MIPS中，用于从内存加载字的指令是？",options:["A. lw","B. sw","C. lb","D. sb"],a:"A",t:"lw=load word读字；sw存字；lb/sb读写字节 [cite: 4]。"},
-                {id:"s28",q:"28. 汇编表示\"add $t0 $s1 $s2\"对应的MIPS指令的机器码为（add func=32,t0=8,s1=17, s2=18）：",options:["A. 000000 01000 10001 10010 00000 100000","B. 000000 10001 10010 01000 00000 100000","C. 100000 01000 10001 10010 00000 000000","D. 100000 10001 10010 01000 00000 000000"],a:"B",t:"R型格式OP(6) rs(5) rt(5) rd(5) shamt(5) func(6)；OP=0，rs=s1=17，rt=s2=18，rd=$t0=8，shamt=0，func=32，对应选项B [cite: 5]。"},
-                {id:"s29",q:"29. 下列哪一项不是指令的寻址方式？",options:["A. 立即寻址","B. 直接寻址","C. 操作码寻址","D. 寄存器寻址"],a:"C",t:"不存在“操作码寻址”，立即、直接、寄存器均为标准寻址方式 [cite: 6]。"},
-                {id:"s30",q:"30. 下列哪一项不是指令设计风格的类型？",options:["A. 累加器型","B. 堆栈型","C. 通用寄存器型","D. 直接型"],a:"D",t:"三大经典指令架构：累加器、堆栈、通用寄存器型，无直接型 [cite: 6]。"},
-                {id:"s31",q:"31. 在MIPS中，用于从子过程返回的指令是？",options:["A. jr","B. jal","C. j","D. beq"],a:"A",t:"jr $ra跳转到返回地址实现子程序返回；jal用于调用子程序 [cite: 6]。"},
-                {id:"s32",q:"32. 下列哪一项不是指令的操作类型？",options:["A. 数据传送","B. 算术运算","C. 逻辑运算","D. 操作系统调用"],a:"D",t:"硬件指令操作包含数据传送、算术、逻辑、分支；系统调用属于软件层面，不属于硬件指令类型 [cite: 6]。"},
-                {id:"s33",q:"33. 下列哪一项不是指令格式的类型？",options:["A. R-Type","B. I-Type","C. J-Type","D. S-Type"],a:"D",t:"MIPS仅R、I、J三类指令格式，无S-Type [cite: 6]。"},
-                {id:"s34",q:"34. 在MIPS中，用于条件分支的指令是？",options:["A. beq","B. j","C. jal","D. jr"],a:"A",t:"beq相等条件分支；j无条件跳转，jal调用，jr返回 [cite: 6]。"},
-                {id:"s35",q:"35. 下列哪一项不是指令系统设计的基本问题？",options:["A. 操作码的组成","B. 数据类型","C. 指令格式","D. 操作系统类型"],a:"D",t:"指令设计关注操作码、数据类型、指令编码格式，与操作系统无关 [cite: 6]。"},
-                {id:"s36",q:"36. 下列哪一项不是指令的执行步骤？",options:["A. 取指令","B. 译码","C. 执行","D. 打印结果"],a:"D",t:"CPU标准执行流程：取指、译码、执行、访存、写回；打印是外设操作，不属于CPU硬件步骤 [cite: 6]。"},
-                {id:"s37",q:"37. 下列哪一项不是指令的操作数来源？",options:["A. 寄存器","B. 存储器","C. 立即数","D. 操作码"],a:"D",t:"操作数来源：寄存器、内存、指令内立即数；操作码是运算标识，不是操作数 [cite: 6]。"},
-                {id:"s38",q:"38. 下列哪一项不是指令的编码方式？",options:["A. 定长编码","B. 扩展编码","C. 哈夫曼编码","D. 变长编码"],a:"C",t:"指令编码分为定长、扩展、变长；哈夫曼是压缩编码，不用于指令编码 [cite: 6]。"},
-                {id:"s39",q:"39. add指令的RegWr和MemtoReg信号分别为：",options:["A. 0 1","B. 1 0","C. 0 0","D. 1 1"],a:"B",t:"add运算结果写入寄存器，RegWr=1；不访问内存，MemtoReg=0 [cite: 6]。"},
-                {id:"s40",q:"40. lw指令的Branch和MemWr信号分别为：",options:["A. 0 0","B. 0 1","C. 1 0","D. 1 1"],a:"A",t:"lw是加载字，非分支指令Branch=0；仅读内存不写内存MemWr=0 [cite: 7]。"},
-                {id:"s41",q:"41. 关于指令控制信号，错误的是：",options:["A. lw指令的ALUctr取值为addu","B. sw指令的ALUctr取值为addu","C. sw指令的ExtOp取值为0","D. add指令的MemWr取值为0"],a:"C",t:"sw需要扩展立即数计算地址，ExtOp=1，C错误；lw/sw均用加法算地址，add不写内存MemWr=0 [cite: 6]。"},
-                {id:"s42",q:"42. 数据通路的功能是：",options:["A. 存储指令和数据","B. 进行数据存储、处理和传送","C. 控制指令的执行顺序","D. 生成时钟信号"],a:"B",t:"数据通路负责数据传输、运算、临时存储；控制器控制流程，时钟电路生成时钟 [cite: 6]。"},
-                {id:"s43",q:"43. 单周期处理器的CPI为：",options:["A. 0","B. 1","C. 2","D. 可变"],a:"B",t:"单周期每条指令占用1个完整时钟周期，CPI=1 [cite: 6]。"},
-                {id:"s44",q:"44. 下列哪条指令的执行时间最长？",options:["A. add","B. lw","C. beq","D. j"],a:"B",t:"lw需要访存步骤，流程最长，决定单周期时钟周期长度 [cite: 6]。"},
-                {id:"s45",q:"45. 在单周期处理器中，时钟周期的宽度由什么决定？",options:["A. 最短指令的执行时间","B. 最长指令的执行时间","C. 所有指令的平均执行时间","D. 指令的条数"],a:"B",t:"单周期所有指令共用同一时钟，周期必须覆盖最慢指令（lw）耗时 [cite: 6]。"},
-                {id:"s46",q:"46. 在MIPS指令集中，R-type指令的功能是：",options:["A. 从内存读取数据","B. 将数据写入内存","C. 对寄存器中的数据进行运算","D. 跳转到目标地址"],a:"C",t:"R型仅操作寄存器，完成算术/逻辑运算；lw/sw访存，j/jal跳转 [cite: 6]。"},
-                {id:"s47",q:"47. 下列哪项是I-type指令的特点？",options:["A. 使用立即数","B. 仅对寄存器操作","C. 无条件跳转","D. 不涉及ALU运算"],a:"A",t:"I型包含16位立即数，用于访存、条件分支、立即数运算 [cite: 6]。"},
-                {id:"s48",q:"48. 在数据通路中，ALU的功能是：",options:["A. 存储数据","B. 进行算术和逻辑运算","C. 控制指令执行顺序","D. 生成时钟信号"],a:"B",t:"ALU算术逻辑单元，专门完成加减、与或、移位等运算 [cite: 6]。"},
-                {id:"s49",q:"49. 在单周期处理器中，控制信号：",options:["A. 在每个时钟周期变化","B. 在整个指令执行过程中不变","C. 由微程序生成","D. 仅用于ALU"],a:"B",t:"单周期一条指令完整占用一个周期，译码后控制信号全程保持不变 [cite: 6]。"},
-                {id:"s50",q:"50. 在数据通路中，PC的功能是：",options:["A. 存储指令","B. 存储下一条指令的地址","C. 存储数据","D. 控制ALU"],a:"B",t:"Program Counter程序计数器，保存即将取出指令的内存地址 [cite: 6]。"},
-                {id:"s51",q:"51. 在单周期处理器中，Load指令的执行时间是：",options:["A. 最短的","B. 最长的","C. 平均的","D. 可变的"],a:"B",t:"Load（lw）包含取指、译码、运算、访存、写回五步，耗时最长 [cite: 6]。"},
-                {id:"s52",q:"52. 在MIPS中，Jump指令的目标地址计算方式是：",options:["A. PC+4+offset","B. PC<31:28> concat target<25:0>","C. 从寄存器读取","D. 由ALU计算"],a:"B",t:"J型跳转地址：PC高4位拼接指令内26位偏移，左移2位 [cite: 6]。"},
-                {id:"s53",q:"53. 流流水线技术的主要目的是什么？",options:["A. 减少指令的执行时间","B. 提高指令的吞吐率","C. 降低功耗","D. 简化硬件设计"],a:"B",t:"流水线不缩短单条指令耗时，但多条指令重叠执行，提升单位时间完成指令数量（吞吐率） [cite: 8]。"},
-                {id:"s54",q:"54. 在MIPS流水线中，Load指令需要多少个阶段完成？",options:["A. 3","B. 4","C. 5","D. 6"],a:"C",t:"标准MIPS五级流水线：IF取指、ID译码、EX执行、MEM访存、WB写回，所有指令均5阶段 [cite: 8]。"},
-                {id:"s55",q:"55. 以下哪种指令集特征最有利于流水线执行？",options:["A. 指令长度不一致","B. 格式多样且源寄存器位置不同","C. 指令长度一致且格式规整","D. 允许运算指令直接访问内存"],a:"C",t:"RISC定长规整指令，各阶段硬件逻辑统一，极易流水线；变长、格式混乱会阻塞流水线 [cite: 8]。"},
-                {id:"s56",q:"56. 结构冒险（Structure Hazard）是指什么？",options:["A. 指令间的数据依赖","B. 同一部件同时被不同指令使用","C. 分支指令改变程序流程","D. 异常中断的发生"],a:"B",t:"结构冒险：硬件资源冲突，多条指令同时争抢同一功能部件 [cite: 8]。"},
-                {id:"s57",q:"57. 转发（Forwarding）技术主要用于解决哪种冒险？",options:["A. 结构冒险","B. 数据冒险","C. 控制冒险","D. 异常中断"],a:"B",t:"转发旁路将尚未写回寄存器的运算结果直接送至ALU输入，解决RAW数据冒险 [cite: 8]。"},
-                {id:"s58",q:"58. 在MIPS流水线中，R-type指令的写寄存器操作发生在哪个阶段？",options:["A. Exec","B. Mem","C. Wr","D. Reg/Dec"],a:"C",t:"五级流水线WB（写回）阶段完成寄存器写入 [cite: 8]。"},
-                {id:"s59",q:"59. 在MIPS流水线中，哪一阶段不需要控制信号？",options:["A. IF","B. ID","C. EX","D. MEM"],a:"A",t:"IF仅取指令，仅需PC自增逻辑，无需译码产生的控制信号 [cite: 8]。"},
-                {id:"s60",q:"60. 以下哪种技术可以消除循环内的分支指令？",options:["A. 循环展开","B. 动态预测","C. 转发技术","D. 硬件阻塞"],a:"A",t:"循环展开复制循环体，减少分支判断次数，消除循环内部分支 [cite: 8]。"},
-                {id:"s61",q:"61. 以下哪种冒险会导致流水线插入'气泡'？",options:["A. 结构冒险","B. 数据冒险","C. 控制冒险","D. 以上都是"],a:"D",t:"资源冲突、数据依赖、分支跳转三类冒险均会插入流水线气泡暂停执行 [cite: 8]。"},
-                {id:"s62",q:"62. 在MIPS流水线中，分支指令的目标地址计算最早可以提前到哪个阶段？",options:["A. IF","B. ID","C. EX","D. MEM"],a:"B",t:"ID阶段读取寄存器、计算分支偏移，提前判断跳转地址，减少气泡 [cite: 8]。"},
-                {id:"s63",q:"63. 以下哪种方法不能解决控制冒险？",options:["A. 静态分支预测","B. 动态分支预测","C. 转发技术","D. 延迟分支"],a:"C",t:"转发仅解决数据冒险；预测、延迟分支用于缓解分支带来的控制冒险 [cite: 8]。"},
-                {id:"s64",q:"64. 以下哪种存储器属于易失性存储器？",options:["A. ROM","B. DRAM","C. 磁盘","D. 光盘"],a:"B",t:"DRAM断电电荷丢失，易失；ROM、磁盘、光盘断电数据保留，非易失 [cite: 8]。"},
-                {id:"s65",q:"65. Cache的映射方式中，灵活性最高的是？",options:["A. 直接映射","B. 全相联映射","C. 组相联映射","D. 顺序映射"],a:"B",t:"全相联任意主存块可放入任意Cache行，冲突最少，灵活性最高，但硬件成本最高 [cite: 8]。"},
-                {id:"s66",q:"66. 以下哪种存储器的工作速度最快？",options:["A. 寄存器","B. Cache","C. 主存","D. 硬盘"],a:"A",t:"速度层级：寄存器 > Cache > 主存 > 磁盘 [cite: 9]。"},
-                {id:"s67",q:"67. DRAM需要定期刷新的原因是？",options:["A. 数据以电荷形式存储","B. 存储单元由触发器构成","C. 采用随机存取方式","D. 容量较大"],a:"A",t:"DRAM用电容存电荷，电荷缓慢泄漏，必须定时刷新补充电荷；SRAM触发器无需刷新 [cite: 8]。"},
-                {id:"s68",q:"68. 在直接映射Cache中，主存块号与Cache行号的映射关系是？",options:["A. 一对一","B. 多对一","C. 一对多","D. 多对多"],a:"B",t:"直接映射主存块固定映射唯一Cache行，多个主存块共享同一行，多对一 [cite: 8]。"},
-                {id:"s69",q:"69. 以下哪种存储器通常用于构建主存？",options:["A. SRAM","B. DRAM","C. ROM","D. 磁带"],a:"B",t:"DRAM容量大、成本低，用作内存主存；SRAM高速昂贵，用于Cache [cite: 8]。"},
-                {id:"s70",q:"70. Cache的写策略中，写回法（Write Back）的特点是？",options:["A. 同时写Cache和主存","B. 只写Cache，不立即写主存","C. 直接写主存","D. 不写Cache"],a:"B",t:"写回仅更新Cache块，块被替换时才一次性写入主存，减少主存访问 [cite: 8]。"},
-                {id:"s71",q:"71. 程序访问的局部性包括哪两种？",options:["A. 时间和空间","B. 顺序和随机","C. 静态和动态","D. 读写和执行"],a:"A",t:"时间局部性：刚访问的数据短期内重复访问；空间局部性：相邻地址数据连续访问 [cite: 8]。"},
-                {id:"s72",q:"72. TLB的作用是？",options:["A. 加快地址转换","B. 存储程序指令","C. 管理磁盘空间","D. 刷新DRAM"],a:"A",t:"TLB是页表高速缓存，缓存虚拟-物理地址映射，加速地址转换 [cite: 8]。"},
-                {id:"s73",q:"73. 在组相联映射Cache中，主存块可以映射到Cache的？",options:["A. 固定行","B. 固定组中的任意行","C. 任意行","D. 任意组"],a:"B",t:"主存块固定对应唯一Cache组，组内任意一行均可存放 [cite: 8]。"},
-                {id:"s74",q:"74. 虚拟存储器的实现方式不包括？",options:["A. 分页式","B. 分段式","C. 段页式","D. 直接映射式"],a:"D",t:"直接映射是Cache映射策略，虚拟存储分页、分段、段页式三种 [cite: 8]。"},
-                {id:"s75",q:"75. 以下哪种存储器通常用于存放当前执行的指令和数据？",options:["A. 寄存器","B. 主存","C. 硬盘","D. 光盘"],a:"B",t:"程序运行时代码与数据载入主存；硬盘仅长期存储 [cite: 8]。"},
-                {id:"s76",q:"76. Cache的命中时间（Hit Time）是指？",options:["A. 判断是否命中的时间","B. 访问主存的时间","C. 访问磁盘的时间","D. 替换算法的时间"],a:"A",t:"命中时间=访问Cache、对比标记判断命中的耗时 [cite: 8]。"},
-                {id:"s77",q:"77. 以下哪种存储器通常用于构建Cache？",options:["A. SRAM","B. DRAM","C. ROM","D. 磁盘"],a:"A",t:"SRAM速度快、无需刷新，用于Cache；DRAM做主存 [cite: 8]。"},
-                {id:"s78",q:"78. 以下哪种存储器通常用于长期存储数据？",options:["A. 寄存器","B. Cache","C. 主存","D. 硬盘"],a:"D",t:"硬盘非易失，断电保存数据，长期存储文件程序 [cite: 10]外部扩展。"}
-            ],
-            multiple: [
-                {id:"m1",q:"1. 冯·诺依曼结构计算机体系定义的五大核心基础硬件组成部分包括哪些？",options:["A. 运算器","B. 控制器","C. 存储器","D. 输入设备和输出设备"],a:"ABCD",t:"五大核心部件：运算器、控制器、存储器、输入设备、输出设备 [cite: 10]。"},
-                {id:"m2",q:"2. 一条MIPS指令的机器码为000000 00101 01111 10000 00000 100000，其有效的汇编表示形式为（add func=32）：",options:["A. add $16,$5,$15","B. add $s0,$a1,$t7","C. add $5,$15,$16","D. add $a1,$t7,$s0"],a:"AB",t:"R型字段拆解：rs=5($a1)，rt=15($t7)，rd=16($s0)，标准汇编格式 add rd,rs,rt，即add $s0,$a1,$t7 等价于 add $16,$5,$15 [cite: 10]。"},
-                {id:"m3",q:"3. 计算机中采用二进制编码的原因包括？",options:["A. 制造稳定态的物理器件容易","B. 运算规则简单","C. 与逻辑命题对应","D. 便于与十进制转换"],a:"ABC",t:"ABC是二进制核心优势；便于十进制转换不是物理原生的硬件设计理由 [cite: 11]。"},
-                {id:"m4",q:"4. 计算机性能评价的基本指标包括？",options:["A. 响应时间","B. 吞吐量","C. 带宽","D. 功耗"],a:"ABC",t:"响应时间、吞吐量、带宽衡量系统物理运算与带宽性能；功耗为电气能效指标 [cite: 11]。"},
-                {id:"m5",q:"5. 下列哪些是数值数据的表示方式？",options:["A. 定点数","B. 浮点数","C. 十进制数","D. 逻辑数"],a:"ABC",t:"定点、浮点、十进制BCD均为具备数学权重的数值数据；逻辑数属于纯物理非数值状态 [cite: 11]。"},
-                {id:"m6",q:"6. 下列哪些是浮点数的规格化形式？",options:["A. 1.01×2^3","B. 0.01×2^5","C. 10.1×2^1","D. 1.0×2^0"],a:"AD",t:"IEEE 754规格化尾数整数位固定为1，AD符合；B、C整数位不为1，非规格化 [cite: 11]。"},
-                {id:"m7",q:"7. 下列哪些是IEEE754浮点数的特殊表示？",options:["A. 0","B. ∞","C. NaN","D. 非规格化数"],a:"ABCD",t:"IEEE 754包含零、正负无穷、NaN、规格化、非规格化等五类基础边界编码 [cite: 11]。"},
-                {id:"m8",q:"8. 下列哪些是补码的特性？",options:["A. 0的表示唯一","B. 加减运算统一","C. 比原码多表示一个最小负数","D. 符号位与真值符号对应"],a:"ABCD",t:"补码零唯一；减法转加法运算；n位补码范围比原码多一个绝对值最大的负数；最高位符合0正1负 [cite: 11]。"},
-                {id:"m9",q:"9. 下列哪些是寻址方式？",options:["A. 立即寻址","B. 直接寻址","C. 寄存器寻址","D. 堆栈寻址"],a:"ABCD",t:"四项均为计算机标准的硬件层控制寻址方式 [cite: 11]。"},
-                {id:"m10",q:"10. 下列哪些是偏移寻址的方式？",options:["A. 基址寻址","B. 变址寻址","C. 相对寻址","D. 间接寻址"],a:"ABC",t:"偏移寻址核心特征是EA=Reg+Offset，包含基址、变址、相对；间接寻址属于多级内存指针，不属于偏移架构 [cite: 11]。"},
-                {id:"m11",q:"11. 下列哪些是MIPS的指令操作类型？",options:["A. 算术运算","B. 逻辑运算","C. 数据传送","D. 条件分支"],a:"ABCD",t:"MIPS基本指令大类完整包含算术、逻辑、访存数据传送、分支控制跳转 [cite: 11]。"},
-                {id:"m12",q:"12. 下列哪些是操作数的类型？",options:["A. 立即数","B. 寄存器操作数","C. 存储器操作数","D. 操作码"],a:"ABC",t:"操作数按物理介质分为立即数、寄存器操作数、存储器操作数；操作码是控制标识 [cite: 11]。"},
-                {id:"m13",q:"13. 下列哪些是指令设计风格的类型？",options:["A. 累加器型","B. 堆栈型","C. 通用寄存器型","D. 装入/存储型"],a:"ABCD",t:"四者均为硬件体系结构经典的风格。其中MIPS属于典型的通用寄存器型衍生出的装入/存储型架构 [cite: 11]。"},
-                {id:"m14",q:"14. 数据通路的功能包括：",options:["A. 数据存储","B. 数据处理","C. 数据传送","D. 指令译码"],a:"ABC",t:"数据通路完成数据传输、ALU处理、中间寄存器临时存储；译码控制是控制器的核心职责 [cite: 11]。"},
-                {id:"m15",q:"15. 单周期处理器的缺点包括：",options:["A. 时钟周期过长","B. 功能部件不能重复使用","C. 设计复杂","D. CPI可变"],a:"AB",t:"单周期由于全长共用时钟导致木桶效应周期长；一部件单条指令内独占无法复用；其CPI固定等于1 [cite: 11]。"},
-                {id:"m16",q:"16. 在单周期处理器中，控制信号的特点包括：",options:["A. 在整个指令执行过程中不变","B. 由指令译码生成","C. 每个时钟周期变化","D. 由微程序生成"],a:"AB",t:"单周期内一条指令独占周期，控制信号经硬连线译码后在整个周期内保持死锁稳定 [cite: 11]。"},
-                {id:"m17",q:"17. 下列哪些指令属于I-type？",options:["A. ori","B. lw","C. sw","D. beq"],a:"ABCD",t:"立即逻辑ori、访存偏移lw/sw、条件相对分支beq均为底层I型定长指令 [cite: 11]。"},
-                {id:"m18",q:"18. 关于高速缓存Cache的缺失（Miss）类型，业界公认的经典3C缺失包含哪些？",options:["A. 冷启动产生的强制缺失 (Compulsory Miss)","B. 空间受限引发的容量缺失 (Capacity Miss)","C. 映射位置挤占引发的冲突缺失 (Conflict Miss)","D. 虚拟内存页面错误引发的磁盘分配缺失"],a:"ABC",t:"Cache经典三大缺失包括：强制缺失、容量缺失、冲突缺失。操作系统缺页异常属于更高层级的软硬件数据交换，不属于物理Cache层。"},
-                {id:"m19",q:"19. 以下哪些是MIPS五级流水线的标准执行阶段？",options:["A. IF 取指级","B. ID 译码级","C. EX 执行级","D. WB 写回级"],a:"ABCD",t:"经典MIPS五级并行流水线完整包含：IF、ID、EX、MEM、WB五个基础步骤 [cite: 12]。"},
-                {id:"m20",q:"20. 流水线设计中，消除或克服资源竞争产生的“结构冒险”，可采纳的硬件举措有：",options:["A. 增加底层的硬件物理部件数量进行冗余备份","B. 将通用的高速缓存拆分为独立的指令Cache和数据Cache","C. 派发控制信号令流水线级强制进行Stall阻塞分时使用","D. 启动大规模超前硬件动态分支预测器"],a:"ABC",t:"增加硬件、分离指令/数据端口、下发Stall气泡均可解除结构性冲突。分支预测主要用来对付控制冒险。"},
-                {id:"m21",q:"21. CPU流水线并行重叠执行过程中，可能被触发的数据冒险（Data Hazard）有：",options:["A. 写后读真数据依赖冒险 (RAW)","B. 读后写反依赖名义冒险 (WAR)","C. 写后写输出依赖冒险 (WAW)","D. 连续读取同一单元的读后读 (RAR)"],a:"ABC",t:"只有存在“写”时才会有时序风险。RAW、WAR、WAW是典型的数据冲突风险。RAR纯读不改写，绝不引发任何冒险。"},
-                {id:"m22",q:"22. 为了将分支跳转带来的“控制冒险”惩罚降到最低，微架构和编译层常用的技术有：",options:["A. 引入基于历史饱和计数器的动态分支预测","B. 由编译器实施代码静态调度，开辟并填满分支延迟槽","C. 依赖高并发硬件转发旁路网络（Forwarding）","D. 采用1位或2位前历史记录静态分支预测"],a:"AB",t:"动态/静态预测、编译延迟槽属于控制冒险的标准克星。Forwarding旁路是用来解决数据冒险的，对控制跳转无能为力。"},
-                {id:"m23",q:"23. 下列关于存储器“局部性特征”的精准划分维度，包括哪几大铁律？",options:["A. 时间局部性","B. 空间局部性","C. 顺序串行局部性","D. 随机离散局部性"],a:"AB",t:"局部性原理两大经典核心铁律：时间局部性（近期复用）与空间局部性（邻近连续复用）。"},
-                {id:"m24",q:"24. 计算机系统中，下列哪些半导体或介质存储元件属于典型的“内部存储器”级图层？",options:["A. CPU内的通用寄存器堆","B. 板载的多级高速缓冲存储器 Cache","C. 系统主内存条 (DRAM)","D. 挂载在总线上的外置固态/机械硬盘"],a:"ABC",t:"寄存器、Cache、主存可由CPU直接寻址，划归内存储器范畴。大硬盘通过I/O总线驱动访问，属于外置长期封存介质。"},
-                {id:"m25",q:"25. 当高速缓存Cache空间放满需要清退旧变量时，底层硬件可选用的替换算法包括：",options:["A. 先进先出时间线淘汰算法 FIFO","B. 近期最少使用热度淘汰算法 LRU","C. 最不经常使用计数淘汰算法 LFU","D. 完全依靠随机数发生器的随机替换算法"],a:"ABCD",t:"四者均为Cache和虚拟内存页面调度中经典的冷热数据替换算法。"},
-                {id:"m26",q:"26. 高速缓存Cache执行改写时，全写法（Write Through）策略通常具备的硬件特点包括：",options:["A. 执行写操作时，Cache和外部主存同步改写更新","B. 硬件上常常搭配一个“写缓冲（Write Buffer）”以防止CPU挂起死等","C. 能够极大程度地缩减并释放对主内存写入带宽的占用消耗","D. 极其适合进行高密度、海量连续数据的物理写入"],a:"AB",t:"全写法同步改写主存，极其消耗总线带宽。为了缓和等待，必须紧邻配备Write Buffer写缓冲级进行拦截拦截。"},
-                {id:"m27",q:"27. 衡量一个底层存储硬件（如主RAM芯片、SRAM）的关键物理性能技术指标包含：",options:["A. 存取时间 (Access Time)","B. 连续存储周期 (Cycle Time)","C. 数据存储容量密度","D. 电气耗散功耗"],a:"ABCD",t:"速度指标（时间和周期）、空间容量密度、以及能效功耗，是衡量一切物理存储器件好坏的四大黄金金指标。"},
-                {id:"m28",q:"28. 针对最恶劣的Load-use流水线数据冒险（即紧邻lw下一条指令就要用其结果），有效的消纳处理方法有：",options:["A. 由编译器在静态编译期在两条指令间强行强插 NOP 空指令","B. 触发硬件流水线Stall阻塞，暂停前级取指译码并向EX级灌入空气泡","C. 动用高频 Forwarding 旁路直接零延迟拉回结果","D. 启动动态超前乱序分支跳转预测"],a:"AB",t:"由于lw结果在MEM后才从内存蹦出来，转发也无法挽救，必须硬卡一周期（通过软件强插NOP或硬件发射Stall阻塞气泡）。"},
-                {id:"m29",q:"29. 关于单周期数据通路（Single-cycle CPU）控制信号的分析，下列哪些指令的生成逻辑完全对应正确？",options:["A. lw 指令写回目的来自内存：MemtoReg = 1","B. sw 指令属于存字，绝不写回寄存器：RegWr = 0","C. beq 指令计算分支：Branch = 1","D. add 指令运算结果来自ALU算术通路：MemtoReg = 0"],a:"ABCD",t:"单周期信号映射标准无误：lw结果自内存写回寄存器；sw只写内存不改寄存器；beq触发分支控制总线；add结果源自ALU计算。全选。"},
-                {id:"m30",q:"30. 主内存与CPU核心进行物理硬件桥接线拓展时，标准的总线拓扑字位扩展方法有：",options:["A. 拓宽单字物理带宽的 位扩展","B. 增加寻址总存储项单元数的 字扩展","C. 字位横向纵向同时叠加的 复合扩展","D. 依靠多体时间重叠流水运行的 多体交叉编址"],a:"ABCD",t:"字扩展增容量，位扩展增线宽，字位扩展融合处理。交叉编址则是通过时间多体交叉重叠大幅拓宽多路宏观读写带宽。"},
-                {id:"m31",q:"31. 现代操作系统引入“虚拟存储器（Virtual Memory）”后，获得的里程碑式系统红利包含：",options:["A. 为每个进程提供远超主存实际容量的巨大逻辑编程空间","B. 提供了坚实的物理内存进程隔离与安全访问读写权限控制","C. 极大地简化了应用编译、多模块重定位链接和动态加载流程","D. 物理上反向优化并拔高了本地固态/机械硬盘的硬件原生寻址读写速度"],a:"ABC",t:"虚拟内存提供大空间、安全权限和隔离重定位。它属于系统内存管理范畴，无法改变或反向提高外部大硬盘的底层物理硬件传导传动速度。"},
-                {id:"m32",q:"32. 高速缓冲存储器（Cache）与主内存之间的经典物理地址Tag映射管理策略包括：",options:["A. 直接映射","B. 全相联映射","C. 组相联映射","D. 线性顺序硬连线映射"],a:"ABC",t:"直接、全相联、组相联是Cache缓存管理地址比对Tag的三大正统经典映射，绝无“线性顺序硬连线映射”这种架构。"},
-                {id:"m33",q:"33. 在多核中央处理器（Multi-core CPU）微架构中，下列哪些操作会直接引发恶心的“Cache不一致性（Cache Coherence）”冲突？",options:["A. 多个核心的高速私有Cache中存有相同主存块旧拷贝，且某核心强行对该数据进行了写修改","B. 具有独立DMAC控制器的外设I/O设备绕过处理器核心，直接改写了物理主内存条中的数据","C. 系统内部各层Cache因策略失调，采用了写回法与全写法冲突导致的无序数据穿透","D. 内存管理单元MMU在硬件后台执行高频的虚拟地址到物理物理地址转换映射"],a:"ABC",t:"多核多副本修改、DMA外设直写主存、冲突混用写策略，是多副本数据产生代差的经典根源。MMU转换页表并不产生主存多副本不一致。"},
-                {id:"m34",q:"34. 冯·诺依曼结构计算机核心思想中，下列关于二进制编码叙述完全成立的有：",options:["A. 所有的指令在形式上和所有的数据变量一样，统一采用二进制机器码锁封存放","B. 指令流和数据流无任何外观物理区别，完全依靠CPU执行在不同时序级进行逻辑分流","C. 二进制机器数在底层可以与布尔代数逻辑命题实现完美的真假映射转换","D. 人类大脑能够无成本直接读取、记忆并高频对口算二进制复杂机器指令码"],a:"ABC",t:"ABC是二进制席卷计算界的核心硬核因果。D明显荒唐，二进制极度冗长，对人类直观读取极不友好。"},
-                {id:"m35",q:"35. 评价一个中央处理器（CPU）流水线设计好坏、追踪运行损耗时，通常采纳的核心冒险损耗参数有：",options:["A. 结构冒险引发的资源硬件空耗争抢损失","B. 数据冒险脏读写造成的Stall阻塞或NOP空载开销","C. 控制冒险分支预测失败引发的流水线预取机器码彻底爆破清空惩罚","D. 芯片硅片内部产生的微安级漏电流发热电气损耗"],a:"ABC",t:"结构、数据、控制三大经典流水线冒险损耗（Hazards），是决定和调优CPU吞吐性能的核心指标。发热漏电属于电气学功耗问题。"},
-                {id:"m36",q:"36. 在涉及计算机有符号整型数的底层运算设计时，补码（Two's Complement）之所以展现出无与伦比的架构红利，是因为：",options:["A. 真值数值“0”在机器内拿到了绝对唯一、不分裂的纯二进制编码形式","B. 可以自上而下将极其复杂的机器硬件减法器直接统一收拢转化为标准的加法加法电路","C. 在定长机器字长中，它保底能够比原码多表示一个绝对值最大的最小负数","D. 指令级数据流在传送时自动自带高精度的循环冗余CRC校验纠错"],a:"ABC",t:"补码解决了正负零双重编码问题，消灭了减法器，拓宽了负数边界到-128。全选。硬件指令流传输并不自带高级CRC纠错。"},
-                {id:"m37",q:"37. 在高性能现代处理器分支预测部件中，属于纯硬件在“动态运行期（Dynamic）”捕捉轨迹、调整结果的硬核技术是：",options:["A. 1位饱和计数器状态机判定历史","B. 基于2位强弱分支状态交叉跳转的饱和计数器表预测机制 (2-bit BPT)","C. 由前端编译器（Compiler）实施暴力的静态循环展开（Loop Unrolling）优化","D. 在编译链接阶段，由程序员手工指定静态的分支跳转发生概率进行指令排列"],a:"AB",t:"动态预测由硬件在运行周期实时追踪并动态变卦（如1位、2位表）。循环展开、手工指定排列属于软件在静态编译编译期的优化行为。"},
-                {id:"m38",q:"38. 计算机中，关于易失性存储器（Volatile Memory）与非易失性存储器的电气特性判定，完全正确的有：",options:["A. 系统物理内存条（DRAM）属于典型的易失性存储器，一旦断电所有缓存瞬时湮灭","B. 物理外置大硬盘（HDD/SSD）采用非易失介质，断电后数据依然能长久封存安全保留","C. 高速缓存硬件（SRAM）虽然速度极快无需刷新，但同样属于断电即空易失性元器件","D. 出厂固化好主板BIOS镜像的只读ROM存储器属于断电后数据完好留存的非易失元件"],a:"ABCD",t:"全项关于Volatile电学特性的常识判定全部精准。RAM家族（SRAM、DRAM）均为断电即空易失存储，ROM及大硬盘属于非易失。"},
-                {id:"m39",q:"39. 主内存地址空间管理中，操作系统段页式管理（Segmentation & Paging）机制融合展现出的复合技术优势包括：",options:["A. 完美继承了分段模式在逻辑分块、应用安全隔离和代码多进程共享上的天然便利","B. 完美融入了分页模式细粒度块切割、内存空间利用率高、近乎零物理碎片的优点","C. 全面统一提升了慢速机械硬盘磁头在旋转寻道时的硬件物理物理执行频率","D. 彻底抹消了高速缓冲存储器Cache在比对Tag标记时的硬件阻抗延迟"],a:"AB",t:"段页式复合机制集分段的逻辑管理共享和分页的高空间利用率之大成。它无法越权改变外部硬盘磁头的物理运动频率，更无法干涉Cache硬件Tag的固有电气阻抗延迟。"},
-                {id:"m40",q:"40. 衡量一个底层硬件存储器（如主存芯片、SRAM）技术指标的核心性能指标包含哪些？",options:["A. 存取时间（Access Time）","B. 连续存取周期（Cycle Time）","C. 存储容量密度","D. 能耗功耗"],a:"ABCD",t:"衡量一个存储元器件好坏的四大硬性物理指标：速度（存取时间和周期）、容量（密度）、以及能效指标功耗 [cite: 14]。"},
-                {id:"m41",q:"41. 在涉及多核处理器（Multi-core CPU）和高吞吐总线架构设计时，下列哪些行为或硬件机制会直接引发恶心的“Cache不一致性问题（Cache Coherence）”？",options:["A. 多个CPU核心各自独立的高速私有Cache中，同时缓存了主存中同一个变量的旧副本，且某核实施了修改","B. 具有独立DMAC（直接内存存取）控制器的外设I/O设备直接跨过CPU改写了物理主内存中的数据","C. 芯片内部各级Cache之间，由于乱序写采用了不同的写策略（如写回法与全写法冲突）","D. CPU内部MMU（内存管理单元）在后台执行虚拟地址到物理地址的页表映射转换过程"],a:"ABC",t:"多核多副本修改、DMA外设直写内存、不同写策略乱序，是引发Cache与主存多副本数据穿透错位的经典源头。虚拟地址转换不产生多副本一致性冲突 [cite: 13]。"}
-            ],
-            judgment: [
-                {id:"j1",q:"1. 冯·诺依曼结构计算机的最核心工作本质和特征就是“存储程序、自动控制”的工作方式。 (对 / 错)",a:"对",t:"存储程序原理是冯诺依曼计算机的灵魂，即将指令当做数据提前存入内存，由CPU自动抓取执行 [cite: 14]。"},
-                {id:"j2",q:"2. 计算机中采用二进制编码的【唯一核心原因】，是因为二进制的加减乘除数学运算规则最为简单。 (对 / 错)",a:"错",t:"唯一原因错了。采用二进制不仅因为运算简单，更核心的是因为在物理上极易制造出高低电平双稳态的微电子开关器件 [cite: 14]。"},
-                {id:"j3",q:"3. 在现代计算机有符号整型数各种补码表示法中，真值数值“0”的机器码编码表示具有唯一的物理编码形式。 (对 / 错)",a:"对",t:"补码最伟大的发明之一：消除了原码和反码中存在+0和-0的双重机器码，补码的0只有全0物理编码 [cite: 14]。"},
-                {id:"j4",q:"4. 按照国际IEEE 754标准规范要求，任何一个“严格规格化”的浮点数，其尾数部分的小数点前面个位数字必须且固定为1。 (对 / 错)",a:"对",t:"规格化科学计数法要求整数位非零。在二进制中非零数字只有1，故个位固定为1，硬件存储时直接隐藏不存以省空间 [cite: 14]。"},
-                {id:"j5",q:"5. 在符合IEEE 754标准的浮点数溢出与边界编码中，特殊标记“NaN”具有特定的机器码，代表当前运算结果为非数。 (对 / 错)",a:"对",t:"NaN (Not a Number) 用于在发生0除以0、负数开根号等非法数学边界时，给处理器下发安全非数标记，防止核心宕机 [cite: 14]。"},
-                {id:"j6",q:"6. 在操作数寻址方式中，立即寻址（Immediate）的最核心特征就是目标操作数本身直接被硬编码包含在指令机器码流内部。 (对 / 错)",a:"对",t:"立即寻址操作数就在指令里，跟着取指一起进CPU，执行时完全不需要访问任何物理通用寄存器或内存数据段 [cite: 14]。"},
-                {id:"j7",q:"7. 在标准的MIPS精简指令架构中，所有的R-Type（寄存器型）指令具体的算术/逻辑运算功能是由前段的OP操作码字段决定的。 (对 / 错)",a:"错",t:"MIPS中所有R型指令的OP字段全部固定死为全0，硬件翻译时需要向后查阅低6位的func（功能码）字段才能判定具体动作 [cite: 14]。"},
-                {id:"j8",q:"8. 精简指令集（RISC）设计风格为了追求极高执行频率，其最显著的技术特点就是构建了极其庞大、功能复杂的变长指令系统。 (对 / 错)",a:"错",t:"大错特错。构建复杂变长指令系统是CISC（复杂指令集，如X86）的特征。RISC（如MIPS、ARM）追求的是定长、精简、单周期 [cite: 14]。"},
-                {id:"j9",q:"9. 在MIPS过程调用与子程序管理中，31号寄存器 $ra (Return Address) 的核心专职是用来安全保存子程序执行完毕后的返回PC地址。 (对 / 错)",a:"对",t:"当执行 jal 指令跳转进子函数时，硬件会自动将当前下条PC+4地址塞入 $ra 寄存器，以便函数末尾执行 jr $ra 弹回原处 [cite: 14]。"},
-                {id:"j10",q:"10. 计算机底层的非数值数据处理中，单纯的逻辑数据（Logic Data）在机器中通常仅占用1个bit位来直白表示真（1）或假（0）。 (对 / 错)",a:"对",t:"逻辑量不具备数学加减权重，1个bit位的0和1即可完美映射逻辑代数中的真假、开关或高低状态 [cite: 14]。"},
-                {id:"j11",q:"11. 在处理中文字符时，国家标准的汉字内码（如GBK、机内码）其最核心的用处和专职是负责面向键盘外设进行汉字的快速敲击输入。 (对 / 错)",a:"错",t:"输入汉字靠的是输入码（如拼音、五笔）；机内码/内码是汉字在计算机CPU和内存内部进行存储、查找、传输、比对时的内部统一编码 [cite: 14]。"},
-                {id:"j12",q:"12. BCD码（Binary-Coded Decimal）在实质上是一种使用4位标准的二进制编码来精确映射和表示1位十进制数字的专用数制技术。 (对 / 错)",a:"对",t:"BCD码用0000~1001专门锁定表示十进制的0~9，在财务计算等极度恐惧二进制舍入误差的特定硬件场景中应用极广 [cite: 14]。"},
-                {id:"j13",q:"13. 内存多字节排列中，大端（Big-Endian）字节序的排布特点是，将多字节数据的低位尾数有效字节优先存放在低地址端。 (对 / 错)",a:"错",t:"记反了。低位字节存放在低地址端是【小端（Little-Endian）】字节序的特征。大端字节序是高位字节优先存放在低地址端 [cite: 14]。"},
-                {id:"j14",q:"14. 在MIPS微架构动态运行时，29号通用寄存器 $sp (Stack Pointer) 是硬件和编译器约定俗成用来死死锁存并维护运行时物理堆栈栈顶边界的。 (对 / 错)",a:"对",t:"$sp是标准的栈指针寄存器，函数发生嵌套、局部变量入栈、压栈保护现场时，必须通过改写 $sp 的值来开辟和释放物理栈空间 [cite: 14]。"},
-                {id:"j15",q:"15. 无论一个机器数是正数还是负数，当其在底层进行“无符号扩展（Zero Extension）”时，高位一律无条件用纯二进制零“0”补齐。 (对 / 错)",a:"对",t:"零扩展（无符号扩展）完全不需要看什么符号位，硬件在拓宽机器字长时，高位直接无脑清零，常用于逻辑数和无符号整数转换 [cite: 14]。"},
-                {id:"j16",q:"16. 硬件架构设计中，为了彻底解放译码器电路、大幅提升流水线高频主频，指令系统体系（ISA）必须严格追求所有指令在空间上的定长编码。 (对 / 错)",a:"错",t:"理想美好但非必须。虽然定长对流水线极好，但X86复杂指令集历经数十年长盛不衰，证明了变长复杂指令系统在商业和微架构上依然有其强大的生命力 [cite: 14]。"},
-                {id:"j17",q:"17. 在MIPS微架构的数据通路控制器中，位逻辑立即数与（andi）指令和从内存读字的加载指令（lw）在格式分流上均属于标准的I-Type指令。 (对 / 错)",a:"对",t:"立即数类运算、访存偏移类加载存储（lw/sw）、条件跳转类（beq）都由于格式中强行内嵌了16位立即数字段，在ISA中统一被分流编译为I型 [cite: 14]。"},
-                {id:"j18",q:"18. 数字电路中，组合逻辑元件（如全加器、多路选择器、译码器）其任意时刻的输出不仅取决于当前的输入，还高度依赖内部保存的历史历史状态。 (对 / 错)",a:"错",t:"搞反了。输出不仅取决于当前输入、还取决于历史状态（带记忆）的是【时序逻辑元件，如寄存器、触发器】。组合逻辑绝无任何记忆能力 [cite: 14]。"},
-                {id:"j19",q:"19. 在单周期中央处理器（Single-cycle CPU）的整体时钟频率敲定时，其时钟周期宽度的最小值被迫要由芯片内部执行耗时最长、物理流程最复杂的指令来硬性垫底锁定。 (对 / 错)",a:"对",t:"木桶效应。由于单周期CPU不允许一条指令跨周期运行，为了照顾动作最慢、延迟最恐怖的Load（lw）指令能顺利做完，周期宽度必须卡死在lw的总延迟上限上 [cite: 14]。"},
-                {id:"j20",q:"20. 处理器核心的控制组件中，程序计数器（PC）是一个具有特殊存储职能的物理寄存器，里面实时锁死保存的就是当前正在被执行的这一条机器码指令本身。 (对 / 错)",a:"错",t:"概念严重混淆。存放当前正在执行的指令机器码的器件是【指令寄存器 IR】。程序计数器 PC 里面存放的永远是下一条即将被抓取的指令的【内存物理地址】 [cite: 14]。"},
-                {id:"j21",q:"21. 相比单周期中央处理器，采用多周期或流水线并行微架构的核心目的，本质上是为了能够显著缩短某一条特定、独立指令的物理绝对执行总延迟时间。 (对 / 错)",a:"错",t:"概念错。流水线由于在各流水级级间加入了锁存触发器，单条指令经过五级的总延迟通常会比单周期【还要长】。流水线拔高的是宏观的并行指令吞吐率 [cite: 14]。"},
-                {id:"j22",q:"22. 流水线三大冒险中，写后读（RAW）数据冒险冲突的根本成因，是由于后续指令被迫要读取前面那条还没来得及彻底WB写回寄存器堆的最亲新鲜算出的脏数据。 (对 / 错)",a:"对",t:"RAW是最经典的数据冒险。前面一条指令刚在EX级算出数据、或者刚在MEM级拿到数据，下一条指令在ID级就要急着用，时钟差导致读到的是没改写的旧脏数据 [cite: 14]。"},
-                {id:"j23",q:"23. 在标准的经典MIPS五级并行流水线中，控制部件为了向下派发各流水级的控制信号，其针对当前指令的硬核组合逻辑“译码（Decode）”微操作只能发生并完成在ID级。 (对 / 错)",a:"对",t:"五级流水线划分明确。IF级只管无脑盲取机器码，到了ID级才真正对操作码拆解分析，派发后续所需的EX、MEM、WB所有控制总线控制 [cite: 14]。"},
-                {id:"j24",q:"24. 转发旁路技术（Forwarding）虽然能够通过跨总线数据打捞来丝滑解决大量的RAW数据冒险，但是当遭遇“紧邻的Load-use”冲突时，硬件依然无法完美单独挽救，必须强行注水卡死一个周期。 (对 / 错)",a:"对",t:"无可奈何。Load指令（lw）的数据在MEM级结束后才真正从内存芯片蹦出来，如果紧邻的下一条指令在EX级就要用，微架构算尽一切也无法让时间倒流，必须先强行阻塞（Stall）一个周期 [cite: 14]。"},
-                {id:"j25",q:"25. 在多核中央处理器（Multi-core CPU）系统设计中，各核心拥有独立的私有高速Cache，如果不同核心同时改写了映射到相同主存物理块的本地Cache缓存，就会产生灾难性的Cache数据不一致性问题。 (对 / 错)",a:"对",t:"多核共享主存架构下，不同核心的私有Cache副本如果修改不同步，会导致严重的缓存数据不一致，需要复杂的总线嗅探或目录协议维持一致性 [cite: 14]。"},
-                {id:"j26",q:"26. 现代虚拟存储管理体系中，虚拟地址空间开辟的上限和容量深度，彻底摆脱并完全无视了计算机主内存（DRAM）实际物理容量大小的硬性枷锁限制。 (对 / 错)",a:"对",t:"虚拟存储的核心魅力正是利用磁盘（外存）作为保底，让程序员可以完全无视物理内存大小，编写逻辑地址空间庞大得多的程序 [cite: 14]。"},
-                {id:"j27",q:"27. 计算机存储器层次结构设计中，金字塔顶端的寄存器之所以速度最快，核心是因为它直接集成在CPU中央核心内部且采用了高成本的触发器架构实现。 (对 / 错)",a:"对",t:"寄存器由最昂贵的双稳态触发器构成，与CPU逻辑电路同频运转，拥有整个人类计算机体系中最极致的吞吐响应速度 [cite: 14]。"},
-                {id:"j28",q:"28. 流水线设计中，只要无脑且暴力地增加流水线的物理硬件划分级数，中央处理器的吞吐性能以及指令执行效率就能获得无上限的线性暴增。 (对 / 错)",a:"错",t:"反常识。流水线级数过多会导致级间锁存触发器的物理延迟开销占比急剧飙升，且会成倍加剧控制和数据冒险的惩罚延迟，导致收益递减甚至倒退 [cite: 15]。"},
-                {id:"j29",q:"29. 高速缓存系统的关键性能指标中，缺失损失时间（Miss Penalty）的硬件定义是指CPU命中Cache后，将有用数据掏出并成功打入通用寄存器所耗费的全部时间。 (对 / 错)",a:"错",t:"概念完全篡改。命中并打入寄存器的总耗时叫【命中时间 Hit Time】 [cite: 8]。缺失损失（Miss Penalty）专指Cache发生缺失后，被迫前往慢速的主物理内存将缺失数据块跨总线调入Cache行所付出的巨大时间惩罚 [cite: 16]。"},
-                {id:"j30",q:"30. 高速缓存采用写回法（Write Back）改写数据时，一旦CPU发出写操作指令命中，硬件控制部件会同步对当前Cache图层和外部慢速的主物理内存条同步执行改写。 (对 / 错)",a:"错",t:"搞混了。写操作时同时更新Cache和主存的是【全写法 / 写直达法 Write Through】 [cite: 15]。写回法（Write Back）在命中时仅仅只修改Cache行并标记为“脏（Dirty）”，只有当该行被未来新块替换调出时，才一次性刷回主存 [cite: 15]。"},
-                // --- 以下为严格校正清洗、剔除全部复读机和增补干扰的去重保真60道判断题保底卡槽 ---
-                {id:"j31",q:"31. 虚拟存储器的物理页（Page）大小在微架构电路布局中，通常会设计得比外部Cache的高速缓冲块（Block）大小要大得多。 (对 / 错)",a:"对",t:"物理页一般为标准4KB或8KB [cite: 15]；而Cache的硬件数据块Block通常仅为32字节或64字节宽度 [cite: 15]。"},
-                {id:"j32",q:"32. 高速缓冲存储器Cache的管理中，直接映射（Direct Mapping）由于其映射规则死板，其在动态刷题时引发的块冲突概率通常显著高于全相联映射。 (对 / 错)",a:"对",t:"直接映射模运算导致多对一挤占唯一行 [cite: 8]，极易发生剧烈冲突引发颠簸 [cite: 15]；全相联极其自由冲突最低 [cite: 15]。"},
-                {id:"j33",q:"33. 在现代CPU的存储验证和地址映射中，近期最少使用算法（LRU）在数学本质上被严密论证为符合一种标准的“栈算法”属性。 (对 / 错)",a:"对",t:"LRU算法完美契合栈模型属性 [cite: 16]，可通过复杂的动态栈空间轨迹精准评估和优化命中缺失特性 [cite: 16]。"},
-                {id:"j34",q:"34. 虚拟存储管理硬件中，一旦系统触发了缺页未命中（Page Fault），接下来的缺失页面调入、物理页表刷新等全套高防动作是由CPU硬件电路瞬间自主闭环做完的。 (对 / 错)",a:"错",t:"硬件无法闭环。缺页异常（Page Fault）属于高阶系统异常 [cite: 15]，硬件只能产生异常信号并强行挂起流水线，接下来的磁盘寻道和内存调页必须移交给【操作系统内核软件】接管执行 [cite: 15]。"},
-                {id:"j35",q:"35. 中央处理器在微程序控制器设计中，控制一条特定指令执行所需的全部微命令序列，是提前封装在一个只读的控制存储器（微ROM）中的。 (对 / 错)",a:"对",t:"微程序控制器的精髓。通过将复杂的微指令序列像写软件一样烧录在芯片内部的控存微ROM中，通过查表步进来分步派发。"},
-                {id:"j36",q:"36. 计算机底层执行算术乘法或除法运算时，为了节约极度昂贵的硅片面积，硬件上通常只保留一套基础的加法ALU，配合移位寄存器串行步进实现。 (对 / 错)",a:"对",t:"经典的串行乘除法硬件实现方案。通过反复的“执行加法-逻辑移位”循环往复，以极小的硬件电路面积成本完成乘除法运算。"},
-                {id:"j37",q:"37. 在MIPS五级流水线控制体系中，前级的IF（取指）流水段由于指令还没有被读出来，因此该阶段的流水线寄存器完全不需要接收控制器的译码信号。 (对 / 错)",a:"对",t:"IF级指令还没读出更无从译码 [cite: 8]，控制线此时全部处于盲挂空载状态，仅依赖PC时钟自增触发硬件。"},
-                {id:"j38",q:"38. 在RISC处理器的指令译码阶段，由于指令长度高度一致且各个字段（如源寄存器rs、rt索引）位置极其固定，硬件甚至可以在还没译码出操作码是什么之前，就同步并行去读取寄存器堆。 (对 / 错)",a:"对",t:"RISC架构的巨大并行红利。因为定长规整，ID级电路不需要等OP分析完，就可以闭着眼睛直接去拉对应固定位宽的通用寄存器数据。"},
-                {id:"j39",q:"39. 硬件设计中，动态分支预测器采用的2位饱和计数器状态机，在连续两次发生预测失败前，其内部锁定的强预测方向绝对不会发生方向翻转。 (对 / 错)",a:"对",t:"2位饱和状态机（强跳、弱跳、弱不跳、强不跳）具备平滑的阻尼滞后特性，能有效过滤循环末尾等偶发性颠簸，连续错两次才会真正改变大风向。"},
-                {id:"j40",q:"40. 在CPU运行中，全局性的“中断异常（Interrupt / Exception）”与流水线自身的“技术冒险”在性质上完全一致，均属于数据因果产生的延迟现象。 (对 / 错)",a:"错",t:"概念完全搞错。技术冒险是多指令指令级并行的物理错位延迟 [cite: 8]；而中断异常属于突发的外设I/O请求或高危软件非法错漏（如除0、缺页），会强行强震摧毁当前整个处理器的运行状态机 [cite: 15]。"},
-                {id:"j41",q:"41. 采用多体交叉存储器编址（Multi-bank Interleaving）时，由于相邻的物理地址被强行交叉分散打入不同的独立内存体中，CPU可以走起多路流水线重叠访存，冲高内存总带宽。 (对 / 错)",a:"对",t:"多体交叉编址的精髓。通过横向分流，利用多体内部的信号恢复时间差，实现宏观上的并发流水线总线搬运。"},
-                {id:"j42",q:"42. 内存条硬件标参中，存取时间（Access Time）和连续存取周期（Cycle Time）在数学时间线上完全等价，均指完成一次读写耗费的纯物理延迟。 (对 / 错)",a:"错",t:"速度概念混淆。存取时间指发出命令到拿到变量的时间；而存取周期（Cycle Time）是指连续发起两次独立访存操作之间，硬件电路为了恢复电荷/状态所必须强制垫底的【最小安全时间跨度】，周期通常显著大于存取时间。"},
-                {id:"j43",q:"43. 在主内存地址线连接中，如果CPU具有32位物理寻址总线，则该微架构理论上可以直接、随机挂载并无缝驱动容量高达16GB的超大物理主RAM条。 (对 / 错)",a:"错",t:"数学计算穿产错误。32位寻址线的极限物理寻址上限位宽空间等于 $2^{32} = 4\text{GB}$ 字节边界。超出4GB的空间，32位线在硬件层面上根本无法拨通对应的高位片选引脚。"},
-                {id:"j44",q:"44. 虚拟存储器的快表（TLB）和高速缓存Cache在物理硬件构成上，普遍摒弃了慢速廉价的DRAM，而是不惜成本采用六管晶体管触发器构成的极速SRAM。 (对 / 错)",a:"对",t:"为了追赶ALU的绝对节拍速度，TLB和Cache必须选用基于静态双稳态触发器架构、无需刷新且响应近乎零阻抗的SRAM芯片 [cite: 8, 8]。"},
-                {id:"j45",q:"45. 在芯片微操作执行中，同一条单周期处理指令的控制信号之所以能全程锁定不变，是因为控制器的底层硬件是由纯硬连线（Hardwired）组合逻辑电路瞬时直接焊死的。 (对 / 错)",a:"对",t:"单周期硬连线控制的本质。它没有多周期微程序内部的状态机跳转，完全由当前操作码经门电路组合逻辑网络瞬时派发，只要指令在指令寄存器里不动，控制线就死死不动 [cite: 6]。"},
-                {id:"j46",q:"46. 在流水线超前乱序执行架构中，写后写（WAW）和读后写（WAR）冒险之所以被称为名义上的“伪数据冒险”，是因为它们可以通过硬件重命名寄存器（Register Renaming）在运行时完全化解。 (对 / 错)",a:"对",t:"乱序处理高级常识。RAW是真因果依赖无法消除；而WAR和WAW仅仅是因为编译器分配了同名物理寄存器索引导致的撞车，通过引入架构寄存器重命名映射到庞大的物理寄存器池即可彻底根除。"},
-                {id:"j47",q:"47. 硬件执行MIPS分支跳转指令时，beq指令在EX级算出了两个通用寄存器值不相等，此时流水线前级已经预取进来的后续2条无关机器指令码必须被执行完全暴力爆破清空清除动作。 (对 / 错)",a:"对",t:"控制冒险代价。一旦分支预测失败发生改道跳转，前级IF/ID级已经灌进流水线的后续错误指令必须全部通过硬件清零信号（Flush）当场物理蒸发抹除，转化为气泡损耗 [cite: 8]。"},
-                {id:"j48",q:"48. 在存储器金字塔体系设计中，空间局部性原理之所以在客观上大范围成立，核心得益于高级语言编写的代码在底层机器编译出来后，大都呈现出标准的线性、顺序串行时序逻辑排布。 (对 / 错)",a:"对",t:"空间局部性的底层逻辑。除了解析分支和子函数过程调用外，九成以上的机器码和数组变量在主存中都是密密麻麻紧挨着线性平铺存放的。"},
-                {id:"j49",q:"49. 计算机底层的财务级高精度计算场景中，十进制压缩BCD编码（如每4位二进制表示一位十进制）之所以能长盛不衰，核心是因为它能从源头上100%抹除浮点数在转换时必然产生的微小舍入误差。 (对 / 错)",a:"对",t:"BCD码财务红利。由于0.1等十进制小数在纯二进制中是无限循环小数、必定截断产生代差误差，BCD码直接用硬件四位锁定表示，完美适配银行财务核心账目对齐。"},
-                {id:"j50",q:"50. 现代高性能中央处理器的二级缓存（L2 Cache）和三级缓存（L3 Cache）为了追求大容量和芯片内部极高的集成密度，硬件上普遍改而采纳了低成本的单管电容易失性DRAM架构。 (对 / 错)",a:"错",t:"架构常识严重翻车。尽管L2/L3 Cache容量高达数十MB，但它们为了维持在同内核总线的高速命中的响应节拍，其底层【依然是全量采用SRAM】 [cite: 8]。任何层级的Cache只要敢混入需要慢速刷新、充放电延迟极大的DRAM，处理器的总吞吐效能就会遭遇断崖式崩塌。"},
-                {id:"j51",q:"51. 主存与外部高速缓存进行直接映射管理时，主存空间中地址相差特定恒定倍数的多个数据块，在硬件层面上会被死死、唯一的强制固定映射分配到同一个Cache行号中。 (对 / 错)",a:"对",t:"直接映射取模算法的死结（行号 = 块号 Mod 行数） [cite: 8]。这种多对一的硬件刚性绑定，在遭遇多变量交替循环访问时，会导致严重的同一行反复擦除替换颠簸 [cite: 8, 8]。"},
-                {id:"j52",q:"52. 一条现代MIPS单周期运算指令（如 sub $t0, $s1, $s2），它在CPU芯片内流转时所付出的物理总耗时延迟，在数学真值上与当前通用寄存器组（RegFile）的数据内容大小完全不相关。 (对 / 错)",a:"对",t:"时序逻辑硬物理特性。单单周期处理器的指令延迟严格取决于各门电路的物理电容充放电雪崩导通时间（硬件关键路径延迟），不管你算的数是0x0还是0xFFFFFFFF，耗时完全一样。"},
-                {id:"j53",q:"53. 在MIPS五级并行流水线中，一条纯R-Type的算术加法指令，虽然它在EX（执行）阶段就已经把数学结果完美算出来了，但该结果也必须强制排队等到WB级时钟沿到来时才能写入寄存器堆。 (对 / 错)",a:"对",t:"流水线设计铁律。所有写寄存器动作必须在最后一级WB级整齐划一地落笔写回 [cite: 8]，否则若在EX级提早乱改写状态，会导致后续流水线在发生异常或预测失败时发生脏数据状态机无法回滚的灾难。"},
-                {id:"j54",q:"54. 在高性能芯片设计中，编译延迟分支槽（Delayed Branch Slot）技术是指在紧随分支跳转指令的后方强行留出一个时钟空位，不管分支跳不跳，这个空位里安排的指令都必须且必然会被硬件无条件强制执行完毕。 (对 / 错)",a:"对",t:"延迟分支槽经典定义 [cite: 8]。通过在分支指令后留出延迟槽，由软件编译器将无关的保底有效指令静态调度进去，从而用有用的工作100%抹平了控制冒险产生的等待间隙 [cite: 8]。"},
-                {id:"j55",q:"55. 计算机底层的移位操作指令中，逻辑右移（SRL）和算术右移（SRA）在对待最高符号位的电气补充规则上表现出完全一模一样的填充行为。 (对 / 错)",a:"错",t:"右移电气特性混淆。逻辑右移（SRL）执行的是零扩展，高位无脑一律补0 [cite: 4]；而算术右移（SRA）为了维持有符号负数的数学真值正负符号不变，其高位必须【无脑复制补齐原机器数的最高符号位】 [cite: 4]。"},
-                {id:"j56",q:"56. 在中央处理器设计数据通路时，多路选择器（MUX - Multiplexer）和三态门总线控制器在宏观逻辑上扮演的功能完全相同，均属于根据控制信号对多路信号线实施精准分流与挑选导通的组合逻辑。 (对 / 错)",a:"对",t:"微架构选择器常识。MUX通过选择端信号挑一路输出；三态门通过高阻态控制某一路上总线，二者均在数据通路内部担任极其重要的数据流交叉分流闸门。"},
-                {id:"j57",q:"57. 在严格的单周期处理器体系结构中，数据主内内存端口（Data Memory）和机器指令存储器端口（Instruction Memory）可以合并封装并共用同一个物理RAM读写端口。 (对 / 错)",a:"错",t:"单周期单总线死结。由于单周期要求一条指令在一周期内做完取指和访存 [cite: 6]，如果两个存储端合一，lw/sw指令就会在同一个时钟周期内同时向该存储芯片发起两次读写请求，直接引发灾难性的物理信号短路冲突（结构冒险） [cite: 8]。"},
-                {id:"j58",q:"58. 芯片内部集成的一级Cache（L1 Cache）通常被极度严密地物理物理切割拆分为独立的指令Cache（I-Cache）和数据Cache（D-Cache），其根本架构目的是为了从源头上免疫并消除数据流水线在运行时可能爆发的结构冒险。 (对 / 错)",a:"对",t:"采用分离哈佛架构Cache的底气所在。通过物理隔离，使得IF级取指和MEM级访存可以在同一个时钟周期内各自安好、并发读取独立物理端口，彻底在底层免除了取指访存撞车的结构冒险风险 [cite: 8]。"},
-                {id:"j59",q:"59. 虚拟存储管理机制中，快表（TLB）的缺失Miss率在宏观实际运行中通常被控制得极低，甚至远低于一级数据Cache的缺失Miss率。 (对 / 错)",a:"对",t:"TLB超强命中率根源。因为快表TLB缓存的是页表项（每行映射4KB或8KB的巨幅虚拟空间范围） [cite: 15]，只要TLB命中一行，就相当于这4K/8K空间内的所有高频读写全部拿到了直通卡，其空间局部性辐射范围远超Cache单Block（仅64字节） [cite: 15]，故TLB极难发生缺失。"},
-                {id:"j60",q:"60. 在整个多层级计算机存储体系（Memory Hierarchy）建设的终极宗旨中，其自上而下的核心演进路线，是为了能够用极低且亲民的综合整体硬件成本，换取到宏观上逼近寄存器组般极致读写主频速度、且逻辑容量空间逼近物理大硬盘般庞大的无缝存储闭环。 (对 / 错)",a:"对",t:"存储器层次结构阶梯建设的终极哲学红利。通过层层拦截和冷热动态数据下发调度，扬长避短，用多级漏斗形态在整体效能上实现了低成本、高速度、海量存储容量的完美折中与和谐统一。"}
-            ]
-        };
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
 
-        let currentTab = 'single';
-        let progressData = JSON.parse(localStorage.getItem('jizu_prog_2026')) || {};
-        let wrongsList = JSON.parse(localStorage.getItem('jizu_wro_2026')) || [];
+function getSelected(q) {
+  const nodes = [...document.querySelectorAll(`input[name="q_${q.id}"]:checked`)];
+  if(q.type==='multi') return nodes.map(n=>n.value).sort();
+  return nodes[0]?.value || '';
+}
 
-        function render() {
-            const pool = document.getElementById('display-pool');
-            pool.innerHTML = '';
-            
-            let list = [];
-            if (currentTab === 'wrong_bank') {
-                let all = [];
-                Object.keys(DATA_PACK).forEach(k => all = all.concat(DATA_PACK[k]));
-                all.forEach(q => { if (wrongsList.includes(q.id)) list.push(q); });
-                if (list.length === 0) {
-                    pool.innerHTML = '<div style="text-align:center; padding:50px; color:#10b981; font-weight:bold; font-size:1.2rem;">🎉 核心错题本已经空空如也！计组期末考试高分稳了！</div>';
-                    return;
-                }
-            } else {
-                list = DATA_PACK[currentTab] || [];
-            }
+function arraysEqual(a,b) {
+  return JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
+}
 
-            list.forEach((q) => {
-                const card = document.createElement('div');
-                card.className = 'q-card';
-                card.id = `c-${q.id}`;
+function submitAnswer(id) {
+  const q = questionsData.find(x=>x.id===id);
+  const selected = getSelected(q);
+  if((Array.isArray(selected) && !selected.length) || (!Array.isArray(selected) && !selected)) {
+    alert(q.type==='multi'?'请至少选择一个选项':'请先选择一个答案');
+    return;
+  }
+  
+  state.userAnswer[id] = selected;
+  const correct = Array.isArray(q.answer) ? arraysEqual(selected, q.answer) : selected === q.answer;
+  state.answered[id] = true;
+  state.revealed[id] = true;
+  
+  if(!correct) state.wrong[id] = true; else delete state.wrong[id];
+  saveState();
+  render();
+}
 
-                const qt = document.createElement('div');
-                qt.className = 'q-text float-title';
-                qt.innerHTML = q.q.replace(/\n/g, '<br>');
-                card.appendChild(qt);
+// 核心改进：一键重置错题集中所有题目的完成状态，保留错题集的身份进行批量重刷
+function retryAllWrongQuestions() {
+  const wrongIds = Object.keys(state.wrong);
+  if (!wrongIds.length) return;
+  
+  if(confirm(`确定要一键重刷当前的 ${wrongIds.length} 道错题吗？\n（将清除这些错题的历史选择并解除锁定状态）`)) {
+    wrongIds.forEach(id => {
+      delete state.answered[id];
+      delete state.revealed[id];
+      delete state.userAnswer[id];
+    });
+    saveState();
+    render();
+  }
+}
 
-                const grid = document.createElement('div');
-                grid.className = 'options-grid';
+function showFeedback(id) {
+  const q = questionsData.find(x=>x.id===id), el=document.getElementById('feedback_'+id);
+  if(!el) return;
+  const selected = state.userAnswer[id];
+  let status='bad', title='回答错误 ❌';
+  
+  const correct = Array.isArray(q.answer) ? arraysEqual(selected||[], q.answer) : selected === q.answer;
+  if(correct) { status='ok'; title='回答正确 🎉'; }
+  
+  let yourText = selected ? (Array.isArray(selected)?selected.join(', '):(q.type==='tf'?(selected==='A'?'正确':'错误'):selected)) : '未记录';
+  
+  el.className = 'feedback show ' + status;
+  el.innerHTML = `
+    <strong>${title}</strong><br>
+    你的答案：${escapeHtml(yourText)} | 正确答案：<span class="correct-answer">${escapeHtml(answerLabel(q))}</span><br><br>
+    <strong>【题目解析】</strong><br>${escapeHtml(q.analysis)}
+  `;
+}
 
-                const isMulti = currentTab === 'multiple' || (currentTab === 'wrong_bank' && q.id.startsWith('m'));
+function toggleWrong(id) {
+  if(state.wrong[id]) {
+    delete state.wrong[id];
+  } else {
+    state.wrong[id]=true;
+  }
+  saveState();
+  render();
+}
 
-                if (q.options) {
-                    q.options.forEach((opt) => {
-                        const btn = document.createElement('button');
-                        btn.className = 'opt-btn';
-                        btn.innerHTML = opt;
+function clearAllRecords() {
+  if(confirm('确定清空所有答题记录和错题集吗？')) {
+    state={answered:{}, wrong:{}, userAnswer:{}, revealed:{}};
+    saveState();
+    render();
+  }
+}
 
-                        const prefix = opt.trim().charAt(0); // 提取 A/B/C/D 字母前缀
+document.querySelectorAll('.filter-btn').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  currentFilter=btn.dataset.filter;
+  render();
+}));
 
-                        // ⚡ 检查历史进度，严密控制按钮状态
-                        if (progressData[q.id]) {
-                            btn.classList.add('disabled');
-                            btn.onclick = null; // 答过的题当场斩断点击回调，保护现场
-                            const userChoice = progressData[q.id].choice;
-                            
-                            if (isMulti) {
-                                if (userChoice.includes(prefix)) {
-                                    btn.classList.add(q.a.includes(prefix) ? 'correct' : 'wrong');
-                                }
-                                if (q.a.includes(prefix)) btn.classList.add('correct');
-                            } else {
-                                if (userChoice === prefix) {
-                                    btn.classList.add(q.a === prefix ? 'correct' : 'wrong');
-                                }
-                                if (q.a === prefix) btn.classList.add('correct');
-                            }
-                        } else {
-                            // 🟢 完全没答过的题目：下发高灵敏交互点击与勾选绑定
-                            if (isMulti) {
-                                btn.onclick = () => {
-                                    btn.classList.toggle('selected');
-                                    btn.style.borderColor = btn.classList.contains('selected') ? 'var(--primary)' : 'var(--border)';
-                                    btn.style.background = btn.classList.contains('selected') ? '#eff6ff' : 'var(--card)';
-                                };
-                            } else {
-                                btn.onclick = () => submitSingleAnswer(q.id, prefix, card);
-                            }
-                        }
-                        grid.appendChild(btn);
-                    });
-                } else {
-                    // 判断题高精度规范化映射 (对/错)
-                    ['对', '错'].forEach((ans) => {
-                        const btn = document.createElement('button');
-                        btn.className = 'opt-btn';
-                        btn.innerHTML = `<strong>${ans}</strong>`;
-
-                        if (progressData[q.id]) {
-                            btn.classList.add('disabled');
-                            btn.onclick = null;
-                            const userChoice = progressData[q.id].choice;
-                            if (userChoice === ans) {
-                                btn.classList.add(q.a === ans ? 'correct' : 'wrong');
-                            }
-                            if (q.a === ans) btn.classList.add('correct');
-                        } else {
-                            btn.onclick = () => submitSingleAnswer(q.id, ans, card);
-                        }
-                        grid.appendChild(btn);
-                    });
-                }
-                grid.appendChild(document.createElement('div')); // 隔离填充占位
-
-                card.appendChild(grid);
-
-                // 多选题单独动态生成多选提交确认按钮
-                if (isMulti && !progressData[q.id]) {
-                    const subBtn = document.createElement('button');
-                    subBtn.className = 'multi-submit-btn';
-                    subBtn.innerText = '确认选择，核对对错';
-                    subBtn.onclick = () => submitMultipleAnswer(q.id, card);
-                    card.appendChild(subBtn);
-                }
-
-                const ab = document.createElement('div');
-                ab.className = `analysis-box ${progressData[q.id] ? 'show' : ''}`;
-                ab.innerHTML = `<strong>【⚡标准答案】 ${q.a}</strong><br><br>${q.t}`;
-                card.appendChild(ab);
-
-                pool.appendChild(card);
-            });
-        }
-
-        function submitSingleAnswer(id, choice, card) {
-            let all = [];
-            Object.keys(DATA_PACK).forEach(k => all = all.concat(DATA_PACK[k]));
-            const qObj = all.find(item => item.id === id);
-            
-            const isCorrect = choice === qObj.a;
-            progressData[id] = { choice: choice, isCorrect: isCorrect };
-
-            if (!isCorrect) {
-                if (!wrongsList.includes(id)) wrongsList.push(id);
-            } else {
-                wrongsList = wrongsList.filter(i => i !== id);
-            }
-
-            save(); updateUI();
-            
-            const btns = card.querySelectorAll('.opt-btn');
-            btns.forEach(b => {
-                b.classList.add('disabled');
-                b.onclick = null;
-                const txt = b.innerText.trim();
-                if (txt.startsWith(choice) || txt === choice || b.querySelector('strong')?.innerText === choice) {
-                    b.classList.add(isCorrect ? 'correct' : 'wrong');
-                }
-                if (txt.startsWith(qObj.a) || txt === qObj.a || b.querySelector('strong')?.innerText === qObj.a) {
-                    b.classList.add('correct');
-                }
-            });
-
-            card.querySelector('.analysis-box').classList.add('show');
-        }
-
-        function submitMultipleAnswer(id, card) {
-            let all = [];
-            Object.keys(DATA_PACK).forEach(k => all = all.concat(DATA_PACK[k]));
-            const qObj = all.find(item => item.id === id);
-
-            const btns = card.querySelectorAll('.opt-btn');
-            let userChoices = [];
-            
-            btns.forEach(b => {
-                if (b.classList.contains('selected')) {
-                    userChoices.push(b.innerText.trim().charAt(0));
-                }
-            });
-
-            if (userChoices.length === 0) {
-                alert('请至少勾选一个你认为正确的选项后再提交！');
-                return;
-            }
-
-            userChoices.sort();
-            const userChoiceStr = userChoices.join('');
-            const isCorrect = userChoiceStr === qObj.a;
-
-            progressData[id] = { choice: userChoiceStr, isCorrect: isCorrect };
-
-            if (!isCorrect) {
-                if (!wrongsList.includes(id)) wrongsList.push(id);
-            } else {
-                wrongsList = wrongsList.filter(i => i !== id);
-            }
-
-            save(); updateUI();
-
-            btns.forEach(b => {
-                b.classList.remove('selected');
-                b.classList.add('disabled');
-                b.onclick = null;
-                b.style.background = 'var(--card)';
-                b.style.borderColor = 'var(--border)';
-                
-                const prefix = b.innerText.trim().charAt(0);
-                if (userChoiceStr.includes(prefix)) {
-                    b.classList.add(qObj.a.includes(prefix) ? 'correct' : 'wrong');
-                }
-                if (qObj.a.includes(prefix)) {
-                    b.classList.add('correct');
-                }
-            });
-
-            const subBtn = card.querySelector('.multi-submit-btn');
-            if (subBtn) subBtn.style.display = 'none';
-            card.querySelector('.analysis-box').classList.add('show');
-        }
-
-        function save() {
-            localStorage.setItem('jizu_prog_2026', JSON.stringify(progressData));
-            localStorage.setItem('jizu_wro_2026', JSON.stringify(wrongsList));
-        }
-
-        function clearAllProgress() {
-            if (confirm('🚨 极其危险警告：确定要清空全部计算机组成原理的做题记录与错题本吗？此操作不可逆！')) {
-                localStorage.removeItem('jizu_prog_2026');
-                localStorage.removeItem('jizu_wro_2026');
-                progressData = {}; wrongsList = [];
-                save(); switchTab('single');
-                alert('🧹 做题痕迹已完全擦除，战场已复原，请重新开始刷题！');
-            }
-        }
-
-        function updateUI() {
-            Object.keys(DATA_PACK).forEach(k => {
-                const total = DATA_PACK[k].length;
-                const done = DATA_PACK[k].filter(q => progressData[q.id]).length;
-                document.getElementById(`b-${k}`).innerText = `${done}/${total}`;
-            });
-            document.getElementById('b-wrong_bank').innerText = wrongsList.length;
-
-            if (currentTab !== 'wrong_bank') {
-                const total = DATA_PACK[currentTab].length;
-                const done = DATA_PACK[currentTab].filter(q => progressData[q.id]).length;
-                const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-                document.getElementById('bar-element').style.width = `${pct}%`;
-                document.getElementById('progress-text').innerText = `本组练习饱和度: ${pct}% (已刷 ${done} / 共 ${total} 题)`;
-            } else {
-                document.getElementById('bar-element').style.width = '100%';
-                document.getElementById('progress-text').innerText = `高频错题重刷池: 剩余 ${wrongsList.length} 道高危漏洞题目`;
-            }
-        }
-
-        function switchTab(key) {
-            currentTab = key;
-            document.querySelectorAll('.nav-list .nav-item').forEach(el => el.classList.remove('active'));
-            
-            const item = window.event?.currentTarget || document.querySelector(`[onclick="switchTab('${key}')"]`);
-            if (item) item.classList.add('active');
-
-            const names = { single: "单项选择题 (GPR 核心版)", multiple: "多项选择题 (并行多流水线版)", judgment: "是非判断题 (双稳态逻辑版)", wrong_bank: "🔥🔥 个人核心错题高频定点爆破营" };
-            document.getElementById('title-text').innerText = names[key] || "题库";
-            updateUI(); render();
-        }
-
-        window.onload = function() { switchTab('single'); };
-    </script>
+render();
+</script>
 </body>
 </html>
